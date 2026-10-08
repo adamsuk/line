@@ -1,0 +1,90 @@
+import { doneCount, useLine } from "@/factory/store";
+import { Parts } from "@/components/line/parts";
+import { Rail } from "@/components/line/rail";
+import { Stage } from "@/components/line/stage";
+
+export function LineApp() {
+  const view = useLine((s) => s.view);
+  const setView = useLine((s) => s.setView);
+  const reset = useLine((s) => s.reset);
+  const notice = useLine((s) => s.notice);
+  const clearNotice = useLine((s) => s.clearNotice);
+  const count = useLine(doneCount);
+
+  return (
+    <main className="min-h-screen pb-16">
+      <header className="border-b border-line bg-paper/95">
+        <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-4 sm:px-6">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="font-mono text-xs tracking-wide text-muted">Software factory</p>
+              <h1 className="font-display text-4xl leading-none text-ink">Line</h1>
+            </div>
+            <button
+              type="button"
+              onClick={reset}
+              className="min-h-11 shrink-0 rounded-md px-3 text-sm font-medium text-steel underline-offset-4 hover:underline"
+            >
+              Start over
+            </button>
+          </div>
+          <p className="max-w-2xl text-sm text-muted sm:text-base">
+            One change, nine stations. A factory is not typing faster. It is how a change stays the same
+            when someone else builds it, on a clean machine, and then listens to what production does.
+          </p>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="grid grid-cols-2 gap-1 rounded-xl bg-paper-2 p-1 sm:flex">
+              <Seg label="Walk the line" active={view === "walk"} onClick={() => setView("walk")} />
+              <Seg label="The parts" active={view === "parts"} onClick={() => setView("parts")} />
+            </div>
+            <p className="font-mono text-xs tabular-nums text-faint">
+              CHK-184 · {count} of 9 stations done
+            </p>
+          </div>
+          {notice ? (
+            <button
+              type="button"
+              onClick={clearNotice}
+              className="rounded-lg border border-line bg-hold-bg px-4 py-3 text-left text-sm text-ink"
+            >
+              {notice}
+            </button>
+          ) : null}
+        </div>
+      </header>
+
+      {view === "walk" ? (
+        <div className="mx-auto grid max-w-6xl gap-4 px-4 py-4 sm:px-6 lg:grid-cols-[16.5rem_minmax(0,1fr)] lg:items-start">
+          <Rail />
+          <Stage />
+        </div>
+      ) : (
+        <Parts />
+      )}
+    </main>
+  );
+}
+
+function Seg({
+  label,
+  active,
+  onClick,
+}: {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={
+        "min-h-11 rounded-lg px-4 text-sm font-medium transition-colors duration-150 " +
+        (active ? "bg-ink text-paper" : "text-muted hover:text-ink")
+      }
+    >
+      {label}
+    </button>
+  );
+}

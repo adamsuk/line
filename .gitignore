@@ -1,0 +1,10 @@
+node_modules/
+.grok/
+screenshots/
+artifacts/
+.vercel/
+dist/
+*.log
+.node_modules.lock
+AGENTS.md
+public/__grok/
