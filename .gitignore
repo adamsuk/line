@@ -8,3 +8,4 @@ dist/
 .node_modules.lock
 AGENTS.md
 public/__grok/
+dist-pages/
