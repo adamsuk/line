@@ -9,8 +9,10 @@ import {
   stationIndex,
 } from "@/factory/model";
 
+export type View = "walk" | "parts" | "guide";
+
 export interface LineState {
-  view: "walk" | "parts";
+  view: View;
   focus: StationId;
   notice: string | null;
   criteria: boolean[];
@@ -27,7 +29,7 @@ export interface LineState {
   production: boolean;
   signalRead: boolean;
   returned: boolean;
-  setView: (view: "walk" | "parts") => void;
+  setView: (view: View) => void;
   focusStation: (id: StationId) => void;
   clearNotice: () => void;
   toggleCriterion: (index: number) => void;

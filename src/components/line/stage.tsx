@@ -3,7 +3,9 @@ import {
   BRANCH,
   CHECKS,
   COMMIT,
+  COMMIT_MESSAGE,
   CRITERIA,
+  GUIDE,
   DIGEST,
   ERRORS,
   HISTORY,
@@ -47,11 +49,13 @@ export function Stage() {
         <p className="mt-2 text-sm text-ink">{station.lesson}</p>
         {station.sources?.map((id) => <SourceLink key={id} id={id} />)}
       </aside>
+
+      <GuidePanel id={focus} />
     </article>
   );
 }
 
-function SourceLink({ id }: { id: ReferenceId }) {
+export function SourceLink({ id }: { id: ReferenceId }) {
   const ref = referenceById(id);
   return (
     <p className="mt-3 text-xs text-muted">
@@ -66,6 +70,39 @@ function SourceLink({ id }: { id: ReferenceId }) {
       </a>{" "}
       by {ref.author}
     </p>
+  );
+}
+
+export function GuidePanel({ id }: { id: LineState["focus"] }) {
+  const guide = GUIDE[id];
+  return (
+    <aside className="mt-4 rounded-xl border border-line p-4">
+      <div className="flex items-center justify-between gap-3">
+        <p className="font-mono text-xs text-muted">Bringing in agents</p>
+        <StageBadge stage={guide.stage} />
+      </div>
+      <dl className="mt-3 grid gap-3 text-sm sm:grid-cols-2">
+        <div>
+          <dt className="font-medium text-steel">Bot</dt>
+          <dd className="mt-1 text-ink">{guide.bot}</dd>
+        </div>
+        <div>
+          <dt className="font-medium text-steel">Human in the loop</dt>
+          <dd className="mt-1 text-ink">{guide.human}</dd>
+        </div>
+      </dl>
+      {guide.sources.map((ref) => (
+        <SourceLink key={ref} id={ref} />
+      ))}
+    </aside>
+  );
+}
+
+export function StageBadge({ stage }: { stage: string }) {
+  return (
+    <span className="rounded-md bg-paper-2 px-2 py-1 font-mono text-xs text-ink">
+      {stage === "Start" ? "Start here" : stage}
+    </span>
   );
 }
 
@@ -271,7 +308,7 @@ function Bench() {
       {committed ? (
         <div className="grid gap-3">
           <p className="font-mono text-xs text-muted">
-            {COMMIT.sha} · {COMMIT.message}
+            {COMMIT.sha} · {choice ? COMMIT_MESSAGE[choice] : COMMIT.message}
           </p>
           <Continue id="bench" label="Continue to the gate" />
         </div>
@@ -299,22 +336,33 @@ function Review() {
         {BRANCH} → main · {COMMIT.sha} · gate passed
       </p>
       <Diff choice={choice} />
+      {correct ? (
+        <div className="rounded-xl border border-line bg-paper-2 p-4">
+          <p className="font-mono text-xs text-muted">Review bot · adversarial pass, ran in the background</p>
+          <ul className="mt-2 grid gap-1 text-sm text-ink">
+            <li>Summary: the charge waits up to 8 seconds and retries once with the same idempotency key.</li>
+            <li>Checked: a retry reuses the key, so it cannot create a second charge.</li>
+            <li>Not checked: whether 8 seconds is the provider&apos;s documented budget. That needs a person.</li>
+          </ul>
+        </div>
+      ) : null}
       <div className="rounded-xl border border-line p-4">
-        <p className="text-sm font-medium">Mina Okonkwo</p>
+        <p className="text-sm font-medium">Mina Okonkwo · human reviewer</p>
         <p className="mt-2 text-sm text-ink">
           {correct
-            ? "The gate is green, so it runs. Timeout and the idempotency key match the work order. Is 8 seconds the provider's documented budget, or the agent's guess?"
+            ? "The gate is green and the bot found nothing low level. The change matches the work order. Is 8 seconds the provider's documented budget, or the agent's guess?"
             : "This misses the work order. The charge can still hang, or a retry can still double-submit. I am not approving this snapshot."}
         </p>
         {correct ? (
           commentResolved ? (
             <p className="mt-3 text-sm text-pass">
-              Resolved. 8 seconds is the provider p99 plus a margin, written on the work order.
+              The agent, in its session: 8 seconds is the provider p99 plus a margin. It is now written
+              on the work order. Resolved.
             </p>
           ) : (
             <div className="mt-3">
               <Primary onClick={resolve}>
-                Reply: it is the provider budget, then resolve
+                Ask the agent in its session
               </Primary>
             </div>
           )

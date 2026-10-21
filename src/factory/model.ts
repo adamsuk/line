@@ -86,8 +86,8 @@ export const STATIONS: Station[] = [
     thesis:
       "The checks already passed. Review is where judgment lives. A person reads the diff, not the intention, and decides if it meets the work order.",
     lesson:
-      "A diff is the only thing that changed: removed lines, added lines, nothing else. Approval is the last call before the change is sealed. It is not a compliment. The agent that wrote the change is the worst judge of it.",
-    sources: ["osmani", "iusztin"],
+      "A diff is the only thing that changed: removed lines, added lines, nothing else. Approval is the last call before the change is sealed. It is not a compliment. The agent that wrote the change is the worst judge of it. Review the session, not only the PR. Some decisions never show up in the diff.",
+    sources: ["osmani", "iusztin", "savkin-review"],
   },
   {
     id: "artifact",
@@ -154,6 +154,13 @@ export const HISTORY = [
 
 export const BRANCH = "fix/checkout-timeout";
 export const COMMIT = { sha: "b7e21a4", message: "Raise the charge timeout and key the retry" };
+
+/** The commit message the agent writes for each bench edit. */
+export const COMMIT_MESSAGE: Record<BenchChoice, string> = {
+  budget: COMMIT.message,
+  forever: "Remove the charge timeout",
+  hide: "Catch charge errors and show success",
+};
 export const DIGEST = "sha256:9f3ac21e8b";
 export const VERSION = "1.4.2";
 
@@ -253,7 +260,7 @@ export const LOGS = [
   { time: "14:14:40", text: "checkout ok       provider=slow  duration=1904ms  retry=0" },
 ];
 
-export type ReferenceId = "osmani" | "iusztin" | "savkin";
+export type ReferenceId = "osmani" | "iusztin" | "savkin" | "savkin-review";
 
 export interface Reference {
   id: ReferenceId;
@@ -293,8 +300,116 @@ export const REFERENCES: Reference[] = [
     url: "https://nx.dev/blog/software-factory-workflow-not-product",
     took: "The factory is ordinary steps wired together. Record what happened once it has.",
   },
+  {
+    id: "savkin-review",
+    title: "Building Interactive Agentic Code Reviews in 20 Minutes",
+    author: "Victor Savkin",
+    publication: "Nx Blog",
+    date: "12 August 2026",
+    url: "https://nx.dev/blog/building-interactive-agentic-code-reviews",
+    took: "A review bot pre-reviews in the background. The person reviews the session and talks to the agent.",
+  },
 ];
 
 export function referenceById(id: ReferenceId): Reference {
   return REFERENCES.find((r) => r.id === id)!;
 }
+
+/** When to bring a station's bot in. Start small and add more as people trust it. */
+export type AdoptionStage = "Start" | "Next" | "Later";
+
+export const ADOPTION_STAGES: {
+  stage: AdoptionStage;
+  summary: string;
+  sources: ReferenceId[];
+}[] = [
+  {
+    stage: "Start",
+    summary:
+      "Cheap checks on every snapshot and a review bot. Every team gains from these. Nothing ships without a person.",
+    sources: ["osmani", "savkin-review"],
+  },
+  {
+    stage: "Next",
+    summary:
+      "Agents take small work orders that are labelled for the factory. They build in fresh workspaces. People still plan and approve.",
+    sources: ["savkin", "iusztin"],
+  },
+  {
+    stage: "Later",
+    summary:
+      "Agents help release, watch production, and record what happened. Keep a person wherever a wrong call is expensive.",
+    sources: ["iusztin", "osmani"],
+  },
+];
+
+export interface Guide {
+  stage: AdoptionStage;
+  bot: string;
+  human: string;
+  sources: ReferenceId[];
+}
+
+/** Per station: the bot you can bring in, when, and where a person stays. */
+export const GUIDE: Record<StationId, Guide> = {
+  backlog: {
+    stage: "Next",
+    bot: "A triage agent sorts incoming bugs, ideas, and incidents. It drops duplicates and routes each one.",
+    human:
+      "Product decides what gets built and writes the checks that mean done. Planning is where judgment pays most.",
+    sources: ["iusztin", "osmani"],
+  },
+  source: {
+    stage: "Next",
+    bot: "An agent sets up a fresh workspace and cuts the branch for each work order.",
+    human:
+      "No one needs to touch this per change. People set the rule that main only moves through the gate and review.",
+    sources: ["savkin"],
+  },
+  bench: {
+    stage: "Next",
+    bot: "A coding agent builds the change. A separate QA agent tries to break it. Start with small work orders labelled for the factory.",
+    human:
+      "Not at the bench. A person must still be able to step in, halt the agent, or redirect it.",
+    sources: ["iusztin", "savkin"],
+  },
+  gate: {
+    stage: "Start",
+    bot: "CI runs lint, types, tests, and a build on every snapshot. Later a fixing agent can pick up a red check.",
+    human:
+      "People choose which checks exist. A check is worth trusting when it is cheap, runs every time, and is hard to fake.",
+    sources: ["osmani", "iusztin"],
+  },
+  review: {
+    stage: "Start",
+    bot: "An adversarial review agent runs in the background. It looks for low-level bugs and API misuse, then writes a summary.",
+    human:
+      "The reviewer. Agents cannot explain a change to a person and are poor at architecture. A person reads the session, talks to the agent, and approves.",
+    sources: ["savkin-review", "osmani"],
+  },
+  artifact: {
+    stage: "Start",
+    bot: "No agent. The build tool seals the version and digest.",
+    human: "None per change. Nothing here needs judgment.",
+    sources: [],
+  },
+  release: {
+    stage: "Later",
+    bot: "CD promotes the sealed digest to staging, then production.",
+    human:
+      "A person checks before production. Keep that check wherever a wrong call is expensive, like auth, billing, or a public API.",
+    sources: ["iusztin", "osmani"],
+  },
+  observe: {
+    stage: "Later",
+    bot: "A monitoring agent turns alerts, errors, and incidents into new tasks for triage.",
+    human: "On call. A person owns the consequences when production is wrong.",
+    sources: ["iusztin", "osmani"],
+  },
+  loop: {
+    stage: "Later",
+    bot: "A record agent writes down what actually happened, so the next change starts from it.",
+    human: "Product decides whether the signal becomes the next work order.",
+    sources: ["savkin", "iusztin"],
+  },
+};
