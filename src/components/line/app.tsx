@@ -1,4 +1,5 @@
 import { REFERENCES } from "@/factory/model";
+import { Guide } from "@/components/line/guide";
 import { doneCount, useLine } from "@/factory/store";
 import { Parts } from "@/components/line/parts";
 import { Rail } from "@/components/line/rail";
@@ -30,13 +31,14 @@ export function LineApp() {
             </button>
           </div>
           <p className="max-w-2xl text-sm text-muted sm:text-base">
-            One change, nine stations. People plan and approve. Agents build. A factory is not typing faster. It is how a change stays the same
+            A guide to bringing agents into a software factory. One change, nine stations. People plan and approve. Agents build. A factory is not typing faster. It is how a change stays the same
             when someone else builds it, on a clean machine, and then listens to what production does.
           </p>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div className="grid grid-cols-2 gap-1 rounded-xl bg-paper-2 p-1 sm:flex">
+            <div className="grid grid-cols-3 gap-1 rounded-xl bg-paper-2 p-1 sm:flex">
               <Seg label="Walk the line" active={view === "walk"} onClick={() => setView("walk")} />
               <Seg label="The parts" active={view === "parts"} onClick={() => setView("parts")} />
+              <Seg label="The guide" active={view === "guide"} onClick={() => setView("guide")} />
             </div>
             <p className="font-mono text-xs tabular-nums text-faint">
               CHK-184 · {count} of 9 stations done
@@ -59,8 +61,10 @@ export function LineApp() {
           <Rail />
           <Stage />
         </div>
-      ) : (
+      ) : view === "parts" ? (
         <Parts />
+      ) : (
+        <Guide />
       )}
 
       <BuiltOn />
@@ -99,8 +103,8 @@ function BuiltOn() {
         <h2 id="built-on" className="font-display text-2xl text-ink">
           Built on
         </h2>
-        <p className="mt-2 max-w-2xl text-sm text-muted">Line started from these three pieces.</p>
-        <ul className="mt-4 grid gap-3 sm:grid-cols-3">
+        <p className="mt-2 max-w-2xl text-sm text-muted">Line started from these four pieces.</p>
+        <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {REFERENCES.map((ref) => (
             <li key={ref.id} className="rounded-2xl border border-line bg-paper p-4">
               <p className="font-mono text-xs text-faint">
