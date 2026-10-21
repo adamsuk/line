@@ -11,8 +11,10 @@ import {
   ORDER,
   VERSION,
   nextStation,
+  referenceById,
   stationById,
   type BenchChoice,
+  type ReferenceId,
 } from "@/factory/model";
 import { useLine, type LineState } from "@/factory/store";
 
@@ -43,8 +45,27 @@ export function Stage() {
       <aside className="mt-6 rounded-xl border border-line bg-paper-2 p-4">
         <p className="font-mono text-xs text-muted">What this station is for</p>
         <p className="mt-2 text-sm text-ink">{station.lesson}</p>
+        {station.source ? <SourceLink id={station.source} /> : null}
       </aside>
     </article>
+  );
+}
+
+function SourceLink({ id }: { id: ReferenceId }) {
+  const ref = referenceById(id);
+  return (
+    <p className="mt-3 text-xs text-muted">
+      From{" "}
+      <a
+        href={ref.url}
+        target="_blank"
+        rel="noreferrer"
+        className="text-steel underline underline-offset-4 hover:text-steel-2"
+      >
+        {ref.title}
+      </a>{" "}
+      by {ref.author}
+    </p>
   );
 }
 

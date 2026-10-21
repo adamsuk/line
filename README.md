@@ -20,17 +20,27 @@ Start here. These files are the factory. Everything else is the app shell that r
 
 ## The nine stations
 
-1. **Backlog** — a work order. Problem, who is hurt, and the checks that mean done.
-2. **Source** — a branch off main, so the trunk stays shippable.
-3. **Bench** — the edit. Fast, and the least trustworthy station.
-4. **Review** — the diff, not the intention.
-5. **Gate** — lint, types, tests, and a build on a clean machine.
-6. **Artifact** — a sealed digest. This is what ships, not the branch.
-7. **Release** — preview, staging, and production run the same bytes.
-8. **Observe** — production talks back in errors and logs.
-9. **Return** — the signal becomes the next work order.
+1. **Backlog**: A work order. Problem, who is hurt, and the checks that mean done.
+2. **Source**: A branch off main, so the trunk stays shippable.
+3. **Bench**: The edit. Fast, and the least trustworthy station.
+4. **Review**: The diff, not the intention.
+5. **Gate**: Lint, types, tests, and a build on a clean machine.
+6. **Artifact**: A sealed digest. This is what ships, not the branch.
+7. **Release**: Preview, staging, and production run the same bytes.
+8. **Observe**: Production talks back in errors and logs.
+9. **Return**: The signal becomes the next work order.
 
 Try the wrong edit on the bench. Review and the gate send it back. That is the point.
+
+## Built on
+
+Line started from these three pieces.
+
+| Piece | What Line took from it |
+|---|---|
+| [Software Factories, Light and Dark](https://addyosmani.com/blog/software-factories/). Addy Osmani, AddyOsmani.com, 20 July 2026 | The closed loop from intent to production signal and back. Verification, not generation, is the bottleneck. |
+| [Inside a Software Factory](https://www.oreilly.com/radar/inside-a-software-factory/). Paul Iusztin, O'Reilly Radar, 4 September 2026 | The factory as stages of the lifecycle, and where the human belongs in it. |
+| [A Software Factory Is a Workflow, Not a Product. Build One in 20 Minutes.](https://nx.dev/blog/software-factory-workflow-not-product) Victor Savkin, Nx Blog, 6 August 2026 | The factory is ordinary steps wired together. Record what happened once it has. |
 
 ## Run it
 
