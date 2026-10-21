@@ -282,7 +282,10 @@ export type ReadingId =
   | "spec-growth"
   | "reviewbench"
   | "review-bench-rots"
-  | "ci-loop-guards";
+  | "ci-loop-guards"
+  | "ironbee"
+  | "pace-bench"
+  | "cortex";
 
 export type ReferenceId = BuiltOnId | ReadingId;
 
@@ -341,6 +344,33 @@ export const FURTHER_READING: { heading: string; refs: Reference[] }[] = [
   {
     heading: "Sep to Oct 2026",
     refs: [
+      {
+        id: "ironbee",
+        title: "The Honest Raw LLM Code Review Benchmark: 21 Models, 7,980 Reviews, Every Number Open",
+        author: "Serkan Özal",
+        publication: "IronBee AI",
+        date: "19 October 2026",
+        url: "https://ironbee.ai/blog/the-honest-raw-llm-code-review-benchmark",
+        took: "Raw models review as well as review tools, and scores shift between models and runs. Benchmark your own setup.",
+      },
+      {
+        id: "pace-bench",
+        title: "When Coding Agents Outpace Review: Evaluating PRD-Driven Development in Mature Enterprise Repositories",
+        author: "Tianqi Liu and others",
+        publication: "arXiv",
+        date: "19 October 2026",
+        url: "https://arxiv.org/abs/2610.26394",
+        took: "With the same model and tasks, successive harness releases raised the mean score from 59.4 to 63.0.",
+      },
+      {
+        id: "cortex",
+        title: "Cortex: Measurement-Gated Evolution and Pruning of Coding-Agent Skills and Rules",
+        author: "Samuele Giampieri",
+        publication: "arXiv",
+        date: "9 October 2026",
+        url: "https://arxiv.org/abs/2610.14216",
+        took: "Replay tasks with a new rule several times. Keep it only if it helps overall and breaks no task.",
+      },
       {
         id: "specguardbench",
         title: "SpecGuardBench: Can Coding Agents Construct Reliable Validation Harnesses from Natural Language Specifications?",
@@ -756,9 +786,9 @@ export const RECOMMENDATIONS: Recommendation[] = [
     id: "measure-review-bot",
     station: "review",
     stage: "Next",
-    maturity: "Cutting edge",
-    text: "Track how often people accept the review bot's comments, and test it on bugs you already know. The PR description can mislead it, so read its summary as a claim. Test it again when the model changes. Rankings move within months.",
-    sources: ["crbugbench", "coderabbit", "reviewbench", "review-bench-rots"],
+    maturity: "Best practice",
+    text: "Track how often people accept the review bot's comments, and test it on bugs you already know. The PR description can mislead it, so read its summary as a claim. Test it again when the model changes. Rankings move within months. Several independent benchmarks back this, though wide adoption is not shown yet.",
+    sources: ["crbugbench", "coderabbit", "reviewbench", "review-bench-rots", "ironbee"],
   },
   {
     id: "measure-factory",
@@ -773,8 +803,8 @@ export const RECOMMENDATIONS: Recommendation[] = [
     station: "observe",
     stage: "Next",
     maturity: "Cutting edge",
-    text: "Test the agent setup like code. Run small behavioural evals when a prompt, tool, or model changes, and track the pass rate over time.",
-    sources: ["harness-evals", "crbugbench"],
+    text: "Test the agent setup like code. Run small behavioural evals when a prompt, tool, or model changes, and track the pass rate over time. Keep a prompt or rule change only when replayed evals show it helps and breaks no task.",
+    sources: ["harness-evals", "crbugbench", "pace-bench", "cortex"],
   },
   {
     id: "spec-drift",
