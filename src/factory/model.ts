@@ -277,7 +277,12 @@ export type ReadingId =
   | "dora-roi"
   | "dora-small-batches"
   | "port-self-healing"
-  | "ms-spec-driven";
+  | "ms-spec-driven"
+  | "specguardbench"
+  | "spec-growth"
+  | "reviewbench"
+  | "review-bench-rots"
+  | "ci-loop-guards";
 
 export type ReferenceId = BuiltOnId | ReadingId;
 
@@ -336,6 +341,51 @@ export const FURTHER_READING: { heading: string; refs: Reference[] }[] = [
   {
     heading: "Sep to Oct 2026",
     refs: [
+      {
+        id: "specguardbench",
+        title: "SpecGuardBench: Can Coding Agents Construct Reliable Validation Harnesses from Natural Language Specifications?",
+        author: "Zhiqing Zhong, Mingyu Chen, Aoyang Fang, Yuzhong Zhang, Haoye Tian, Lionel Briand, Boxi Yu, Pinjia He",
+        publication: "arXiv",
+        date: "12 October 2026",
+        url: "https://arxiv.org/abs/2610.16870",
+        took: "No agent wrote checks faithful to the spec on more than 63% of tasks. Their checks copied the code, not the spec.",
+      },
+      {
+        id: "spec-growth",
+        title: "Implementing the Spec Growth Engine: Preventing Spec-Code Divergence, and Growing the Spec with Agents",
+        author: "Hartwig Grabowski",
+        publication: "arXiv",
+        date: "8 October 2026",
+        url: "https://arxiv.org/abs/2610.11725",
+        took: "A drift check that needs no model can run as a pre-commit hook and refuse a drifting commit.",
+      },
+      {
+        id: "reviewbench",
+        title: "ReviewBench: An open benchmark for AI code review",
+        author: "Michelle Zhou",
+        publication: "The GitHub Blog",
+        date: "5 October 2026",
+        url: "https://github.blog/ai-and-ml/github-copilot/reviewbench-an-open-benchmark-for-ai-code-review/",
+        took: "An open set of 219 real PRs with a fixed rubric, for testing a review agent before you trust it.",
+      },
+      {
+        id: "review-bench-rots",
+        title: "Martian's Code Review Bench: the \"#1\" claim rots in months",
+        author: "aicodereview.io Editorial",
+        publication: "aicodereview.io",
+        date: "5 October 2026",
+        url: "https://aicodereview.io/blog/martians-code-review-bench-the-1-claim-rots-in-months/",
+        took: "Review bot rankings move within months. Re-test rather than trust a vendor's top spot.",
+      },
+      {
+        id: "ci-loop-guards",
+        title: "CI Failure to Fix: The AI Agent CI Loop That Doesn't Thrash",
+        author: "Russell Winslow",
+        publication: "Automater Intel",
+        date: "13 September 2026",
+        url: "https://automater.ai/intel/ci-agent-fix-loop-guards/",
+        took: "Cap fix attempts, retry only on a new failure, and hand fixes to tests, CI config, or lockfiles to a person.",
+      },
       {
         id: "crbugbench",
         title:
@@ -675,16 +725,16 @@ export const RECOMMENDATIONS: Recommendation[] = [
     station: "gate",
     stage: "Later",
     maturity: "Cutting edge",
-    text: "Let the spec sign off, not the agent. Checks drawn from the work order commit the result, and run again when what they depend on changes.",
-    sources: ["spec-sign-off"],
+    text: "Let the spec sign off, not the agent. Checks drawn from the work order commit the result, and run again when what they depend on changes. A person checks those checks against the work order, because agents tend to write checks that copy their code, not the spec.",
+    sources: ["spec-sign-off", "specguardbench"],
   },
   {
     id: "narrow-self-healing",
     station: "gate",
     stage: "Later",
     maturity: "Cutting edge",
-    text: "A fixing agent sorts each red check first: whose problem it is, and whether it has been seen before. It opens a fix as a PR that goes through the gate and review. A new or risky failure goes to its owner.",
-    sources: ["port-self-healing"],
+    text: "A fixing agent sorts each red check first: whose problem it is, and whether it has been seen before. It opens a fix as a PR that goes through the gate and review. A new or risky failure goes to its owner. Cap the attempts, try again only on a new failure, and send any fix to tests, CI config, or lockfiles to a person.",
+    sources: ["port-self-healing", "ci-loop-guards"],
   },
   {
     id: "scale-review",
@@ -707,8 +757,8 @@ export const RECOMMENDATIONS: Recommendation[] = [
     station: "review",
     stage: "Next",
     maturity: "Cutting edge",
-    text: "Track how often people accept the review bot's comments, and test it on bugs you already know. The PR description can mislead it, so read its summary as a claim.",
-    sources: ["crbugbench", "coderabbit"],
+    text: "Track how often people accept the review bot's comments, and test it on bugs you already know. The PR description can mislead it, so read its summary as a claim. Test it again when the model changes. Rankings move within months.",
+    sources: ["crbugbench", "coderabbit", "reviewbench", "review-bench-rots"],
   },
   {
     id: "measure-factory",
@@ -731,8 +781,8 @@ export const RECOMMENDATIONS: Recommendation[] = [
     station: "loop",
     stage: "Later",
     maturity: "Cutting edge",
-    text: "Check that the docs agents build from still match the code. Record the drift as the next work order.",
-    sources: ["spec-drift", "ms-spec-driven"],
+    text: "Check that the docs agents build from still match the code. Record the drift as the next work order. Make the check deterministic, so it can refuse a drifting commit.",
+    sources: ["spec-drift", "ms-spec-driven", "spec-growth"],
   },
 ];
 
