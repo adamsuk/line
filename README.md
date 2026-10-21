@@ -2,6 +2,8 @@
 
 A software factory you can walk. One change, work order CHK-184, moves through nine stations. The factory is not typing faster. It is how a change stays the same when someone else builds it, on a clean machine, and then listens to what production does.
 
+Live at https://adamsuk.github.io/line/
+
 ## Where to read
 
 Start here. These files are the factory. Everything else is the app shell that renders them.
