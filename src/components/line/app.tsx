@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { FURTHER_READING, REFERENCES } from "@/factory/model";
 import { Guide } from "@/components/line/guide";
 import { doneCount, useLine } from "@/factory/store";
@@ -100,60 +101,92 @@ function BuiltOn() {
   return (
     <footer aria-labelledby="built-on" className="mx-auto mt-6 max-w-6xl px-4 sm:px-6">
       <div className="border-t border-line pt-6">
-        <h2 id="built-on" className="font-display text-2xl text-ink">
-          Built on
-        </h2>
-        <p className="mt-2 max-w-2xl text-sm text-muted">Line started from these four pieces.</p>
-        <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {REFERENCES.map((ref) => (
-            <li key={ref.id} className="rounded-2xl border border-line bg-paper p-4">
-              <p className="font-mono text-xs text-faint">
-                {ref.publication} · {ref.date}
-              </p>
-              <a
-                href={ref.url}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-1 block font-display text-lg leading-snug text-ink underline-offset-4 hover:underline"
-              >
-                {ref.title}
-              </a>
-              <p className="mt-1 text-sm text-steel">{ref.author}</p>
-              <p className="mt-2 text-sm text-muted">{ref.took}</p>
-            </li>
+        <Disclosure id="built-on" title="Built on">
+          <p className="mt-2 max-w-2xl text-sm text-muted">Line started from these four pieces.</p>
+          <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {REFERENCES.map((ref) => (
+              <li key={ref.id} className="rounded-2xl border border-line bg-paper p-4">
+                <p className="font-mono text-xs text-faint">
+                  {ref.publication} · {ref.date}
+                </p>
+                <a
+                  href={ref.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-1 block font-display text-lg leading-snug text-ink underline-offset-4 hover:underline"
+                >
+                  {ref.title}
+                </a>
+                <p className="mt-1 text-sm text-steel">{ref.author}</p>
+                <p className="mt-2 text-sm text-muted">{ref.took}</p>
+              </li>
+            ))}
+          </ul>
+        </Disclosure>
+        <Disclosure id="further-reading" title="Further reading" className="mt-4">
+          <p className="mt-2 max-w-2xl text-sm text-muted">
+            Newer pieces behind the labelled recommendations in the guide. Agent tooling moves fast,
+            so these are dated.
+          </p>
+          {FURTHER_READING.map((group) => (
+            <section key={group.heading} aria-label={group.heading} className="mt-4">
+              <h3 className="font-mono text-xs text-muted">{group.heading}</h3>
+              <ul className="mt-2 grid gap-x-6 gap-y-3 sm:grid-cols-2">
+                {group.refs.map((ref) => (
+                  <li key={ref.id} className="text-sm">
+                    <a
+                      href={ref.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-ink underline underline-offset-4 hover:text-steel"
+                    >
+                      {ref.title}
+                    </a>
+                    <span className="text-muted">
+                      . {ref.author}, {ref.publication}, {ref.date}.
+                    </span>
+                    <p className="mt-1 text-muted">{ref.took}</p>
+                  </li>
+                ))}
+              </ul>
+            </section>
           ))}
-        </ul>
-        <h2 id="further-reading" className="mt-8 font-display text-2xl text-ink">
-          Further reading
-        </h2>
-        <p className="mt-2 max-w-2xl text-sm text-muted">
-          Newer pieces behind the labelled recommendations in the guide. Agent tooling moves fast, so these are
-          dated.
-        </p>
-        {FURTHER_READING.map((group) => (
-          <section key={group.heading} aria-label={group.heading} className="mt-4">
-            <h3 className="font-mono text-xs text-muted">{group.heading}</h3>
-            <ul className="mt-2 grid gap-x-6 gap-y-3 sm:grid-cols-2">
-              {group.refs.map((ref) => (
-                <li key={ref.id} className="text-sm">
-                  <a
-                    href={ref.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-ink underline underline-offset-4 hover:text-steel"
-                  >
-                    {ref.title}
-                  </a>
-                  <span className="text-muted">
-                    . {ref.author}, {ref.publication}, {ref.date}.
-                  </span>
-                  <p className="mt-1 text-muted">{ref.took}</p>
-                </li>
-              ))}
-            </ul>
-          </section>
-        ))}
+        </Disclosure>
       </div>
     </footer>
+  );
+}
+
+/** A native disclosure. Closed on first load, opens with click, Enter, or Space. */
+function Disclosure({
+  id,
+  title,
+  className = "",
+  children,
+}: {
+  id: string;
+  title: string;
+  className?: string;
+  children: ReactNode;
+}) {
+  return (
+    <details className={"group " + className}>
+      <summary className="flex min-h-11 cursor-pointer list-none items-center gap-3 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-steel [&::-webkit-details-marker]:hidden">
+        <span
+          aria-hidden="true"
+          className="inline-block w-5 text-xl leading-none text-steel transition-transform duration-150 group-open:rotate-90"
+        >
+          ▸
+        </span>
+        <h2 id={id} className="font-display text-2xl text-ink">
+          {title}
+        </h2>
+        <span aria-hidden="true" className="font-mono text-xs text-muted">
+          <span className="group-open:hidden">Show</span>
+          <span className="hidden group-open:inline">Hide</span>
+        </span>
+      </summary>
+      <div className="mt-2">{children}</div>
+    </details>
   );
 }
