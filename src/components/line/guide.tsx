@@ -1,4 +1,5 @@
-import { ADOPTION_STAGES, GUIDE, STATIONS } from "@/factory/model";
+import { ADOPTION_STAGES, GUIDE, STATIONS, recommendationsFor } from "@/factory/model";
+import { MaturityLegend, RecommendationList } from "@/components/line/recommendations";
 import { SourceLink } from "@/components/line/stage";
 
 export function Guide() {
@@ -6,8 +7,15 @@ export function Guide() {
     <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
       <p className="max-w-2xl text-base text-muted">
         Bring agents in a stage at a time. Start with the cheap checks and a review bot. Add more once people
-        trust them. Keep a person where judgment matters.
+        trust them. Put the guardrails up before any coding agent writes code. Keep a person where judgment
+        matters.
       </p>
+      <div className="mt-4 max-w-4xl rounded-xl border border-line p-4">
+        <p className="font-mono text-xs text-muted">Each recommendation carries a label</p>
+        <div className="mt-2">
+          <MaturityLegend />
+        </div>
+      </div>
       <ol className="mt-6 grid gap-4">
         {ADOPTION_STAGES.map((group) => (
           <li key={group.stage} className="rounded-2xl border border-line bg-paper p-4 sm:p-6">
@@ -18,7 +26,7 @@ export function Guide() {
             {group.sources.map((ref) => (
               <SourceLink key={ref} id={ref} />
             ))}
-            <ul className="mt-4 grid gap-3 md:grid-cols-2">
+            <ul className="mt-4 grid gap-3 empty:hidden md:grid-cols-2">
               {STATIONS.filter((s) => GUIDE[s.id].stage === group.stage).map((s) => (
                 <li key={s.id} className="rounded-xl border border-line p-4">
                   <p className="font-mono text-xs text-faint">
@@ -35,6 +43,14 @@ export function Guide() {
                 </li>
               ))}
             </ul>
+            {recommendationsFor({ stage: group.stage }).length > 0 ? (
+              <div className="mt-4">
+                <h3 className="font-mono text-xs text-muted">Recommendations</h3>
+                <div className="mt-2">
+                  <RecommendationList items={recommendationsFor({ stage: group.stage })} show="station" />
+                </div>
+              </div>
+            ) : null}
           </li>
         ))}
       </ol>

@@ -16,6 +16,7 @@ Start here. These files are the factory. Everything else is the app shell that r
 | [src/components/line/rail.tsx](src/components/line/rail.tsx) | The line itself |
 | [src/components/line/parts.tsx](src/components/line/parts.tsx) | The glossary of parts |
 | [src/components/line/guide.tsx](src/components/line/guide.tsx) | The adoption guide: which bot, when, and where people stay |
+| [src/components/line/recommendations.tsx](src/components/line/recommendations.tsx) | The labelled recommendations: best practice or cutting edge |
 | [src/components/line/app.tsx](src/components/line/app.tsx) | The shell: walk, read the parts, or read the guide |
 | [src/styles.css](src/styles.css) | Paper, ink, and steel |
 
@@ -35,27 +36,53 @@ Try the wrong edit on the bench. The gate sends it back before a person ever rea
 
 ## Bringing agents in
 
-Bring agents in a stage at a time. Start with the cheap checks and a review bot. Add more once people trust them. Keep a person where judgment matters.
+Bring agents in a stage at a time. Start with the cheap checks and a review bot. Put the guardrails up before any coding agent writes code. Add more once people trust them. Keep a person where judgment matters.
 
 | Stage | What to add |
 |---|---|
 | Start | Cheap checks on every snapshot and a review bot. Every team gains from these. Nothing ships without a person. |
-| Next | Agents take small work orders that are labelled for the factory. They build in fresh workspaces. People still plan and approve. |
+| Guardrails | Before any coding agent writes code. Agents run in a sandbox with no secrets and a short list of hosts they can reach. Their writes are staged and checked. Their instruction files are owned and reviewed like code. |
+| Next | Agents take small work orders that are labelled for the factory. They build in fresh workspaces inside the guardrails. People still plan and approve. |
 | Later | Agents help release, watch production, and record what happened. Keep a person wherever a wrong call is expensive. |
 
 ## Where people stay in the loop
 
 | Station | Bot | Stage | Human in the loop |
 |---|---|---|---|
-| Backlog | A triage agent sorts incoming bugs, ideas, and incidents. It drops duplicates and routes each one. | Next | Product decides what gets built and writes the checks that mean done. Planning is where judgment pays most. |
-| Source | An agent sets up a fresh workspace and cuts the branch for each work order. | Next | No one needs to touch this per change. People set the rule that main only moves through the gate and review. |
-| Bench | A coding agent builds the change. A separate QA agent tries to break it. Start with small work orders labelled for the factory. | Next | Not at the bench. A person must still be able to step in, halt the agent, or redirect it. |
-| Gate | CI runs lint, types, tests, and a build on every snapshot. Later a fixing agent can pick up a red check. | Start | People choose which checks exist. A check is worth trusting when it is cheap, runs every time, and is hard to fake. |
-| Review | An adversarial review agent runs in the background. It looks for low-level bugs and API misuse, then writes a summary. | Start | The reviewer. Agents cannot explain a change to a person and are poor at architecture. A person reads the session, talks to the agent, and approves. |
+| Backlog | A triage agent sorts incoming bugs, ideas, and incidents. It drops duplicates and routes each one. It reads issue text as untrusted input and takes no orders from it. | Next | Product decides what gets built and writes the checks that mean done. Planning is where judgment pays most. |
+| Source | An agent sets up a fresh workspace and cuts the branch for each work order. The workspace is a sandbox with no production secrets. | Next | No one needs to touch this per change. People set the rule that main only moves through the gate and review. They own the sandbox rules too. |
+| Bench | A coding agent builds the change. A separate QA agent tries to break it. Start with small work orders labelled for the factory. Its pushes and comments are staged, then checked. | Next | Not at the bench. A person must still be able to step in, halt the agent, or redirect it. |
+| Gate | CI runs lint, types, tests, and a build on every snapshot. Later a fixing agent can sort a red check and open a fix as a PR. A new or risky failure goes to its owner. | Start | People choose which checks exist. A check is worth trusting when it is cheap, runs every time, and is hard to fake. An agent saying it is done is not a check. |
+| Review | An adversarial review agent runs in the background. It looks for bugs and API misuse, then writes a summary. The PR description can mislead it. | Start | The reviewer. Agents cannot explain a change to a person and are poor at architecture. A person reads the session, talks to the agent, and approves. Review goes deeper as the change gets bigger or riskier. |
 | Artifact | No agent. The build tool seals the version and digest. | Start | None per change. Nothing here needs judgment. |
 | Release | CD promotes the sealed digest to staging, then production. | Later | A person checks before production. Keep that check wherever a wrong call is expensive, like auth, billing, or a public API. |
 | Observe | A monitoring agent turns alerts, errors, and incidents into new tasks for triage. | Later | On call. A person owns the consequences when production is wrong. |
 | Return | A record agent writes down what actually happened, so the next change starts from it. | Later | Product decides whether the signal becomes the next work order. |
+
+## Recommendations, labelled
+
+Agent tooling is changing fast. Each recommendation carries one of two labels, so you can tell settled practice from newer ideas.
+
+- **Best practice**: Well established. Several independent sources say it, and teams widely do it.
+- **Cutting edge**: Newer. The evidence is mostly one recent paper or survey, or tooling that is still emerging.
+
+| Label | Station | Stage | Recommendation | Sources |
+|---|---|---|---|---|
+| Best practice | Backlog | Start | Write done as checks a machine can run. Vague criteria give an agent room to claim success. | [Spec-Driven Development: A Spec-First Approach to AI-Native Engineering](https://developer.microsoft.com/blog/spec-driven-development-ai-native-engineering/)<br>[Who Holds the Pen? Let Specifications, Not Agents, Sign Off](https://arxiv.org/abs/2609.29921) |
+| Best practice | Backlog | Next | Treat issue text as untrusted input. The triage agent reads it but takes no orders from it. | [Mitigating Indirect AGENTS.md Injection Attacks in Agentic Environments](https://developer.nvidia.com/blog/mitigating-indirect-agents-md-injection-attacks-in-agentic-environments/)<br>[AI Agent and MCP Security](https://owasp.github.io/DevSecOpsGuideline/2-Process/2-2-Develop/2-2-5-AI-Agent-and-MCP-Security/) |
+| Best practice | Source | Guardrails | Run agents in a sandbox with no production secrets. Isolation is the boundary, not a prompt. | [Under the hood: Security architecture of GitHub Agentic Workflows](https://github.blog/ai-and-ml/generative-ai/under-the-hood-security-architecture-of-github-agentic-workflows/)<br>[Practical Security Guidance for Sandboxing Agentic Workflows and Managing Execution Risk](https://developer.nvidia.com/blog/practical-security-guidance-for-sandboxing-agentic-workflows-and-managing-execution-risk/)<br>[AI Agent and MCP Security](https://owasp.github.io/DevSecOpsGuideline/2-Process/2-2-Develop/2-2-5-AI-Agent-and-MCP-Security/) |
+| Best practice | Source | Guardrails | Let the sandbox reach only a short list of hosts. Block the rest of the network. | [Practical Security Guidance for Sandboxing Agentic Workflows and Managing Execution Risk](https://developer.nvidia.com/blog/practical-security-guidance-for-sandboxing-agentic-workflows-and-managing-execution-risk/)<br>[Under the hood: Security architecture of GitHub Agentic Workflows](https://github.blog/ai-and-ml/generative-ai/under-the-hood-security-architecture-of-github-agentic-workflows/)<br>[AI Agent and MCP Security](https://owasp.github.io/DevSecOpsGuideline/2-Process/2-2-Develop/2-2-5-AI-Agent-and-MCP-Security/) |
+| Best practice | Bench | Guardrails | Stage the agent's writes. Pushes, PRs, and comments pass a check with limits before they land. | [Under the hood: Security architecture of GitHub Agentic Workflows](https://github.blog/ai-and-ml/generative-ai/under-the-hood-security-architecture-of-github-agentic-workflows/)<br>[AI Agent and MCP Security](https://owasp.github.io/DevSecOpsGuideline/2-Process/2-2-Develop/2-2-5-AI-Agent-and-MCP-Security/) |
+| Best practice | Bench | Guardrails | Put AGENTS.md and other instruction files under code owners. Review a change to them like a change to code. | [AI Agent and MCP Security](https://owasp.github.io/DevSecOpsGuideline/2-Process/2-2-Develop/2-2-5-AI-Agent-and-MCP-Security/)<br>[Mitigating Indirect AGENTS.md Injection Attacks in Agentic Environments](https://developer.nvidia.com/blog/mitigating-indirect-agents-md-injection-attacks-in-agentic-environments/)<br>[Beyond source code: The files AI coding agents trust — and attackers exploit](https://cloud.google.com/blog/products/identity-security/beyond-source-code-the-files-ai-coding-agents-trust-and-attackers-exploit) |
+| Best practice | Gate | Start | An agent saying it is done is not evidence. Only the gate's checks count. | [Software Factories, Light and Dark](https://addyosmani.com/blog/software-factories/)<br>[Who Holds the Pen? Let Specifications, Not Agents, Sign Off](https://arxiv.org/abs/2609.29921)<br>[Under the hood: Security architecture of GitHub Agentic Workflows](https://github.blog/ai-and-ml/generative-ai/under-the-hood-security-architecture-of-github-agentic-workflows/) |
+| Cutting edge | Gate | Later | Let the spec sign off, not the agent. Checks drawn from the work order commit the result, and run again when what they depend on changes. | [Who Holds the Pen? Let Specifications, Not Agents, Sign Off](https://arxiv.org/abs/2609.29921) |
+| Cutting edge | Gate | Later | A fixing agent sorts each red check first: whose problem it is, and whether it has been seen before. It opens a fix as a PR that goes through the gate and review. A new or risky failure goes to its owner. | [How to build self-healing CI pipelines](https://newsletter.port.io/p/how-to-build-self-healing-ci-pipelines) |
+| Best practice | Review | Start | Keep PRs small. Scale how deeply a person reviews to the size and risk of the change. | [(When) Should a Software Factory be Lights-off? Benchmarking Code Review Agents on Bug Detection](https://arxiv.org/abs/2610.13668)<br>[Capabilities: Working in small batches](https://dora.dev/capabilities/working-in-small-batches/) |
+| Best practice | Review | Start | A named person approves. Agent review does not replace it, and no agent approves its own change. | [Secure Coding with AI Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Secure_Coding_with_AI_Cheat_Sheet.html)<br>[AI Agent and MCP Security](https://owasp.github.io/DevSecOpsGuideline/2-Process/2-2-Develop/2-2-5-AI-Agent-and-MCP-Security/)<br>[(When) Should a Software Factory be Lights-off? Benchmarking Code Review Agents on Bug Detection](https://arxiv.org/abs/2610.13668) |
+| Cutting edge | Review | Next | Track how often people accept the review bot's comments, and test it on bugs you already know. The PR description can mislead it, so read its summary as a claim. | [(When) Should a Software Factory be Lights-off? Benchmarking Code Review Agents on Bug Detection](https://arxiv.org/abs/2610.13668)<br>[Is Agentic Code Review Helpful? Mining Developers' Feedback to CodeRabbit Reviews in the Wild](https://arxiv.org/abs/2607.03316) |
+| Best practice | Observe | Start | Measure change failure rate and cost per change before agents arrive and after. Expect a dip at first while people check more. | [ROI of AI-assisted Software Development](https://dora.dev/ai/roi/report/)<br>[(When) Should a Software Factory be Lights-off? Benchmarking Code Review Agents on Bug Detection](https://arxiv.org/abs/2610.13668) |
+| Cutting edge | Observe | Next | Test the agent setup like code. Run small behavioural evals when a prompt, tool, or model changes, and track the pass rate over time. | [The Anatomy of Harness Engineering: How to Evaluate, Iterate, and Guard AI Coding Agents](https://developers.googleblog.com/en/the-anatomy-of-harness-engineering-how-to-evaluate-iterate-and-guard-ai-coding-agents/)<br>[(When) Should a Software Factory be Lights-off? Benchmarking Code Review Agents on Bug Detection](https://arxiv.org/abs/2610.13668) |
+| Cutting edge | Return | Later | Check that the docs agents build from still match the code. Record the drift as the next work order. | [Spec-driven development and spec drift: 335 repositories surveyed](https://striff.io/blog/architecture-matters-more-not-less/)<br>[Spec-Driven Development: A Spec-First Approach to AI-Native Engineering](https://developer.microsoft.com/blog/spec-driven-development-ai-native-engineering/) |
 
 ## Built on
 
@@ -67,6 +94,31 @@ Line started from these four pieces.
 | [Inside a Software Factory](https://www.oreilly.com/radar/inside-a-software-factory/). Paul Iusztin, O'Reilly Radar, 4 September 2026 | The factory as stages of the lifecycle, and where the human belongs in it. |
 | [A Software Factory Is a Workflow, Not a Product. Build One in 20 Minutes.](https://nx.dev/blog/software-factory-workflow-not-product) Victor Savkin, Nx Blog, 6 August 2026 | The factory is ordinary steps wired together. Record what happened once it has. |
 | [Building Interactive Agentic Code Reviews in 20 Minutes](https://nx.dev/blog/building-interactive-agentic-code-reviews). Victor Savkin, Nx Blog, 12 August 2026 | A review bot pre-reviews in the background. The person reviews the session and talks to the agent. |
+
+## Further reading
+
+Newer pieces behind the labelled recommendations. Titles are quoted as published.
+
+### Sep to Oct 2026
+
+- [(When) Should a Software Factory be Lights-off? Benchmarking Code Review Agents on Bug Detection](https://arxiv.org/abs/2610.13668). Chenyang Yang, Hao He, Ti-Chung Cheng, Jenna Butler, Emerson Murphy-Hill, Carmen Badea, Christian Bird, arXiv, 9 October 2026. The best review agent caught 71.9% of known bugs. Agents still miss bugs that need wider context. Scale review effort to the change.
+- [Who Holds the Pen? Let Specifications, Not Agents, Sign Off](https://arxiv.org/abs/2609.29921). Haiqing Li and others, arXiv, 24 September 2026. Agents claim success more often than they pass. Checks outside the agent should sign off.
+- [Spec-driven development and spec drift: 335 repositories surveyed](https://striff.io/blog/architecture-matters-more-not-less/). Striff Engineering, Striff, 15 September 2026. Most repos hand agents docs to build from. Few check the code still matches them.
+- [The Anatomy of Harness Engineering: How to Evaluate, Iterate, and Guard AI Coding Agents](https://developers.googleblog.com/en/the-anatomy-of-harness-engineering-how-to-evaluate-iterate-and-guard-ai-coding-agents/). Taylor Mullen, Christian Gunderman, Google Developers Blog, 9 September 2026. Test the agent setup with small behavioural evals, and watch the pass rate when a prompt or model changes.
+
+### Earlier, still current
+
+- [Is Agentic Code Review Helpful? Mining Developers' Feedback to CodeRabbit Reviews in the Wild](https://arxiv.org/abs/2607.03316). Hong Yi Lin, Mingzhao Liang, Patanamon Thongtanunam, Kla Tantithamthavorn, arXiv, 3 July 2026. Developers rejected more review bot comments than they accepted. Track which ones land.
+- [Under the hood: Security architecture of GitHub Agentic Workflows](https://github.blog/ai-and-ml/generative-ai/under-the-hood-security-architecture-of-github-agentic-workflows/). Landon Cox, Jiaxiao Zhou, The GitHub Blog, 9 March 2026. Agents hold no secrets. Their writes are staged and vetted before anything lands.
+- [Practical Security Guidance for Sandboxing Agentic Workflows and Managing Execution Risk](https://developer.nvidia.com/blog/practical-security-guidance-for-sandboxing-agentic-workflows-and-managing-execution-risk/). Rich Harang, NVIDIA Technical Blog, 30 January 2026. Sandbox agents and control where they can reach on the network.
+- [Mitigating Indirect AGENTS.md Injection Attacks in Agentic Environments](https://developer.nvidia.com/blog/mitigating-indirect-agents-md-injection-attacks-in-agentic-environments/). Daniel Teixeira, NVIDIA Technical Blog, 20 April 2026. Instruction files can be planted. Treat them as part of the supply chain.
+- [Beyond source code: The files AI coding agents trust — and attackers exploit](https://cloud.google.com/blog/products/identity-security/beyond-source-code-the-files-ai-coding-agents-trust-and-attackers-exploit). Bernardo Quintero, Daniel Kapellmann Zafra, Google Cloud Blog, 12 May 2026. Instruction files and agent settings can steer an agent. Allow only known ones and review them before merge.
+- [AI Agent and MCP Security](https://owasp.github.io/DevSecOpsGuideline/2-Process/2-2-Develop/2-2-5-AI-Agent-and-MCP-Security/). OWASP, OWASP DevSecOps Guideline, Undated. Isolation is the boundary, not a prompt. Instruction files go under code owners. No agent approves its own change.
+- [Secure Coding with AI Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Secure_Coding_with_AI_Cheat_Sheet.html). OWASP, OWASP Cheat Sheet Series, Undated. Every AI change has a named human owner. AI review does not replace human review.
+- [ROI of AI-assisted Software Development](https://dora.dev/ai/roi/report/). DORA, dora.dev, 22 April 2026. Expect a dip before gains, and count the cost of checking AI output.
+- [Capabilities: Working in small batches](https://dora.dev/capabilities/working-in-small-batches/). DORA, dora.dev, Updated 8 December 2025. Small batches are a safety net for AI adoption, against the instability faster changes bring.
+- [How to build self-healing CI pipelines](https://newsletter.port.io/p/how-to-build-self-healing-ci-pipelines). Zohar Einy, Port newsletter, 12 May 2026. Sort a red check by whose problem it is before fixing it. Hand new or risky failures to a person.
+- [Spec-Driven Development: A Spec-First Approach to AI-Native Engineering](https://developer.microsoft.com/blog/spec-driven-development-ai-native-engineering/). Apoorv Gupta, Microsoft for Developers, 10 June 2026. Write the spec first, and keep it as the thing agents build and check against.
 
 ## Run it
 

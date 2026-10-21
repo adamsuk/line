@@ -1,9 +1,14 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import {
   ADOPTION_STAGES,
+  ALL_REFERENCES,
   COMMIT_MESSAGE,
+  FURTHER_READING,
   GUIDE,
+  MATURITY,
+  RECOMMENDATIONS,
   REFERENCES,
   STATIONS,
   STATION_IDS,
@@ -32,14 +37,83 @@ test("every station has a guide with a known adoption stage", () => {
   }
 });
 
-test("every adoption stage has at least one station", () => {
+test("every adoption stage has a station or a recommendation", () => {
   for (const { stage } of ADOPTION_STAGES) {
-    assert.ok(STATION_IDS.some((id) => GUIDE[id].stage === stage), stage);
+    const hasStation = STATION_IDS.some((id) => GUIDE[id].stage === stage);
+    const hasRecommendation = RECOMMENDATIONS.some((r) => r.stage === stage);
+    assert.ok(hasStation || hasRecommendation, stage);
   }
 });
 
-test("every cited source is in Built on", () => {
-  const known = new Set(REFERENCES.map((r) => r.id));
+test("guardrails go up before coding agents", () => {
+  const order = ADOPTION_STAGES.map((g) => g.stage);
+  assert.ok(order.indexOf("Guardrails") > -1);
+  assert.ok(order.indexOf("Guardrails") < order.indexOf("Next"));
+  assert.equal(GUIDE.bench.stage, "Next");
+  assert.ok(RECOMMENDATIONS.some((r) => r.stage === "Guardrails" && r.station === "source"));
+  assert.ok(RECOMMENDATIONS.some((r) => r.stage === "Guardrails" && r.station === "bench"));
+});
+
+test("Built on keeps its four pieces", () => {
+  assert.deepEqual(
+    REFERENCES.map((r) => r.id),
+    ["osmani", "iusztin", "savkin", "savkin-review"],
+  );
+});
+
+test("every recommendation has a label, a known station and stage, and a credited source", () => {
+  const credited = new Set(ALL_REFERENCES.map((r) => r.id));
+  const labels = Object.keys(MATURITY);
+  const stages = ADOPTION_STAGES.map((g) => g.stage);
+  const ids = new Set<string>();
+  for (const r of RECOMMENDATIONS) {
+    assert.ok(!ids.has(r.id), `duplicate ${r.id}`);
+    ids.add(r.id);
+    assert.ok(labels.includes(r.maturity), r.id);
+    assert.ok(STATION_IDS.includes(r.station), r.id);
+    assert.ok(stages.includes(r.stage), r.id);
+    assert.ok(r.text.length > 0, r.id);
+    assert.ok(r.sources.length > 0, r.id);
+    for (const id of r.sources) assert.ok(credited.has(id), `${r.id} cites ${id}`);
+  }
+});
+
+test("best practice rests on more than one source", () => {
+  for (const r of RECOMMENDATIONS.filter((r) => r.maturity === "Best practice")) {
+    assert.ok(new Set(r.sources).size >= 2, r.id);
+  }
+});
+
+test("both labels are in use", () => {
+  for (const m of Object.keys(MATURITY)) {
+    assert.ok(RECOMMENDATIONS.some((r) => r.maturity === m), m);
+  }
+});
+
+test("every further reading piece backs a recommendation", () => {
+  const cited = new Set(RECOMMENDATIONS.flatMap((r) => r.sources));
+  for (const ref of FURTHER_READING.flatMap((g) => g.refs)) assert.ok(cited.has(ref.id), ref.id);
+});
+
+test("references have unique ids and https links", () => {
+  assert.equal(new Set(ALL_REFERENCES.map((r) => r.id)).size, ALL_REFERENCES.length);
+  for (const r of ALL_REFERENCES) assert.match(r.url, /^https:\/\//, r.id);
+});
+
+test("the README lists every recommendation with its label", () => {
+  const readme = readFileSync(new URL("../../README.md", import.meta.url), "utf8");
+  const rows = readme.split("\n");
+  for (const r of RECOMMENDATIONS) {
+    assert.ok(
+      rows.some((row) => row.startsWith(`| ${r.maturity} |`) && row.includes(r.text)),
+      r.id,
+    );
+  }
+  for (const ref of FURTHER_READING.flatMap((g) => g.refs)) assert.ok(readme.includes(ref.url), ref.id);
+});
+
+test("every cited source is credited", () => {
+  const known = new Set(ALL_REFERENCES.map((r) => r.id));
   const cited = [
     ...STATIONS.flatMap((s) => s.sources ?? []),
     ...Object.values(GUIDE).flatMap((g) => g.sources),
@@ -52,7 +126,9 @@ test("each bench edit has its own commit message", () => {
   assert.equal(new Set(Object.values(COMMIT_MESSAGE)).size, 3);
 });
 
-test("no em or en dashes in station copy or the guide", () => {
-  const copy = JSON.stringify([STATIONS, GUIDE, ADOPTION_STAGES, REFERENCES]);
+test("no em or en dashes in station copy, the guide, or the recommendations", () => {
+  // Titles are quoted as published, so they are left out.
+  const refs = ALL_REFERENCES.map(({ title: _title, ...rest }) => rest);
+  const copy = JSON.stringify([STATIONS, GUIDE, ADOPTION_STAGES, refs, RECOMMENDATIONS, MATURITY]);
   assert.doesNotMatch(copy, /[\u2013\u2014]/);
 });

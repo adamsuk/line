@@ -260,7 +260,26 @@ export const LOGS = [
   { time: "14:14:40", text: "checkout ok       provider=slow  duration=1904ms  retry=0" },
 ];
 
-export type ReferenceId = "osmani" | "iusztin" | "savkin" | "savkin-review";
+export type BuiltOnId = "osmani" | "iusztin" | "savkin" | "savkin-review";
+
+export type ReadingId =
+  | "crbugbench"
+  | "spec-sign-off"
+  | "harness-evals"
+  | "spec-drift"
+  | "coderabbit"
+  | "gh-agentic-security"
+  | "nvidia-sandbox"
+  | "nvidia-agents-md"
+  | "gcloud-trusted-files"
+  | "owasp-agents"
+  | "owasp-ai-coding"
+  | "dora-roi"
+  | "dora-small-batches"
+  | "port-self-healing"
+  | "ms-spec-driven";
+
+export type ReferenceId = BuiltOnId | ReadingId;
 
 export interface Reference {
   id: ReferenceId;
@@ -272,6 +291,7 @@ export interface Reference {
   took: string;
 }
 
+/** The four pieces Line started from. */
 export const REFERENCES: Reference[] = [
   {
     id: "osmani",
@@ -311,12 +331,164 @@ export const REFERENCES: Reference[] = [
   },
 ];
 
+/** Newer pieces behind the labelled recommendations. Titles are quoted as published. */
+export const FURTHER_READING: { heading: string; refs: Reference[] }[] = [
+  {
+    heading: "Sep to Oct 2026",
+    refs: [
+      {
+        id: "crbugbench",
+        title:
+          "(When) Should a Software Factory be Lights-off? Benchmarking Code Review Agents on Bug Detection",
+        author: "Chenyang Yang, Hao He, Ti-Chung Cheng, Jenna Butler, Emerson Murphy-Hill, Carmen Badea, Christian Bird",
+        publication: "arXiv",
+        date: "9 October 2026",
+        url: "https://arxiv.org/abs/2610.13668",
+        took: "The best review agent caught 71.9% of known bugs. Agents still miss bugs that need wider context. Scale review effort to the change.",
+      },
+      {
+        id: "spec-sign-off",
+        title: "Who Holds the Pen? Let Specifications, Not Agents, Sign Off",
+        author: "Haiqing Li and others",
+        publication: "arXiv",
+        date: "24 September 2026",
+        url: "https://arxiv.org/abs/2609.29921",
+        took: "Agents claim success more often than they pass. Checks outside the agent should sign off.",
+      },
+      {
+        id: "spec-drift",
+        title: "Spec-driven development and spec drift: 335 repositories surveyed",
+        author: "Striff Engineering",
+        publication: "Striff",
+        date: "15 September 2026",
+        url: "https://striff.io/blog/architecture-matters-more-not-less/",
+        took: "Most repos hand agents docs to build from. Few check the code still matches them.",
+      },
+      {
+        id: "harness-evals",
+        title: "The Anatomy of Harness Engineering: How to Evaluate, Iterate, and Guard AI Coding Agents",
+        author: "Taylor Mullen, Christian Gunderman",
+        publication: "Google Developers Blog",
+        date: "9 September 2026",
+        url: "https://developers.googleblog.com/en/the-anatomy-of-harness-engineering-how-to-evaluate-iterate-and-guard-ai-coding-agents/",
+        took: "Test the agent setup with small behavioural evals, and watch the pass rate when a prompt or model changes.",
+      },
+    ],
+  },
+  {
+    heading: "Earlier, still current",
+    refs: [
+      {
+        id: "coderabbit",
+        title: "Is Agentic Code Review Helpful? Mining Developers' Feedback to CodeRabbit Reviews in the Wild",
+        author: "Hong Yi Lin, Mingzhao Liang, Patanamon Thongtanunam, Kla Tantithamthavorn",
+        publication: "arXiv",
+        date: "3 July 2026",
+        url: "https://arxiv.org/abs/2607.03316",
+        took: "Developers rejected more review bot comments than they accepted. Track which ones land.",
+      },
+      {
+        id: "gh-agentic-security",
+        title: "Under the hood: Security architecture of GitHub Agentic Workflows",
+        author: "Landon Cox, Jiaxiao Zhou",
+        publication: "The GitHub Blog",
+        date: "9 March 2026",
+        url: "https://github.blog/ai-and-ml/generative-ai/under-the-hood-security-architecture-of-github-agentic-workflows/",
+        took: "Agents hold no secrets. Their writes are staged and vetted before anything lands.",
+      },
+      {
+        id: "nvidia-sandbox",
+        title: "Practical Security Guidance for Sandboxing Agentic Workflows and Managing Execution Risk",
+        author: "Rich Harang",
+        publication: "NVIDIA Technical Blog",
+        date: "30 January 2026",
+        url: "https://developer.nvidia.com/blog/practical-security-guidance-for-sandboxing-agentic-workflows-and-managing-execution-risk/",
+        took: "Sandbox agents and control where they can reach on the network.",
+      },
+      {
+        id: "nvidia-agents-md",
+        title: "Mitigating Indirect AGENTS.md Injection Attacks in Agentic Environments",
+        author: "Daniel Teixeira",
+        publication: "NVIDIA Technical Blog",
+        date: "20 April 2026",
+        url: "https://developer.nvidia.com/blog/mitigating-indirect-agents-md-injection-attacks-in-agentic-environments/",
+        took: "Instruction files can be planted. Treat them as part of the supply chain.",
+      },
+      {
+        id: "gcloud-trusted-files",
+        title: "Beyond source code: The files AI coding agents trust \u2014 and attackers exploit",
+        author: "Bernardo Quintero, Daniel Kapellmann Zafra",
+        publication: "Google Cloud Blog",
+        date: "12 May 2026",
+        url: "https://cloud.google.com/blog/products/identity-security/beyond-source-code-the-files-ai-coding-agents-trust-and-attackers-exploit",
+        took: "Instruction files and agent settings can steer an agent. Allow only known ones and review them before merge.",
+      },
+      {
+        id: "owasp-agents",
+        title: "AI Agent and MCP Security",
+        author: "OWASP",
+        publication: "OWASP DevSecOps Guideline",
+        date: "Undated",
+        url: "https://owasp.github.io/DevSecOpsGuideline/2-Process/2-2-Develop/2-2-5-AI-Agent-and-MCP-Security/",
+        took: "Isolation is the boundary, not a prompt. Instruction files go under code owners. No agent approves its own change.",
+      },
+      {
+        id: "owasp-ai-coding",
+        title: "Secure Coding with AI Cheat Sheet",
+        author: "OWASP",
+        publication: "OWASP Cheat Sheet Series",
+        date: "Undated",
+        url: "https://cheatsheetseries.owasp.org/cheatsheets/Secure_Coding_with_AI_Cheat_Sheet.html",
+        took: "Every AI change has a named human owner. AI review does not replace human review.",
+      },
+      {
+        id: "dora-roi",
+        title: "ROI of AI-assisted Software Development",
+        author: "DORA",
+        publication: "dora.dev",
+        date: "22 April 2026",
+        url: "https://dora.dev/ai/roi/report/",
+        took: "Expect a dip before gains, and count the cost of checking AI output.",
+      },
+      {
+        id: "dora-small-batches",
+        title: "Capabilities: Working in small batches",
+        author: "DORA",
+        publication: "dora.dev",
+        date: "Updated 8 December 2025",
+        url: "https://dora.dev/capabilities/working-in-small-batches/",
+        took: "Small batches are a safety net for AI adoption, against the instability faster changes bring.",
+      },
+      {
+        id: "port-self-healing",
+        title: "How to build self-healing CI pipelines",
+        author: "Zohar Einy",
+        publication: "Port newsletter",
+        date: "12 May 2026",
+        url: "https://newsletter.port.io/p/how-to-build-self-healing-ci-pipelines",
+        took: "Sort a red check by whose problem it is before fixing it. Hand new or risky failures to a person.",
+      },
+      {
+        id: "ms-spec-driven",
+        title: "Spec-Driven Development: A Spec-First Approach to AI-Native Engineering",
+        author: "Apoorv Gupta",
+        publication: "Microsoft for Developers",
+        date: "10 June 2026",
+        url: "https://developer.microsoft.com/blog/spec-driven-development-ai-native-engineering/",
+        took: "Write the spec first, and keep it as the thing agents build and check against.",
+      },
+    ],
+  },
+];
+
+export const ALL_REFERENCES: Reference[] = [...REFERENCES, ...FURTHER_READING.flatMap((g) => g.refs)];
+
 export function referenceById(id: ReferenceId): Reference {
-  return REFERENCES.find((r) => r.id === id)!;
+  return ALL_REFERENCES.find((r) => r.id === id)!;
 }
 
 /** When to bring a station's bot in. Start small and add more as people trust it. */
-export type AdoptionStage = "Start" | "Next" | "Later";
+export type AdoptionStage = "Start" | "Guardrails" | "Next" | "Later";
 
 export const ADOPTION_STAGES: {
   stage: AdoptionStage;
@@ -330,9 +502,15 @@ export const ADOPTION_STAGES: {
     sources: ["osmani", "savkin-review"],
   },
   {
+    stage: "Guardrails",
+    summary:
+      "Before any coding agent writes code. Agents run in a sandbox with no secrets and a short list of hosts they can reach. Their writes are staged and checked. Their instruction files are owned and reviewed like code.",
+    sources: ["gh-agentic-security", "owasp-agents"],
+  },
+  {
     stage: "Next",
     summary:
-      "Agents take small work orders that are labelled for the factory. They build in fresh workspaces. People still plan and approve.",
+      "Agents take small work orders that are labelled for the factory. They build in fresh workspaces inside the guardrails. People still plan and approve.",
     sources: ["savkin", "iusztin"],
   },
   {
@@ -354,37 +532,37 @@ export interface Guide {
 export const GUIDE: Record<StationId, Guide> = {
   backlog: {
     stage: "Next",
-    bot: "A triage agent sorts incoming bugs, ideas, and incidents. It drops duplicates and routes each one.",
+    bot: "A triage agent sorts incoming bugs, ideas, and incidents. It drops duplicates and routes each one. It reads issue text as untrusted input and takes no orders from it.",
     human:
       "Product decides what gets built and writes the checks that mean done. Planning is where judgment pays most.",
     sources: ["iusztin", "osmani"],
   },
   source: {
     stage: "Next",
-    bot: "An agent sets up a fresh workspace and cuts the branch for each work order.",
+    bot: "An agent sets up a fresh workspace and cuts the branch for each work order. The workspace is a sandbox with no production secrets.",
     human:
-      "No one needs to touch this per change. People set the rule that main only moves through the gate and review.",
-    sources: ["savkin"],
+      "No one needs to touch this per change. People set the rule that main only moves through the gate and review. They own the sandbox rules too.",
+    sources: ["savkin", "gh-agentic-security"],
   },
   bench: {
     stage: "Next",
-    bot: "A coding agent builds the change. A separate QA agent tries to break it. Start with small work orders labelled for the factory.",
+    bot: "A coding agent builds the change. A separate QA agent tries to break it. Start with small work orders labelled for the factory. Its pushes and comments are staged, then checked.",
     human:
       "Not at the bench. A person must still be able to step in, halt the agent, or redirect it.",
     sources: ["iusztin", "savkin"],
   },
   gate: {
     stage: "Start",
-    bot: "CI runs lint, types, tests, and a build on every snapshot. Later a fixing agent can pick up a red check.",
+    bot: "CI runs lint, types, tests, and a build on every snapshot. Later a fixing agent can sort a red check and open a fix as a PR. A new or risky failure goes to its owner.",
     human:
-      "People choose which checks exist. A check is worth trusting when it is cheap, runs every time, and is hard to fake.",
+      "People choose which checks exist. A check is worth trusting when it is cheap, runs every time, and is hard to fake. An agent saying it is done is not a check.",
     sources: ["osmani", "iusztin"],
   },
   review: {
     stage: "Start",
-    bot: "An adversarial review agent runs in the background. It looks for low-level bugs and API misuse, then writes a summary.",
+    bot: "An adversarial review agent runs in the background. It looks for bugs and API misuse, then writes a summary. The PR description can mislead it.",
     human:
-      "The reviewer. Agents cannot explain a change to a person and are poor at architecture. A person reads the session, talks to the agent, and approves.",
+      "The reviewer. Agents cannot explain a change to a person and are poor at architecture. A person reads the session, talks to the agent, and approves. Review goes deeper as the change gets bigger or riskier.",
     sources: ["savkin-review", "osmani"],
   },
   artifact: {
@@ -413,3 +591,153 @@ export const GUIDE: Record<StationId, Guide> = {
     sources: ["savkin", "iusztin"],
   },
 };
+
+/**
+ * How settled a recommendation is.
+ * Best practice: well established, several independent sources, widely adopted.
+ * Cutting edge: newer, evidence mostly from one recent paper or survey, or emerging tooling.
+ */
+export type Maturity = "Best practice" | "Cutting edge";
+
+export const MATURITY: Record<Maturity, string> = {
+  "Best practice": "Well established. Several independent sources say it, and teams widely do it.",
+  "Cutting edge": "Newer. The evidence is mostly one recent paper or survey, or tooling that is still emerging.",
+};
+
+export interface Recommendation {
+  id: string;
+  station: StationId;
+  stage: AdoptionStage;
+  maturity: Maturity;
+  text: string;
+  sources: ReferenceId[];
+}
+
+export const RECOMMENDATIONS: Recommendation[] = [
+  {
+    id: "done-as-checks",
+    station: "backlog",
+    stage: "Start",
+    maturity: "Best practice",
+    text: "Write done as checks a machine can run. Vague criteria give an agent room to claim success.",
+    sources: ["ms-spec-driven", "spec-sign-off"],
+  },
+  {
+    id: "untrusted-issues",
+    station: "backlog",
+    stage: "Next",
+    maturity: "Best practice",
+    text: "Treat issue text as untrusted input. The triage agent reads it but takes no orders from it.",
+    sources: ["nvidia-agents-md", "owasp-agents"],
+  },
+  {
+    id: "sandbox-no-secrets",
+    station: "source",
+    stage: "Guardrails",
+    maturity: "Best practice",
+    text: "Run agents in a sandbox with no production secrets. Isolation is the boundary, not a prompt.",
+    sources: ["gh-agentic-security", "nvidia-sandbox", "owasp-agents"],
+  },
+  {
+    id: "egress-allowlist",
+    station: "source",
+    stage: "Guardrails",
+    maturity: "Best practice",
+    text: "Let the sandbox reach only a short list of hosts. Block the rest of the network.",
+    sources: ["nvidia-sandbox", "gh-agentic-security", "owasp-agents"],
+  },
+  {
+    id: "staged-writes",
+    station: "bench",
+    stage: "Guardrails",
+    maturity: "Best practice",
+    text: "Stage the agent's writes. Pushes, PRs, and comments pass a check with limits before they land.",
+    sources: ["gh-agentic-security", "owasp-agents"],
+  },
+  {
+    id: "owned-instructions",
+    station: "bench",
+    stage: "Guardrails",
+    maturity: "Best practice",
+    text: "Put AGENTS.md and other instruction files under code owners. Review a change to them like a change to code.",
+    sources: ["owasp-agents", "nvidia-agents-md", "gcloud-trusted-files"],
+  },
+  {
+    id: "checks-not-claims",
+    station: "gate",
+    stage: "Start",
+    maturity: "Best practice",
+    text: "An agent saying it is done is not evidence. Only the gate's checks count.",
+    sources: ["osmani", "spec-sign-off", "gh-agentic-security"],
+  },
+  {
+    id: "spec-signs-off",
+    station: "gate",
+    stage: "Later",
+    maturity: "Cutting edge",
+    text: "Let the spec sign off, not the agent. Checks drawn from the work order commit the result, and run again when what they depend on changes.",
+    sources: ["spec-sign-off"],
+  },
+  {
+    id: "narrow-self-healing",
+    station: "gate",
+    stage: "Later",
+    maturity: "Cutting edge",
+    text: "A fixing agent sorts each red check first: whose problem it is, and whether it has been seen before. It opens a fix as a PR that goes through the gate and review. A new or risky failure goes to its owner.",
+    sources: ["port-self-healing"],
+  },
+  {
+    id: "scale-review",
+    station: "review",
+    stage: "Start",
+    maturity: "Best practice",
+    text: "Keep PRs small. Scale how deeply a person reviews to the size and risk of the change.",
+    sources: ["crbugbench", "dora-small-batches"],
+  },
+  {
+    id: "human-approves",
+    station: "review",
+    stage: "Start",
+    maturity: "Best practice",
+    text: "A named person approves. Agent review does not replace it, and no agent approves its own change.",
+    sources: ["owasp-ai-coding", "owasp-agents", "crbugbench"],
+  },
+  {
+    id: "measure-review-bot",
+    station: "review",
+    stage: "Next",
+    maturity: "Cutting edge",
+    text: "Track how often people accept the review bot's comments, and test it on bugs you already know. The PR description can mislead it, so read its summary as a claim.",
+    sources: ["crbugbench", "coderabbit"],
+  },
+  {
+    id: "measure-factory",
+    station: "observe",
+    stage: "Start",
+    maturity: "Best practice",
+    text: "Measure change failure rate and cost per change before agents arrive and after. Expect a dip at first while people check more.",
+    sources: ["dora-roi", "crbugbench"],
+  },
+  {
+    id: "harness-evals",
+    station: "observe",
+    stage: "Next",
+    maturity: "Cutting edge",
+    text: "Test the agent setup like code. Run small behavioural evals when a prompt, tool, or model changes, and track the pass rate over time.",
+    sources: ["harness-evals", "crbugbench"],
+  },
+  {
+    id: "spec-drift",
+    station: "loop",
+    stage: "Later",
+    maturity: "Cutting edge",
+    text: "Check that the docs agents build from still match the code. Record the drift as the next work order.",
+    sources: ["spec-drift", "ms-spec-driven"],
+  },
+];
+
+export function recommendationsFor(filter: { station?: StationId; stage?: AdoptionStage }): Recommendation[] {
+  return RECOMMENDATIONS.filter(
+    (r) => (!filter.station || r.station === filter.station) && (!filter.stage || r.stage === filter.stage),
+  );
+}
