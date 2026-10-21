@@ -2,8 +2,8 @@ export const STATION_IDS = [
   "backlog",
   "source",
   "bench",
-  "review",
   "gate",
+  "review",
   "artifact",
   "release",
   "observe",
@@ -26,7 +26,7 @@ export interface Station {
   owner: string;
   thesis: string;
   lesson: string;
-  source?: ReferenceId;
+  sources?: ReferenceId[];
 }
 
 export const STATIONS: Station[] = [
@@ -37,17 +37,17 @@ export const STATIONS: Station[] = [
     part: "Work order",
     owner: "Product",
     thesis:
-      "Nothing enters the factory as a vibe. A work order names the break, who feels it, and how you will know it is fixed.",
+      "People decide what to build. Nothing enters the factory as a vibe. A work order names the break, who feels it, and how you will know it is fixed.",
     lesson:
       "Later stations do not invent the goal. Review, the gate, and production all check the change against this card. If the checks are fuzzy, every argument downstream is about a different change. Judgment is cheapest here. A wrong goal costs more at every station after it.",
-    source: "osmani",
+    sources: ["osmani"],
   },
   {
     id: "source",
     index: "02",
     name: "Source",
     part: "Branch",
-    owner: "Author",
+    owner: "Agent",
     thesis:
       "The repo is the memory of the factory. Main stays shippable. A branch is a parallel timeline with a name.",
     lesson:
@@ -58,35 +58,36 @@ export const STATIONS: Station[] = [
     index: "03",
     name: "Bench",
     part: "Edit",
-    owner: "Author",
+    owner: "Agent",
     thesis:
-      "The bench is the inner loop: change a file, run it locally, look. It is the fastest station, and the least trustworthy.",
+      "An agent builds the change here. It edits a file, runs it in its sandbox, and looks. It is the fastest station, and the least trustworthy.",
     lesson:
-      "Your laptop knows your env, your half-saved buffers, and your habits. The factory does not. What leaves the bench is a commit. That is a snapshot someone else can check out on a clean machine.",
-  },
-  {
-    id: "review",
-    index: "04",
-    name: "Review",
-    part: "Diff",
-    owner: "Reviewer",
-    thesis:
-      "Review reads the diff, not your intention. A second person checks the change against the work order before main moves.",
-    lesson:
-      "A diff is the only thing that changed: removed lines, added lines, nothing else. Approval is permission for that snapshot to be considered for the trunk. It is not a compliment. Whoever wrote the change, person or agent, is the worst judge of it.",
-    source: "iusztin",
+      "The sandbox knows its own env, its half-written files, and its lucky runs. The factory does not. What leaves the bench is a commit. That is a snapshot someone else can check out on a clean machine.",
+    sources: ["iusztin"],
   },
   {
     id: "gate",
-    index: "05",
+    index: "04",
     name: "Gate",
     part: "Checks",
     owner: "The factory",
     thesis:
-      "The gate runs the same checks, on a clean machine, from the snapshot. Not from the folder open on your laptop.",
+      "The gate runs the same checks, on a clean machine, from the snapshot. Not from the agent's sandbox. It runs before any person reads the change.",
     lesson:
-      "Lint, types, tests, and a build are a recipe. If they pass only for you, they are not a gate. A red check sends the snapshot back. Main does not move. A check earns trust when it is cheap, runs every time, and is hard to fake.",
-    source: "osmani",
+      "Lint, types, tests, and a build are a recipe. If they pass only in the sandbox, they are not a gate. A red check sends the snapshot back. Main does not move. A check earns trust when it is cheap, runs every time, and is hard to fake.",
+    sources: ["osmani"],
+  },
+  {
+    id: "review",
+    index: "05",
+    name: "Review",
+    part: "Diff",
+    owner: "Human reviewer",
+    thesis:
+      "The checks already passed. Review is where judgment lives. A person reads the diff, not the intention, and decides if it meets the work order.",
+    lesson:
+      "A diff is the only thing that changed: removed lines, added lines, nothing else. Approval is the last call before the change is sealed. It is not a compliment. The agent that wrote the change is the worst judge of it.",
+    sources: ["osmani", "iusztin"],
   },
   {
     id: "artifact",
@@ -95,7 +96,7 @@ export const STATIONS: Station[] = [
     part: "Digest",
     owner: "The factory",
     thesis:
-      "A passing gate produces a sealed object: a name, a version, and a digest. That object is what ships. Not the branch.",
+      "Once the gate passes and a person approves, the build is sealed: a name, a version, and a digest. That object is what ships. Not the branch.",
     lesson:
       "Rebuilding later, even from the same commit, can pick up a different clock, toolchain, or dependency. The digest is the proof you promoted the bytes you tested.",
   },
@@ -131,7 +132,7 @@ export const STATIONS: Station[] = [
       "The signal becomes the next work order. A factory is the loop, not the moment of deploy.",
     lesson:
       "CHK-184 left a trace: the timeout budget is invisible to the people who will debug the next incident. That trace is backlog, not a victory lap. Write down what actually happened, so the next change starts from it.",
-    source: "savkin",
+    sources: ["savkin"],
   },
 ];
 
@@ -172,10 +173,10 @@ export function nextStation(id: StationId): StationId | null {
 export const LOCK_REASON: Record<StationId, string> = {
   backlog: "",
   source: "Accept the work order first. The line does not start from a vague idea.",
-  bench: "Cut a branch first, so main stays shippable while you edit.",
-  review: "Commit the edit. Review looks at a diff, not at an unsaved buffer.",
-  gate: "Main does not take an unreviewed change. Approve the review first.",
-  artifact: "Nothing is sealed until the gate passes on a clean machine.",
+  bench: "Cut a branch first, so main stays shippable while the agent edits.",
+  gate: "Commit the edit. The gate checks a snapshot, not an unsaved buffer.",
+  review: "Run the gate first. A person only reads a change the checks could not reject.",
+  artifact: "Nothing is sealed until the gate passes and a person approves.",
   release: "Promote a sealed digest. Do not ship a folder from a laptop.",
   observe: "Production has to be running this digest before its signal means anything.",
   loop: "Read the production signal. The next work order comes from what actually happened.",
@@ -204,13 +205,7 @@ export const PARTS: { name: string; station: string; definition: string; here: s
     name: "Commit",
     station: "Bench",
     definition: "An immutable snapshot: tree, parent, author, message. History is a chain of these.",
-    here: "b7e21a4 is the snapshot review and the gate will both look at. Not your editor.",
-  },
-  {
-    name: "Diff",
-    station: "Review",
-    definition: "The lines removed and the lines added between two snapshots. Intention does not appear in it.",
-    here: "Mina reviews only what b7e21a4 changed in payments/timeout.ts.",
+    here: "b7e21a4 is the snapshot the gate and review will both look at. Not the agent's sandbox.",
   },
   {
     name: "Gate",
@@ -219,9 +214,15 @@ export const PARTS: { name: string; station: string; definition: string; here: s
     here: "Lint, types, tests, build. A failing test stops the line. Main stays at 4e88c19.",
   },
   {
+    name: "Diff",
+    station: "Review",
+    definition: "The lines removed and the lines added between two snapshots. Intention does not appear in it.",
+    here: "Mina reads only what b7e21a4 changed in payments/timeout.ts, after the gate passed.",
+  },
+  {
     name: "Artifact",
     station: "Artifact",
-    definition: "The sealed output of a passing gate: version plus digest. The thing you promote.",
+    definition: "The sealed output of a passing gate and an approved review: version plus digest. The thing you promote.",
     here: "checkout-web 1.4.2, sha256:9f3ac21e8b, built from b7e21a4.",
   },
   {

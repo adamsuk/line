@@ -34,8 +34,8 @@ export function Stage() {
         {focus === "backlog" && <Backlog />}
         {focus === "source" && <Source />}
         {focus === "bench" && <Bench />}
-        {focus === "review" && <Review />}
         {focus === "gate" && <Gate />}
+        {focus === "review" && <Review />}
         {focus === "artifact" && <Artifact />}
         {focus === "release" && <Release />}
         {focus === "observe" && <Observe />}
@@ -45,7 +45,7 @@ export function Stage() {
       <aside className="mt-6 rounded-xl border border-line bg-paper-2 p-4">
         <p className="font-mono text-xs text-muted">What this station is for</p>
         <p className="mt-2 text-sm text-ink">{station.lesson}</p>
-        {station.source ? <SourceLink id={station.source} /> : null}
+        {station.sources?.map((id) => <SourceLink key={id} id={id} />)}
       </aside>
     </article>
   );
@@ -242,7 +242,7 @@ function Bench() {
         {`// payments/timeout.ts\nexport const TIMEOUT_MS = 800;\nexport const RETRIES = 0;\n\nexport async function charge(card: Card) {\n  return provider.charge(card, {\n    timeout: TIMEOUT_MS,\n    retries: RETRIES,\n  });\n}`}
       </pre>
       <fieldset>
-        <legend className="text-sm font-medium">Choose the edit. Then commit it.</legend>
+        <legend className="text-sm font-medium">The agent drafted three edits. Pick the one it commits.</legend>
         <div className="mt-2 grid gap-2">
           {CHOICES.map((item) => (
             <label
@@ -273,11 +273,11 @@ function Bench() {
           <p className="font-mono text-xs text-muted">
             {COMMIT.sha} · {COMMIT.message}
           </p>
-          <Continue id="bench" label="Continue to review" />
+          <Continue id="bench" label="Continue to the gate" />
         </div>
       ) : (
         <Primary onClick={commit} disabled={!choice}>
-          {choice ? "Commit and open review" : "Pick an edit first"}
+          {choice ? "Commit the edit" : "Pick an edit first"}
         </Primary>
       )}
     </div>
@@ -296,14 +296,14 @@ function Review() {
   return (
     <div className="grid gap-4">
       <p className="font-mono text-xs text-muted">
-        {BRANCH} → main · {COMMIT.sha}
+        {BRANCH} → main · {COMMIT.sha} · gate passed
       </p>
       <Diff choice={choice} />
       <div className="rounded-xl border border-line p-4">
         <p className="text-sm font-medium">Mina Okonkwo</p>
         <p className="mt-2 text-sm text-ink">
           {correct
-            ? "Timeout and the idempotency key match the work order. Is 8 seconds the provider's documented budget, or our guess?"
+            ? "The gate is green, so it runs. Timeout and the idempotency key match the work order. Is 8 seconds the provider's documented budget, or the agent's guess?"
             : "This misses the work order. The charge can still hang, or a retry can still double-submit. I am not approving this snapshot."}
         </p>
         {correct ? (
@@ -325,7 +325,7 @@ function Review() {
         )}
       </div>
       {approved ? (
-        <Continue id="review" label="Continue to the gate" />
+        <Continue id="review" label="Continue to the artifact" />
       ) : correct && commentResolved ? (
         <Primary onClick={approve}>Approve b7e21a4</Primary>
       ) : (
@@ -438,17 +438,17 @@ function Gate() {
       {gate === "failed" ? (
         <div className="grid gap-3">
           <p className="text-sm text-fail">
-            Tests failed: {failName}. This machine does not have your local luck. Main stays at 4e88c19.
+            Tests failed: {failName}. This machine does not have the sandbox's luck. No person had to read it. Main stays at 4e88c19.
           </p>
           <Primary onClick={() => focusStation("bench")}>Back to the bench</Primary>
         </div>
       ) : gate === "passed" ? (
         <div className="grid gap-3">
           <p className="text-sm text-ink">
-            Same snapshot as the bench, on a machine that does not know you. The gate produced a build. It
-            has not shipped.
+            Same snapshot as the bench, on a machine that does not know the agent. The gate produced a build.
+            No person has read it yet.
           </p>
-          <Continue id="gate" label="Continue to the artifact" />
+          <Continue id="gate" label="Continue to review" />
         </div>
       ) : (
         <Primary onClick={runGate} disabled={gate === "running"}>
@@ -621,9 +621,9 @@ function Loop() {
       <ol className="grid gap-1 text-sm text-muted">
         <li>Work order CHK-184 accepted with three checks.</li>
         <li>Branch {BRANCH} cut from main at 4e88c19.</li>
-        <li>Commit {COMMIT.sha} raised the budget and keyed the retry.</li>
-        <li>Review approved the diff, not the intention.</li>
+        <li>The agent committed {COMMIT.sha}. It raised the budget and keyed the retry.</li>
         <li>The gate passed on a clean machine.</li>
+        <li>A person approved the diff, not the intention.</li>
         <li>Artifact {VERSION} sealed as {DIGEST}.</li>
         <li>That digest was promoted, not rebuilt.</li>
         <li>Errors fell. The line heard it.</li>
