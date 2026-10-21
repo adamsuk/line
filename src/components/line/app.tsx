@@ -1,4 +1,4 @@
-import { REFERENCES } from "@/factory/model";
+import { FURTHER_READING, REFERENCES } from "@/factory/model";
 import { Guide } from "@/components/line/guide";
 import { doneCount, useLine } from "@/factory/store";
 import { Parts } from "@/components/line/parts";
@@ -123,6 +123,36 @@ function BuiltOn() {
             </li>
           ))}
         </ul>
+        <h2 id="further-reading" className="mt-8 font-display text-2xl text-ink">
+          Further reading
+        </h2>
+        <p className="mt-2 max-w-2xl text-sm text-muted">
+          Newer pieces behind the labelled recommendations in the guide. Agent tooling moves fast, so these are
+          dated.
+        </p>
+        {FURTHER_READING.map((group) => (
+          <section key={group.heading} aria-label={group.heading} className="mt-4">
+            <h3 className="font-mono text-xs text-muted">{group.heading}</h3>
+            <ul className="mt-2 grid gap-x-6 gap-y-3 sm:grid-cols-2">
+              {group.refs.map((ref) => (
+                <li key={ref.id} className="text-sm">
+                  <a
+                    href={ref.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-ink underline underline-offset-4 hover:text-steel"
+                  >
+                    {ref.title}
+                  </a>
+                  <span className="text-muted">
+                    . {ref.author}, {ref.publication}, {ref.date}.
+                  </span>
+                  <p className="mt-1 text-muted">{ref.took}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
       </div>
     </footer>
   );

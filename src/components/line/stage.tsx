@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { RecommendationList } from "@/components/line/recommendations";
 import {
   BRANCH,
   CHECKS,
@@ -13,6 +14,7 @@ import {
   ORDER,
   VERSION,
   nextStation,
+  recommendationsFor,
   referenceById,
   stationById,
   type BenchChoice,
@@ -94,6 +96,14 @@ export function GuidePanel({ id }: { id: LineState["focus"] }) {
       {guide.sources.map((ref) => (
         <SourceLink key={ref} id={ref} />
       ))}
+      {recommendationsFor({ station: id }).length > 0 ? (
+        <div className="mt-4 border-t border-line pt-4">
+          <p className="font-mono text-xs text-muted">Recommendations</p>
+          <div className="mt-2">
+            <RecommendationList items={recommendationsFor({ station: id })} show="stage" />
+          </div>
+        </div>
+      ) : null}
     </aside>
   );
 }
