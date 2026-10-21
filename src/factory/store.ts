@@ -82,8 +82,8 @@ export function frontierOf(s: Pick<
   if (!s.accepted) return "backlog";
   if (!s.branched) return "source";
   if (!s.committed) return "bench";
-  if (!s.approved) return "review";
   if (s.gate !== "passed") return "gate";
+  if (!s.approved) return "review";
   if (!s.sealed) return "artifact";
   if (!s.production) return "release";
   if (!s.signalRead) return "observe";
@@ -144,7 +144,7 @@ export const useLine = create<LineState>((set, get) => ({
   resolveComment: () => set({ commentResolved: true }),
   approve: () => {
     const s = get();
-    if (s.choice !== "budget" || !s.commentResolved) return;
+    if (s.gate !== "passed" || s.choice !== "budget" || !s.commentResolved) return;
     set({ approved: true, notice: null });
   },
   runGate: () => {
@@ -156,6 +156,8 @@ export const useLine = create<LineState>((set, get) => ({
     set({
       gate: "running",
       checks: CHECKS.map(() => "pending"),
+      commentResolved: false,
+      approved: false,
       sealed: false,
       staging: false,
       production: false,
@@ -195,7 +197,7 @@ export const useLine = create<LineState>((set, get) => ({
     set({ checks });
   },
   seal: () => {
-    if (get().gate !== "passed") return;
+    if (get().gate !== "passed" || !get().approved) return;
     set({ sealed: true });
   },
   promoteStaging: () => {
@@ -216,8 +218,8 @@ export function doneCount(s: LineState): number {
     s.accepted,
     s.branched,
     s.committed,
-    s.approved,
     s.gate === "passed",
+    s.approved,
     s.sealed,
     s.production,
     s.signalRead,
@@ -233,10 +235,10 @@ export function stationDone(s: LineState, id: StationId): boolean {
       return s.branched;
     case "bench":
       return s.committed;
-    case "review":
-      return s.approved;
     case "gate":
       return s.gate === "passed";
+    case "review":
+      return s.approved;
     case "artifact":
       return s.sealed;
     case "release":

@@ -4,7 +4,7 @@ export function Parts() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
       <p className="max-w-2xl text-base text-muted">
-        These are the objects that move. Stations are where a person or a machine touches them. Learn the
+        These are the objects that move. Stations are where a person, an agent, or a machine touches them. Learn the
         object and you can recognize it in any repo, not just this one.
       </p>
       <ol className="mt-6 grid gap-3 sm:grid-cols-2">

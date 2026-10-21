@@ -30,7 +30,7 @@ export function LineApp() {
             </button>
           </div>
           <p className="max-w-2xl text-sm text-muted sm:text-base">
-            One change, nine stations. A factory is not typing faster. It is how a change stays the same
+            One change, nine stations. People plan and approve. Agents build. A factory is not typing faster. It is how a change stays the same
             when someone else builds it, on a clean machine, and then listens to what production does.
           </p>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
