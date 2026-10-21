@@ -1,3 +1,4 @@
+import { REFERENCES } from "@/factory/model";
 import { doneCount, useLine } from "@/factory/store";
 import { Parts } from "@/components/line/parts";
 import { Rail } from "@/components/line/rail";
@@ -61,6 +62,8 @@ export function LineApp() {
       ) : (
         <Parts />
       )}
+
+      <BuiltOn />
     </main>
   );
 }
@@ -86,5 +89,37 @@ function Seg({
     >
       {label}
     </button>
+  );
+}
+
+function BuiltOn() {
+  return (
+    <footer aria-labelledby="built-on" className="mx-auto mt-6 max-w-6xl px-4 sm:px-6">
+      <div className="border-t border-line pt-6">
+        <h2 id="built-on" className="font-display text-2xl text-ink">
+          Built on
+        </h2>
+        <p className="mt-2 max-w-2xl text-sm text-muted">Line started from these three pieces.</p>
+        <ul className="mt-4 grid gap-3 sm:grid-cols-3">
+          {REFERENCES.map((ref) => (
+            <li key={ref.id} className="rounded-2xl border border-line bg-paper p-4">
+              <p className="font-mono text-xs text-faint">
+                {ref.publication} · {ref.date}
+              </p>
+              <a
+                href={ref.url}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-1 block font-display text-lg leading-snug text-ink underline-offset-4 hover:underline"
+              >
+                {ref.title}
+              </a>
+              <p className="mt-1 text-sm text-steel">{ref.author}</p>
+              <p className="mt-2 text-sm text-muted">{ref.took}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </footer>
   );
 }

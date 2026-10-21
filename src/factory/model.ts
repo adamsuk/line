@@ -26,6 +26,7 @@ export interface Station {
   owner: string;
   thesis: string;
   lesson: string;
+  source?: ReferenceId;
 }
 
 export const STATIONS: Station[] = [
@@ -38,7 +39,8 @@ export const STATIONS: Station[] = [
     thesis:
       "Nothing enters the factory as a vibe. A work order names the break, who feels it, and how you will know it is fixed.",
     lesson:
-      "Later stations do not invent the goal. Review, the gate, and production all check the change against this card. If the checks are fuzzy, every argument downstream is about a different change.",
+      "Later stations do not invent the goal. Review, the gate, and production all check the change against this card. If the checks are fuzzy, every argument downstream is about a different change. Judgment is cheapest here. A wrong goal costs more at every station after it.",
+    source: "osmani",
   },
   {
     id: "source",
@@ -60,7 +62,7 @@ export const STATIONS: Station[] = [
     thesis:
       "The bench is the inner loop: change a file, run it locally, look. It is the fastest station, and the least trustworthy.",
     lesson:
-      "Your laptop knows your env, your half-saved buffers, and your habits. The factory does not. What leaves the bench is a commit — a snapshot someone else can check out on a clean machine.",
+      "Your laptop knows your env, your half-saved buffers, and your habits. The factory does not. What leaves the bench is a commit. That is a snapshot someone else can check out on a clean machine.",
   },
   {
     id: "review",
@@ -71,7 +73,8 @@ export const STATIONS: Station[] = [
     thesis:
       "Review reads the diff, not your intention. A second person checks the change against the work order before main moves.",
     lesson:
-      "A diff is the only thing that changed: removed lines, added lines, nothing else. Approval is permission for that snapshot to be considered for the trunk. It is not a compliment.",
+      "A diff is the only thing that changed: removed lines, added lines, nothing else. Approval is permission for that snapshot to be considered for the trunk. It is not a compliment. Whoever wrote the change, person or agent, is the worst judge of it.",
+    source: "iusztin",
   },
   {
     id: "gate",
@@ -80,9 +83,10 @@ export const STATIONS: Station[] = [
     part: "Checks",
     owner: "The factory",
     thesis:
-      "The gate runs the same checks, on a clean machine, from the snapshot — not from the folder open on your laptop.",
+      "The gate runs the same checks, on a clean machine, from the snapshot. Not from the folder open on your laptop.",
     lesson:
-      "Lint, types, tests, and a build are a recipe. If they pass only for you, they are not a gate. A red check sends the snapshot back. Main does not move.",
+      "Lint, types, tests, and a build are a recipe. If they pass only for you, they are not a gate. A red check sends the snapshot back. Main does not move. A check earns trust when it is cheap, runs every time, and is hard to fake.",
+    source: "osmani",
   },
   {
     id: "artifact",
@@ -126,7 +130,8 @@ export const STATIONS: Station[] = [
     thesis:
       "The signal becomes the next work order. A factory is the loop, not the moment of deploy.",
     lesson:
-      "CHK-184 left a trace: the timeout budget is invisible to the people who will debug the next incident. That trace is backlog, not a victory lap.",
+      "CHK-184 left a trace: the timeout budget is invisible to the people who will debug the next incident. That trace is backlog, not a victory lap. Write down what actually happened, so the next change starts from it.",
+    source: "savkin",
   },
 ];
 
@@ -246,3 +251,49 @@ export const LOGS = [
   { time: "14:11:02", text: "checkout ok       provider=slow  duration=2401ms  retry=1" },
   { time: "14:14:40", text: "checkout ok       provider=slow  duration=1904ms  retry=0" },
 ];
+
+export type ReferenceId = "osmani" | "iusztin" | "savkin";
+
+export interface Reference {
+  id: ReferenceId;
+  title: string;
+  author: string;
+  publication: string;
+  date: string;
+  url: string;
+  took: string;
+}
+
+export const REFERENCES: Reference[] = [
+  {
+    id: "osmani",
+    title: "Software Factories, Light and Dark",
+    author: "Addy Osmani",
+    publication: "AddyOsmani.com",
+    date: "20 July 2026",
+    url: "https://addyosmani.com/blog/software-factories/",
+    took: "The closed loop from intent to production signal and back. Verification, not generation, is the bottleneck.",
+  },
+  {
+    id: "iusztin",
+    title: "Inside a Software Factory",
+    author: "Paul Iusztin",
+    publication: "O'Reilly Radar",
+    date: "4 September 2026",
+    url: "https://www.oreilly.com/radar/inside-a-software-factory/",
+    took: "The factory as stages of the lifecycle, and where the human belongs in it.",
+  },
+  {
+    id: "savkin",
+    title: "A Software Factory Is a Workflow, Not a Product. Build One in 20 Minutes.",
+    author: "Victor Savkin",
+    publication: "Nx Blog",
+    date: "6 August 2026",
+    url: "https://nx.dev/blog/software-factory-workflow-not-product",
+    took: "The factory is ordinary steps wired together. Record what happened once it has.",
+  },
+];
+
+export function referenceById(id: ReferenceId): Reference {
+  return REFERENCES.find((r) => r.id === id)!;
+}
