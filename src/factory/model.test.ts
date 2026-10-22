@@ -14,6 +14,7 @@ import {
   STATION_IDS,
   stationIndex,
   TOOLS,
+  TOOL_LIST,
 } from "./model.ts";
 
 test("nine stations, numbered in order", () => {
@@ -146,4 +147,10 @@ test("every recommendation maps to tools or names its gap", () => {
     }
   }
   for (const id of Object.keys(TOOLS)) assert.ok(RECOMMENDATIONS.some((r) => r.id === id), id);
+});
+
+test("the tools list names each tool once", () => {
+  assert.equal(new Set(TOOL_LIST.map((t) => t.url)).size, TOOL_LIST.length);
+  const urls = new Set(Object.values(TOOLS).flatMap((e) => e.tools.map((t) => t.url)));
+  assert.equal(TOOL_LIST.length, urls.size);
 });

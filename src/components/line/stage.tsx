@@ -100,7 +100,7 @@ export function GuidePanel({ id }: { id: LineState["focus"] }) {
         <div className="mt-4 border-t border-line pt-4">
           <p className="font-mono text-xs text-muted">Recommendations</p>
           <div className="mt-2">
-            <RecommendationList items={recommendationsFor({ station: id })} show="stage" />
+            <RecommendationList items={recommendationsFor({ station: id })} show="stage" withTools />
           </div>
         </div>
       ) : null}
