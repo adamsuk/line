@@ -46,6 +46,18 @@ export function LineApp() {
             A guide to bringing agents into a software factory. One change, nine stations. People plan and approve. Agents build. A factory is not typing faster. It is how a change stays the same
             when someone else builds it, on a clean machine, and then listens to what production does.
           </p>
+          <p className="-mt-2 text-sm text-muted">
+            How it was researched:{" "}
+            <a
+              href="https://sradams.co.uk/blog/researching-a-software-factory-with-grok"
+              target="_blank"
+              rel="noreferrer"
+              className="text-steel underline underline-offset-4 hover:text-steel-2"
+            >
+              Researching a Software Factory with Grok
+              <span className="sr-only"> (opens in a new tab)</span>
+            </a>
+          </p>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="grid grid-cols-3 gap-1 rounded-xl bg-paper-2 p-1 sm:flex">
               <Seg label="Walk the line" active={view === "walk"} onClick={() => setView("walk")} />

@@ -4,6 +4,8 @@ A best practice guide to bringing agents into a software factory, and to where p
 
 Live at https://adamsuk.github.io/line/
 
+How it was researched: [Researching a Software Factory with Grok](https://sradams.co.uk/blog/researching-a-software-factory-with-grok)
+
 ## Where to read
 
 Start here. These files are the factory. Everything else is the app shell that renders them.
