@@ -23,13 +23,24 @@ export function LineApp() {
               <p className="font-mono text-xs tracking-wide text-muted">Software factory</p>
               <h1 className="font-display text-4xl leading-none text-ink">Line</h1>
             </div>
-            <button
-              type="button"
-              onClick={reset}
-              className="min-h-11 shrink-0 rounded-md px-3 text-sm font-medium text-steel underline-offset-4 hover:underline"
-            >
-              Start over
-            </button>
+            <div className="flex shrink-0 flex-wrap items-center justify-end gap-1">
+              <a
+                href="https://github.com/adamsuk/line"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex min-h-11 items-center rounded-md px-3 text-sm font-medium text-steel underline underline-offset-4 hover:text-steel-2"
+              >
+                View on GitHub
+                <span className="sr-only"> (opens in a new tab)</span>
+              </a>
+              <button
+                type="button"
+                onClick={reset}
+                className="min-h-11 shrink-0 rounded-md px-3 text-sm font-medium text-steel underline-offset-4 hover:underline"
+              >
+                Start over
+              </button>
+            </div>
           </div>
           <p className="max-w-2xl text-sm text-muted sm:text-base">
             A guide to bringing agents into a software factory. One change, nine stations. People plan and approve. Agents build. A factory is not typing faster. It is how a change stays the same
