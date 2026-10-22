@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { FURTHER_READING, REFERENCES, TOOL_LIST, TOOLS_CHECKED } from "@/factory/model";
 import { Guide } from "@/components/line/guide";
+import { buildInfo, commitUrl, formatLondon, shortSha } from "@/factory/build-info";
 import { doneCount, useLine } from "@/factory/store";
 import { Parts } from "@/components/line/parts";
 import { Rail } from "@/components/line/rail";
@@ -183,8 +184,32 @@ function BuiltOn() {
             ))}
           </ul>
         </Disclosure>
+        <LastUpdated />
       </div>
     </footer>
+  );
+}
+
+function LastUpdated() {
+  const info = buildInfo();
+  if (!info) return null;
+  return (
+    <p className="mt-6 font-mono text-xs text-faint">
+      Last updated <time dateTime={info.iso}>{formatLondon(info.iso)}</time>
+      {info.sha ? (
+        <>
+          {" · "}
+          <a
+            href={commitUrl(info.sha)}
+            target="_blank"
+            rel="noreferrer"
+            className="underline underline-offset-4 hover:text-steel"
+          >
+            {shortSha(info.sha)}
+          </a>
+        </>
+      ) : null}
+    </p>
   );
 }
 

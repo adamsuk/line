@@ -13,6 +13,11 @@ export default defineConfig({
   publicDir: fileURLToPath(new URL("./public", import.meta.url)),
   resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },
   plugins: [tailwindcss(), viteReact()],
+  // The deployed commit's date and sha come from pages.yml. Locally, fall back to build time.
+  define: {
+    __BUILD_TIME__: JSON.stringify(process.env.LINE_BUILD_TIME || new Date().toISOString()),
+    __BUILD_SHA__: JSON.stringify(process.env.LINE_BUILD_SHA ?? ""),
+  },
   build: {
     outDir: fileURLToPath(new URL("./dist-pages", import.meta.url)),
     emptyOutDir: true,
