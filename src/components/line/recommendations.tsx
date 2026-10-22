@@ -2,6 +2,7 @@ import {
   MATURITY,
   referenceById,
   stationById,
+  TOOLS,
   type Maturity,
   type Recommendation,
 } from "@/factory/model";
@@ -37,9 +38,11 @@ export function MaturityLegend() {
 export function RecommendationList({
   items,
   show,
+  withTools = false,
 }: {
   items: Recommendation[];
   show: "station" | "stage";
+  withTools?: boolean;
 }) {
   if (items.length === 0) return null;
   return (
@@ -76,8 +79,39 @@ export function RecommendationList({
               );
             })}
           </p>
+          {withTools ? <ToolList id={r.id} /> : null}
         </li>
       ))}
+    </ul>
+  );
+}
+
+/** The tools that meet some or all of one recommendation, and any gap left. */
+export function ToolList({ id }: { id: string }) {
+  const entry = TOOLS[id];
+  if (!entry || (entry.tools.length === 0 && !entry.gap)) return null;
+  return (
+    <ul aria-label="Tools" className="mt-2 grid gap-1 border-t border-line pt-2 text-sm">
+      {entry.tools.map((t) => (
+        <li key={t.name} className="text-muted">
+          <a
+            href={t.url}
+            target="_blank"
+            rel="noreferrer"
+            className="text-steel underline underline-offset-4 hover:text-steel-2"
+          >
+            {t.name}
+          </a>
+          <span className="font-mono text-xs text-faint"> {t.fit}. </span>
+          {t.note}
+        </li>
+      ))}
+      {entry.gap ? (
+        <li className="text-muted">
+          <span className="font-medium text-hold">Gap. </span>
+          {entry.gap}
+        </li>
+      ) : null}
     </ul>
   );
 }

@@ -1369,6 +1369,11 @@ export const TOOLS: Record<string, { tools: Tool[]; gap?: string }> = {
   }
 };
 
+/** Every tool named in TOOLS, once each, by name. */
+export const TOOL_LIST: { name: string; url: string }[] = [
+  ...new Map(Object.values(TOOLS).flatMap((e) => e.tools.map((t) => [t.url, { name: t.name, url: t.url }] as const))).values(),
+].sort((a, b) => a.name.localeCompare(b.name));
+
 export function recommendationsFor(filter: { station?: StationId; stage?: AdoptionStage }): Recommendation[] {
   return RECOMMENDATIONS.filter(
     (r) => (!filter.station || r.station === filter.station) && (!filter.stage || r.stage === filter.stage),

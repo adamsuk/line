@@ -94,151 +94,48 @@ Agent tooling is changing fast. Each recommendation carries one of two labels, s
 
 ## Tools
 
-Tools that meet some or all of each recommendation, checked on 22 October 2026. This is not an endorsement. Full means the tool covers the recommendation. Partial means a gap is left. A gap with no tool means a person or a custom script still does it.
+Every tool named in the guide, checked on 22 October 2026. This is not an endorsement. Each station's recommendations on the site show which tools fit, how fully, and the gap left.
 
-### 01 Backlog
-
-**Best practice.** Write done as checks a machine can run. Vague criteria give an agent room to claim success.
-
-- [GitHub Spec Kit](https://github.com/github/spec-kit). Partial. Keeps the spec as what agents build and check against. Does not make the checks executable.
-- [Kiro](https://kiro.dev). Partial. Writes acceptance criteria into specs. They run only if you turn them into tests.
-- [Cucumber](https://cucumber.io). Partial. Acceptance criteria as executable scenarios. People still write them.
-
-**Best practice.** Treat issue text as untrusted input. The triage agent reads it but takes no orders from it.
-
-- [GitHub Agentic Workflows](https://github.github.com/gh-aw/). Partial. Limits what an agent can do with what it reads.
-- [Lakera Guard](https://www.lakera.ai/lakera-guard). Partial. Detects prompt injection. Detection is probabilistic, not a boundary.
-- [PurpleLlama (Prompt Guard)](https://github.com/meta-llama/PurpleLlama). Partial. Open-source injection classifier, with the same limit.
-
-### 02 Source
-
-**Best practice.** Run agents in a sandbox with no production secrets. Isolation is the boundary, not a prompt.
-
-- [E2B](https://e2b.dev). Full. Isolated sandboxes for agents.
-- [Daytona](https://www.daytona.io). Full. Isolated sandboxes for agents.
-- [Copilot coding agent](https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent). Full. Runs in a GitHub Actions sandbox. GitHub-hosted work only.
-
-**Best practice.** Let the sandbox reach only a short list of hosts. Block the rest of the network.
-
-- [Copilot coding agent firewall](https://docs.github.com/en/copilot/customizing-copilot/customizing-or-disabling-the-firewall-for-copilot-coding-agent). Full. Allowlist for Copilot's agent only.
-- [StepSecurity Harden-Runner](https://github.com/step-security/harden-runner). Full. Blocks outbound traffic from GitHub Actions runners to unlisted hosts.
-
-### 03 Bench
-
-**Best practice.** Stage the agent's writes. Pushes, PRs, and comments pass a check with limits before they land.
-
-- [GitHub Agentic Workflows](https://github.github.com/gh-aw/). Full. The agent proposes writes and a separate step checks them before they land.
-- [GitHub rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets). Partial. Protect branches, but not comments or PRs.
-
-**Best practice.** Put AGENTS.md and other instruction files under code owners. Review a change to them like a change to code.
-
-- [CODEOWNERS](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners). Full. With rulesets, a change to an instruction file needs its owner.
-- Gap: Instruction files outside the repo, such as user or global agent settings, still need a person.
-
-### 04 Gate
-
-**Best practice.** An agent saying it is done is not evidence. Only the gate's checks count.
-
-- [GitHub rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets). Full. Required status checks block the merge.
-- [Trunk Merge Queue](https://trunk.io/merge-queue). Full. Merges only what passes the checks.
-- [Mergify](https://mergify.com). Full. Merge queue and merge rules.
-
-**Cutting edge.** Let the spec sign off, not the agent. Checks drawn from the work order decide whether the change is done.
-
-- [GitHub Spec Kit](https://github.com/github/spec-kit). Partial. Keeps the spec as what agents build and check against. Does not make the checks executable.
-- [Cucumber](https://cucumber.io). Partial. Scenarios from the work order can decide done.
-- Gap: No tool makes checks drawn from the work order the sign-off by itself. A person or a custom workflow wires it up.
-
-**Cutting edge.** Run those checks again whenever the code or data they depend on changes.
-
-- [Nx affected](https://nx.dev/ci/features/affected). Partial. Reruns checks for projects a code change touches. Not data changes.
-- Gap: Rerunning on a data or external dependency change needs a custom trigger.
-
-**Cutting edge.** A person checks the checks against the work order. Agents tend to write checks that copy their code, not the spec.
-
-- [Stryker](https://stryker-mutator.io). Partial. Mutation testing shows weak tests, not whether they match the spec.
-- Gap: No tool checks the checks against the work order. A person does it.
-
-**Cutting edge.** A fixing agent sorts each red check first: whose problem it is, and whether it has been seen before. A new or risky failure goes to its owner.
-
-- [Trunk Flaky Tests](https://trunk.io/flaky-tests). Partial. Separates flaky failures from real ones.
-- [Nx Cloud self-healing CI](https://nx.dev/ci/features/self-healing-ci). Partial. Proposes fixes for red checks. A person approves by default, with an option to auto-apply verified fixes.
-
-**Cutting edge.** The fixing agent opens its fix as a PR. It goes through the gate and review like any other change.
-
-- [Nx Cloud self-healing CI](https://nx.dev/ci/features/self-healing-ci). Partial. Proposes fixes for red checks. A person approves by default, with an option to auto-apply verified fixes.
-- [Gitar](https://gitar.ai). Partial. Fixes CI failures and reviews code.
-
-**Cutting edge.** Cap the fixing agent's attempts, and let it try again only on a new failure.
-
-- Gap: No product found with an attempt cap and a new-failure rule. Write it into the workflow.
-
-**Cutting edge.** Send any fix that touches tests, CI config, or lockfiles to a person.
-
-- [CODEOWNERS](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners). Full. Own tests, CI config, and lockfiles so a person must approve changes to them.
-
-### 05 Review
-
-**Best practice.** Keep PRs small. Scale how deeply a person reviews to the size and risk of the change.
-
-- [Graphite](https://graphite.dev). Partial. Stacked PRs keep each change small.
-- [PullApprove](https://www.pullapprove.com). Partial. Routes reviewers by rule. You still judge the risk.
-
-**Best practice.** A named person approves. Agent review does not replace it, and no agent approves its own change.
-
-- [GitHub rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets). Full. Require an approving review before merge.
-- [Copilot code review](https://docs.github.com/en/copilot/concepts/agents/code-review). Partial. A review bot only. Check that its reviews cannot count as an approval.
-
-**Cutting edge.** Track how often people accept the review bot's comments, and test it on bugs you already know. The PR description can mislead it, so read its summary as a claim. Test it again when the model changes. Rankings move within months. Several independent benchmarks back this, but wide adoption is not shown yet.
-
-- [CodeRabbit dashboard](https://docs.coderabbit.ai/guides/dashboard). Partial. Comment acceptance rates by severity and category. CodeRabbit only.
-- [Martian Code Review Bench](https://github.com/withmartian/code-review-benchmark). Partial. Open benchmark to run your bot through.
-- Gap: Testing the bot on bugs from your own history is still a custom script.
-
-### 06 Artifact
-
-**Cutting edge.** Attest each build: a signed record that ties the digest to its commit and workflow. Verify it before you promote. The SLSA standard is mature, but most projects do not do this yet.
-
-- [attest-build-provenance](https://github.com/actions/attest-build-provenance). Full. Signed SLSA provenance from GitHub Actions. Verify with gh attestation verify.
-- [slsa-github-generator](https://github.com/slsa-framework/slsa-github-generator). Full. SLSA Build Level 3 provenance.
-- [Sigstore cosign](https://github.com/sigstore/cosign). Partial. Signs and verifies artifacts. Provenance comes from your build.
-
-### 07 Release
-
-**Best practice.** Separate deploy from release. Turn a change on for a small share of users first, widen it on a named signal, and roll back automatically when a guardrail breaks.
-
-- [Argo Rollouts](https://argoproj.github.io/rollouts/). Full. Canary with metric analysis and automated rollback, on Kubernetes.
-- [Flagger](https://flagger.app). Full. The same, on Kubernetes.
-- [LaunchDarkly guarded rollouts](https://launchdarkly.com/docs/home/releases/guarded-rollouts). Full. Flag rollouts that halt and revert on a guardrail metric.
-
-**Best practice.** A named person approves promotion to production where a wrong call is expensive, like auth, billing, data migrations, or a public API. Anyone on call can roll back without a second approval, and the rollback is practised.
-
-- [GitHub environments](https://docs.github.com/en/actions/reference/workflows-and-actions/deployments-and-environments). Full. Required reviewers approve before a deploy to production.
-- Gap: Deciding which changes are expensive to get wrong is still a person's call.
-
-### 08 Observe
-
-**Best practice.** Measure change failure rate, rework, and recovery time before agents arrive and after. Expect throughput to rise before stability does. Count cost per change too, though little published evidence measures it yet.
-
-- [DX](https://getdx.com). Partial. AI impact and delivery metrics.
-- [Faros AI](https://www.faros.ai). Partial. DORA metrics.
-- [Swarmia](https://www.swarmia.com). Partial. Delivery metrics.
-- Gap: No tool reports cost per change. Join agent and CI bills to changes yourself.
-
-**Cutting edge.** Test the agent setup like code. Run small behavioural evals when a prompt, tool, or model changes, and track the pass rate over time. Keep a prompt or rule change only when replayed evals show it helps and breaks no task.
-
-- [Inspect AI](https://inspect.aisi.org.uk). Full. Agent evals.
-- [Promptfoo](https://www.promptfoo.dev). Full. Evals that run in CI.
-- [Braintrust](https://www.braintrust.dev). Partial. Tracks eval results over time.
-- Gap: Keeping a rule only when replayed tasks show it helps needs your own task set.
-
-### 09 Return
-
-**Cutting edge.** Check that the docs agents build from still match the code. Record the drift as the next work order. Make the check deterministic, so it can refuse a drifting commit.
-
-- [dependency-cruiser](https://github.com/sverweij/dependency-cruiser). Partial. Blocks imports that break declared rules, deterministically. Does not read prose specs.
-- [ArchUnit](https://www.archunit.org). Partial. The same for Java.
-- Gap: Nothing checks prose docs or AGENTS.md against the code. That check is custom.
+- [ArchUnit](https://www.archunit.org)
+- [Argo Rollouts](https://argoproj.github.io/rollouts/)
+- [attest-build-provenance](https://github.com/actions/attest-build-provenance)
+- [Braintrust](https://www.braintrust.dev)
+- [CODEOWNERS](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners)
+- [CodeRabbit dashboard](https://docs.coderabbit.ai/guides/dashboard)
+- [Copilot code review](https://docs.github.com/en/copilot/concepts/agents/code-review)
+- [Copilot coding agent](https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent)
+- [Copilot coding agent firewall](https://docs.github.com/en/copilot/customizing-copilot/customizing-or-disabling-the-firewall-for-copilot-coding-agent)
+- [Cucumber](https://cucumber.io)
+- [Daytona](https://www.daytona.io)
+- [dependency-cruiser](https://github.com/sverweij/dependency-cruiser)
+- [DX](https://getdx.com)
+- [E2B](https://e2b.dev)
+- [Faros AI](https://www.faros.ai)
+- [Flagger](https://flagger.app)
+- [Gitar](https://gitar.ai)
+- [GitHub Agentic Workflows](https://github.github.com/gh-aw/)
+- [GitHub environments](https://docs.github.com/en/actions/reference/workflows-and-actions/deployments-and-environments)
+- [GitHub rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets)
+- [GitHub Spec Kit](https://github.com/github/spec-kit)
+- [Graphite](https://graphite.dev)
+- [Inspect AI](https://inspect.aisi.org.uk)
+- [Kiro](https://kiro.dev)
+- [Lakera Guard](https://www.lakera.ai/lakera-guard)
+- [LaunchDarkly guarded rollouts](https://launchdarkly.com/docs/home/releases/guarded-rollouts)
+- [Martian Code Review Bench](https://github.com/withmartian/code-review-benchmark)
+- [Mergify](https://mergify.com)
+- [Nx affected](https://nx.dev/ci/features/affected)
+- [Nx Cloud self-healing CI](https://nx.dev/ci/features/self-healing-ci)
+- [Promptfoo](https://www.promptfoo.dev)
+- [PullApprove](https://www.pullapprove.com)
+- [PurpleLlama (Prompt Guard)](https://github.com/meta-llama/PurpleLlama)
+- [Sigstore cosign](https://github.com/sigstore/cosign)
+- [slsa-github-generator](https://github.com/slsa-framework/slsa-github-generator)
+- [StepSecurity Harden-Runner](https://github.com/step-security/harden-runner)
+- [Stryker](https://stryker-mutator.io)
+- [Swarmia](https://www.swarmia.com)
+- [Trunk Flaky Tests](https://trunk.io/flaky-tests)
+- [Trunk Merge Queue](https://trunk.io/merge-queue)
 
 ## Built on
 
