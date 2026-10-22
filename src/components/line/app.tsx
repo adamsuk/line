@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
-import { FURTHER_READING, REFERENCES } from "@/factory/model";
+import { FURTHER_READING, RECOMMENDATIONS, REFERENCES, STATIONS, TOOLS, TOOLS_CHECKED } from "@/factory/model";
+import { MaturityBadge } from "@/components/line/recommendations";
 import { Guide } from "@/components/line/guide";
 import { doneCount, useLine } from "@/factory/store";
 import { Parts } from "@/components/line/parts";
@@ -157,6 +158,50 @@ function BuiltOn() {
                       . {ref.author}, {ref.publication}, {ref.date}.
                     </span>
                     <p className="mt-1 text-muted">{ref.took}</p>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
+        </Disclosure>
+        <Disclosure id="tools" title="Tools" className="mt-4">
+          <p className="mt-2 max-w-2xl text-sm text-muted">
+            Tools that meet some or all of each recommendation, checked on {TOOLS_CHECKED}. This is not an
+            endorsement. Full means the tool covers the recommendation. Partial means a gap is left. A gap
+            with no tool means a person or a custom script still does it.
+          </p>
+          {STATIONS.filter((s) => RECOMMENDATIONS.some((r) => r.station === s.id)).map((s) => (
+            <section key={s.id} aria-label={s.name} className="mt-4">
+              <h3 className="font-mono text-xs text-muted">
+                {s.index} · {s.name}
+              </h3>
+              <ul className="mt-2 grid gap-3 md:grid-cols-2">
+                {RECOMMENDATIONS.filter((r) => r.station === s.id).map((r) => (
+                  <li key={r.id} className="rounded-xl border border-line p-3 text-sm">
+                    <MaturityBadge maturity={r.maturity} />
+                    <p className="mt-2 text-ink">{r.text}</p>
+                    <ul className="mt-2 grid gap-1">
+                      {TOOLS[r.id].tools.map((t) => (
+                        <li key={t.name} className="text-muted">
+                          <a
+                            href={t.url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-steel underline underline-offset-4 hover:text-steel-2"
+                          >
+                            {t.name}
+                          </a>
+                          <span className="font-mono text-xs text-faint"> {t.fit}. </span>
+                          {t.note}
+                        </li>
+                      ))}
+                      {TOOLS[r.id].gap ? (
+                        <li className="text-muted">
+                          <span className="font-medium text-hold">Gap. </span>
+                          {TOOLS[r.id].gap}
+                        </li>
+                      ) : null}
+                    </ul>
                   </li>
                 ))}
               </ul>

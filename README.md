@@ -75,14 +75,170 @@ Agent tooling is changing fast. Each recommendation carries one of two labels, s
 | Best practice | Bench | Guardrails | Stage the agent's writes. Pushes, PRs, and comments pass a check with limits before they land. | [Under the hood: Security architecture of GitHub Agentic Workflows](https://github.blog/ai-and-ml/generative-ai/under-the-hood-security-architecture-of-github-agentic-workflows/)<br>[AI Agent and MCP Security](https://owasp.github.io/DevSecOpsGuideline/2-Process/2-2-Develop/2-2-5-AI-Agent-and-MCP-Security/) |
 | Best practice | Bench | Guardrails | Put AGENTS.md and other instruction files under code owners. Review a change to them like a change to code. | [AI Agent and MCP Security](https://owasp.github.io/DevSecOpsGuideline/2-Process/2-2-Develop/2-2-5-AI-Agent-and-MCP-Security/)<br>[Mitigating Indirect AGENTS.md Injection Attacks in Agentic Environments](https://developer.nvidia.com/blog/mitigating-indirect-agents-md-injection-attacks-in-agentic-environments/)<br>[Beyond source code: The files AI coding agents trust — and attackers exploit](https://cloud.google.com/blog/products/identity-security/beyond-source-code-the-files-ai-coding-agents-trust-and-attackers-exploit) |
 | Best practice | Gate | Start | An agent saying it is done is not evidence. Only the gate's checks count. | [Software Factories, Light and Dark](https://addyosmani.com/blog/software-factories/)<br>[Who Holds the Pen? Let Specifications, Not Agents, Sign Off](https://arxiv.org/abs/2609.29921)<br>[Under the hood: Security architecture of GitHub Agentic Workflows](https://github.blog/ai-and-ml/generative-ai/under-the-hood-security-architecture-of-github-agentic-workflows/) |
-| Cutting edge | Gate | Later | Let the spec sign off, not the agent. Checks drawn from the work order commit the result, and run again when what they depend on changes. A person checks those checks against the work order, because agents tend to write checks that copy their code, not the spec. | [Who Holds the Pen? Let Specifications, Not Agents, Sign Off](https://arxiv.org/abs/2609.29921)<br>[SpecGuardBench: Can Coding Agents Construct Reliable Validation Harnesses from Natural Language Specifications?](https://arxiv.org/abs/2610.16870) |
-| Cutting edge | Gate | Later | A fixing agent sorts each red check first: whose problem it is, and whether it has been seen before. It opens a fix as a PR that goes through the gate and review. A new or risky failure goes to its owner. Cap the attempts, try again only on a new failure, and send any fix to tests, CI config, or lockfiles to a person. | [How to build self-healing CI pipelines](https://newsletter.port.io/p/how-to-build-self-healing-ci-pipelines)<br>[CI Failure to Fix: The AI Agent CI Loop That Doesn't Thrash](https://automater.ai/intel/ci-agent-fix-loop-guards/) |
+| Cutting edge | Gate | Later | Let the spec sign off, not the agent. Checks drawn from the work order decide whether the change is done. | [Who Holds the Pen? Let Specifications, Not Agents, Sign Off](https://arxiv.org/abs/2609.29921) |
+| Cutting edge | Gate | Later | Run those checks again whenever the code or data they depend on changes. | [Who Holds the Pen? Let Specifications, Not Agents, Sign Off](https://arxiv.org/abs/2609.29921) |
+| Cutting edge | Gate | Later | A person checks the checks against the work order. Agents tend to write checks that copy their code, not the spec. | [SpecGuardBench: Can Coding Agents Construct Reliable Validation Harnesses from Natural Language Specifications?](https://arxiv.org/abs/2610.16870)<br>[Who Holds the Pen? Let Specifications, Not Agents, Sign Off](https://arxiv.org/abs/2609.29921) |
+| Cutting edge | Gate | Later | A fixing agent sorts each red check first: whose problem it is, and whether it has been seen before. A new or risky failure goes to its owner. | [How to build self-healing CI pipelines](https://newsletter.port.io/p/how-to-build-self-healing-ci-pipelines) |
+| Cutting edge | Gate | Later | The fixing agent opens its fix as a PR. It goes through the gate and review like any other change. | [How to build self-healing CI pipelines](https://newsletter.port.io/p/how-to-build-self-healing-ci-pipelines) |
+| Cutting edge | Gate | Later | Cap the fixing agent's attempts, and let it try again only on a new failure. | [CI Failure to Fix: The AI Agent CI Loop That Doesn't Thrash](https://automater.ai/intel/ci-agent-fix-loop-guards/) |
+| Cutting edge | Gate | Later | Send any fix that touches tests, CI config, or lockfiles to a person. | [CI Failure to Fix: The AI Agent CI Loop That Doesn't Thrash](https://automater.ai/intel/ci-agent-fix-loop-guards/) |
 | Best practice | Review | Start | Keep PRs small. Scale how deeply a person reviews to the size and risk of the change. | [(When) Should a Software Factory be Lights-off? Benchmarking Code Review Agents on Bug Detection](https://arxiv.org/abs/2610.13668)<br>[Capabilities: Working in small batches](https://dora.dev/capabilities/working-in-small-batches/) |
 | Best practice | Review | Start | A named person approves. Agent review does not replace it, and no agent approves its own change. | [Secure Coding with AI Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Secure_Coding_with_AI_Cheat_Sheet.html)<br>[AI Agent and MCP Security](https://owasp.github.io/DevSecOpsGuideline/2-Process/2-2-Develop/2-2-5-AI-Agent-and-MCP-Security/)<br>[(When) Should a Software Factory be Lights-off? Benchmarking Code Review Agents on Bug Detection](https://arxiv.org/abs/2610.13668) |
-| Best practice | Review | Next | Track how often people accept the review bot's comments, and test it on bugs you already know. The PR description can mislead it, so read its summary as a claim. Test it again when the model changes. Rankings move within months. Several independent benchmarks back this, though wide adoption is not shown yet. | [(When) Should a Software Factory be Lights-off? Benchmarking Code Review Agents on Bug Detection](https://arxiv.org/abs/2610.13668)<br>[Is Agentic Code Review Helpful? Mining Developers' Feedback to CodeRabbit Reviews in the Wild](https://arxiv.org/abs/2607.03316)<br>[ReviewBench: An open benchmark for AI code review](https://github.blog/ai-and-ml/github-copilot/reviewbench-an-open-benchmark-for-ai-code-review/)<br>[Martian's Code Review Bench: the "#1" claim rots in months](https://aicodereview.io/blog/martians-code-review-bench-the-1-claim-rots-in-months/)<br>[The Honest Raw LLM Code Review Benchmark: 21 Models, 7,980 Reviews, Every Number Open](https://ironbee.ai/blog/the-honest-raw-llm-code-review-benchmark) |
-| Best practice | Observe | Start | Measure change failure rate and cost per change before agents arrive and after. Expect a dip at first while people check more. | [ROI of AI-assisted Software Development](https://dora.dev/ai/roi/report/)<br>[(When) Should a Software Factory be Lights-off? Benchmarking Code Review Agents on Bug Detection](https://arxiv.org/abs/2610.13668) |
+| Cutting edge | Review | Next | Track how often people accept the review bot's comments, and test it on bugs you already know. The PR description can mislead it, so read its summary as a claim. Test it again when the model changes. Rankings move within months. Several independent benchmarks back this, but wide adoption is not shown yet. | [(When) Should a Software Factory be Lights-off? Benchmarking Code Review Agents on Bug Detection](https://arxiv.org/abs/2610.13668)<br>[Is Agentic Code Review Helpful? Mining Developers' Feedback to CodeRabbit Reviews in the Wild](https://arxiv.org/abs/2607.03316)<br>[ReviewBench: An open benchmark for AI code review](https://github.blog/ai-and-ml/github-copilot/reviewbench-an-open-benchmark-for-ai-code-review/)<br>[Martian's Code Review Bench: the "#1" claim rots in months](https://aicodereview.io/blog/martians-code-review-bench-the-1-claim-rots-in-months/)<br>[The Honest Raw LLM Code Review Benchmark: 21 Models, 7,980 Reviews, Every Number Open](https://ironbee.ai/blog/the-honest-raw-llm-code-review-benchmark) |
+| Cutting edge | Artifact | Next | Attest each build: a signed record that ties the digest to its commit and workflow. Verify it before you promote. The SLSA standard is mature, but most projects do not do this yet. | [Artifact attestations](https://docs.github.com/en/actions/concepts/security/artifact-attestations)<br>[Strengthen your supply chain with code-to-cloud traceability and SLSA Build Level 3 security](https://github.blog/changelog/2026-01-20-strengthen-your-supply-chain-with-code-to-cloud-traceability-and-slsa-build-level-3-security/)<br>[Two years after npm shipped build provenance, 78% of a typical dependency tree still doesn't use it](https://zennoxa.com/research/npm-provenance-census-2026) |
+| Best practice | Release | Later | Separate deploy from release. Turn a change on for a small share of users first, widen it on a named signal, and roll back automatically when a guardrail breaks. | [Releasing AI-written changes: flags, canaries and rollback](https://reveneau.com/guides/ai-native-delivery/progressive-delivery-for-ai-written-changes)<br>[More Code, Fewer Deployments: Why Progressive Delivery Is the Missing Half of Your AI Coding Strategy](https://stepto.net/blog/progressive-delivery-feature-flags-ai-generated-code-release-safety-2026)<br>[Announcing the 2025 DORA Report](https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report) |
+| Best practice | Release | Later | A named person approves promotion to production where a wrong call is expensive, like auth, billing, data migrations, or a public API. Anyone on call can roll back without a second approval, and the rollback is practised. | [Deployments and environments](https://docs.github.com/en/actions/reference/workflows-and-actions/deployments-and-environments)<br>[Releasing AI-written changes: flags, canaries and rollback](https://reveneau.com/guides/ai-native-delivery/progressive-delivery-for-ai-written-changes)<br>[Inside a Software Factory](https://www.oreilly.com/radar/inside-a-software-factory/) |
+| Best practice | Observe | Start | Measure change failure rate, rework, and recovery time before agents arrive and after. Expect throughput to rise before stability does. Count cost per change too, though little published evidence measures it yet. | [Announcing the 2025 DORA Report](https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report)<br>[ROI of AI-assisted Software Development](https://dora.dev/ai/roi/report/)<br>[State of AI in Software Development](https://leaddev.com/wp-content/uploads/2026/06/LXD3-2026-AI-in-the-SDLC.pdf)<br>[Do These Violent Delights Have Violent Ends? Measuring the Post-Merge Fate of Agentic Code](https://arxiv.org/abs/2607.09902) |
 | Cutting edge | Observe | Next | Test the agent setup like code. Run small behavioural evals when a prompt, tool, or model changes, and track the pass rate over time. Keep a prompt or rule change only when replayed evals show it helps and breaks no task. | [The Anatomy of Harness Engineering: How to Evaluate, Iterate, and Guard AI Coding Agents](https://developers.googleblog.com/en/the-anatomy-of-harness-engineering-how-to-evaluate-iterate-and-guard-ai-coding-agents/)<br>[(When) Should a Software Factory be Lights-off? Benchmarking Code Review Agents on Bug Detection](https://arxiv.org/abs/2610.13668)<br>[When Coding Agents Outpace Review: Evaluating PRD-Driven Development in Mature Enterprise Repositories](https://arxiv.org/abs/2610.26394)<br>[Cortex: Measurement-Gated Evolution and Pruning of Coding-Agent Skills and Rules](https://arxiv.org/abs/2610.14216) |
 | Cutting edge | Return | Later | Check that the docs agents build from still match the code. Record the drift as the next work order. Make the check deterministic, so it can refuse a drifting commit. | [Spec-driven development and spec drift: 335 repositories surveyed](https://striff.io/blog/architecture-matters-more-not-less/)<br>[Spec-Driven Development: A Spec-First Approach to AI-Native Engineering](https://developer.microsoft.com/blog/spec-driven-development-ai-native-engineering/)<br>[Implementing the Spec Growth Engine: Preventing Spec-Code Divergence, and Growing the Spec with Agents](https://arxiv.org/abs/2610.11725) |
+
+## Tools
+
+Tools that meet some or all of each recommendation, checked on 22 October 2026. This is not an endorsement. Full means the tool covers the recommendation. Partial means a gap is left. A gap with no tool means a person or a custom script still does it.
+
+### 01 Backlog
+
+**Best practice.** Write done as checks a machine can run. Vague criteria give an agent room to claim success.
+
+- [GitHub Spec Kit](https://github.com/github/spec-kit). Partial. Keeps the spec as what agents build and check against. Does not make the checks executable.
+- [Kiro](https://kiro.dev). Partial. Writes acceptance criteria into specs. They run only if you turn them into tests.
+- [Cucumber](https://cucumber.io). Partial. Acceptance criteria as executable scenarios. People still write them.
+
+**Best practice.** Treat issue text as untrusted input. The triage agent reads it but takes no orders from it.
+
+- [GitHub Agentic Workflows](https://github.github.com/gh-aw/). Partial. Limits what an agent can do with what it reads.
+- [Lakera Guard](https://www.lakera.ai/lakera-guard). Partial. Detects prompt injection. Detection is probabilistic, not a boundary.
+- [PurpleLlama (Prompt Guard)](https://github.com/meta-llama/PurpleLlama). Partial. Open-source injection classifier, with the same limit.
+
+### 02 Source
+
+**Best practice.** Run agents in a sandbox with no production secrets. Isolation is the boundary, not a prompt.
+
+- [E2B](https://e2b.dev). Full. Isolated sandboxes for agents.
+- [Daytona](https://www.daytona.io). Full. Isolated sandboxes for agents.
+- [Copilot coding agent](https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent). Full. Runs in a GitHub Actions sandbox. GitHub-hosted work only.
+
+**Best practice.** Let the sandbox reach only a short list of hosts. Block the rest of the network.
+
+- [Copilot coding agent firewall](https://docs.github.com/en/copilot/customizing-copilot/customizing-or-disabling-the-firewall-for-copilot-coding-agent). Full. Allowlist for Copilot's agent only.
+- [StepSecurity Harden-Runner](https://github.com/step-security/harden-runner). Full. Blocks outbound traffic from GitHub Actions runners to unlisted hosts.
+
+### 03 Bench
+
+**Best practice.** Stage the agent's writes. Pushes, PRs, and comments pass a check with limits before they land.
+
+- [GitHub Agentic Workflows](https://github.github.com/gh-aw/). Full. The agent proposes writes and a separate step checks them before they land.
+- [GitHub rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets). Partial. Protect branches, but not comments or PRs.
+
+**Best practice.** Put AGENTS.md and other instruction files under code owners. Review a change to them like a change to code.
+
+- [CODEOWNERS](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners). Full. With rulesets, a change to an instruction file needs its owner.
+- Gap: Instruction files outside the repo, such as user or global agent settings, still need a person.
+
+### 04 Gate
+
+**Best practice.** An agent saying it is done is not evidence. Only the gate's checks count.
+
+- [GitHub rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets). Full. Required status checks block the merge.
+- [Trunk Merge Queue](https://trunk.io/merge-queue). Full. Merges only what passes the checks.
+- [Mergify](https://mergify.com). Full. Merge queue and merge rules.
+
+**Cutting edge.** Let the spec sign off, not the agent. Checks drawn from the work order decide whether the change is done.
+
+- [GitHub Spec Kit](https://github.com/github/spec-kit). Partial. Keeps the spec as what agents build and check against. Does not make the checks executable.
+- [Cucumber](https://cucumber.io). Partial. Scenarios from the work order can decide done.
+- Gap: No tool makes checks drawn from the work order the sign-off by itself. A person or a custom workflow wires it up.
+
+**Cutting edge.** Run those checks again whenever the code or data they depend on changes.
+
+- [Nx affected](https://nx.dev/ci/features/affected). Partial. Reruns checks for projects a code change touches. Not data changes.
+- Gap: Rerunning on a data or external dependency change needs a custom trigger.
+
+**Cutting edge.** A person checks the checks against the work order. Agents tend to write checks that copy their code, not the spec.
+
+- [Stryker](https://stryker-mutator.io). Partial. Mutation testing shows weak tests, not whether they match the spec.
+- Gap: No tool checks the checks against the work order. A person does it.
+
+**Cutting edge.** A fixing agent sorts each red check first: whose problem it is, and whether it has been seen before. A new or risky failure goes to its owner.
+
+- [Trunk Flaky Tests](https://trunk.io/flaky-tests). Partial. Separates flaky failures from real ones.
+- [Nx Cloud self-healing CI](https://nx.dev/ci/features/self-healing-ci). Partial. Proposes fixes for red checks. A person approves by default, with an option to auto-apply verified fixes.
+
+**Cutting edge.** The fixing agent opens its fix as a PR. It goes through the gate and review like any other change.
+
+- [Nx Cloud self-healing CI](https://nx.dev/ci/features/self-healing-ci). Partial. Proposes fixes for red checks. A person approves by default, with an option to auto-apply verified fixes.
+- [Gitar](https://gitar.ai). Partial. Fixes CI failures and reviews code.
+
+**Cutting edge.** Cap the fixing agent's attempts, and let it try again only on a new failure.
+
+- Gap: No product found with an attempt cap and a new-failure rule. Write it into the workflow.
+
+**Cutting edge.** Send any fix that touches tests, CI config, or lockfiles to a person.
+
+- [CODEOWNERS](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners). Full. Own tests, CI config, and lockfiles so a person must approve changes to them.
+
+### 05 Review
+
+**Best practice.** Keep PRs small. Scale how deeply a person reviews to the size and risk of the change.
+
+- [Graphite](https://graphite.dev). Partial. Stacked PRs keep each change small.
+- [PullApprove](https://www.pullapprove.com). Partial. Routes reviewers by rule. You still judge the risk.
+
+**Best practice.** A named person approves. Agent review does not replace it, and no agent approves its own change.
+
+- [GitHub rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets). Full. Require an approving review before merge.
+- [Copilot code review](https://docs.github.com/en/copilot/concepts/agents/code-review). Partial. A review bot only. Check that its reviews cannot count as an approval.
+
+**Cutting edge.** Track how often people accept the review bot's comments, and test it on bugs you already know. The PR description can mislead it, so read its summary as a claim. Test it again when the model changes. Rankings move within months. Several independent benchmarks back this, but wide adoption is not shown yet.
+
+- [CodeRabbit dashboard](https://docs.coderabbit.ai/guides/dashboard). Partial. Comment acceptance rates by severity and category. CodeRabbit only.
+- [Martian Code Review Bench](https://github.com/withmartian/code-review-benchmark). Partial. Open benchmark to run your bot through.
+- Gap: Testing the bot on bugs from your own history is still a custom script.
+
+### 06 Artifact
+
+**Cutting edge.** Attest each build: a signed record that ties the digest to its commit and workflow. Verify it before you promote. The SLSA standard is mature, but most projects do not do this yet.
+
+- [attest-build-provenance](https://github.com/actions/attest-build-provenance). Full. Signed SLSA provenance from GitHub Actions. Verify with gh attestation verify.
+- [slsa-github-generator](https://github.com/slsa-framework/slsa-github-generator). Full. SLSA Build Level 3 provenance.
+- [Sigstore cosign](https://github.com/sigstore/cosign). Partial. Signs and verifies artifacts. Provenance comes from your build.
+
+### 07 Release
+
+**Best practice.** Separate deploy from release. Turn a change on for a small share of users first, widen it on a named signal, and roll back automatically when a guardrail breaks.
+
+- [Argo Rollouts](https://argoproj.github.io/rollouts/). Full. Canary with metric analysis and automated rollback, on Kubernetes.
+- [Flagger](https://flagger.app). Full. The same, on Kubernetes.
+- [LaunchDarkly guarded rollouts](https://launchdarkly.com/docs/home/releases/guarded-rollouts). Full. Flag rollouts that halt and revert on a guardrail metric.
+
+**Best practice.** A named person approves promotion to production where a wrong call is expensive, like auth, billing, data migrations, or a public API. Anyone on call can roll back without a second approval, and the rollback is practised.
+
+- [GitHub environments](https://docs.github.com/en/actions/reference/workflows-and-actions/deployments-and-environments). Full. Required reviewers approve before a deploy to production.
+- Gap: Deciding which changes are expensive to get wrong is still a person's call.
+
+### 08 Observe
+
+**Best practice.** Measure change failure rate, rework, and recovery time before agents arrive and after. Expect throughput to rise before stability does. Count cost per change too, though little published evidence measures it yet.
+
+- [DX](https://getdx.com). Partial. AI impact and delivery metrics.
+- [Faros AI](https://www.faros.ai). Partial. DORA metrics.
+- [Swarmia](https://www.swarmia.com). Partial. Delivery metrics.
+- Gap: No tool reports cost per change. Join agent and CI bills to changes yourself.
+
+**Cutting edge.** Test the agent setup like code. Run small behavioural evals when a prompt, tool, or model changes, and track the pass rate over time. Keep a prompt or rule change only when replayed evals show it helps and breaks no task.
+
+- [Inspect AI](https://inspect.aisi.org.uk). Full. Agent evals.
+- [Promptfoo](https://www.promptfoo.dev). Full. Evals that run in CI.
+- [Braintrust](https://www.braintrust.dev). Partial. Tracks eval results over time.
+- Gap: Keeping a rule only when replayed tasks show it helps needs your own task set.
+
+### 09 Return
+
+**Cutting edge.** Check that the docs agents build from still match the code. Record the drift as the next work order. Make the check deterministic, so it can refuse a drifting commit.
+
+- [dependency-cruiser](https://github.com/sverweij/dependency-cruiser). Partial. Blocks imports that break declared rules, deterministically. Does not read prose specs.
+- [ArchUnit](https://www.archunit.org). Partial. The same for Java.
+- Gap: Nothing checks prose docs or AGENTS.md against the code. That check is custom.
 
 ## Built on
 
@@ -101,6 +257,8 @@ Newer pieces behind the labelled recommendations. Titles are quoted as published
 
 ### Sep to Oct 2026
 
+- [More Code, Fewer Deployments: Why Progressive Delivery Is the Missing Half of Your AI Coding Strategy](https://stepto.net/blog/progressive-delivery-feature-flags-ai-generated-code-release-safety-2026). Igor Gazivoda, StepTo, 20 October 2026. Agents raise change volume. Flags, canaries, and automated rollback shrink how many users meet a bad change.
+- [Releasing AI-written changes: flags, canaries and rollback](https://reveneau.com/guides/ai-native-delivery/progressive-delivery-for-ai-written-changes). Reveneau Editorial, Reveneau, 1 September 2026. Separate deploy from release, widen on a named signal, and let anyone on call roll back. Practise the rollback.
 - [The Honest Raw LLM Code Review Benchmark: 21 Models, 7,980 Reviews, Every Number Open](https://ironbee.ai/blog/the-honest-raw-llm-code-review-benchmark). Serkan Özal, IronBee AI, 19 October 2026. Raw models review as well as review tools, and scores shift between models and runs. Benchmark your own setup.
 - [When Coding Agents Outpace Review: Evaluating PRD-Driven Development in Mature Enterprise Repositories](https://arxiv.org/abs/2610.26394). Tianqi Liu and others, arXiv, 19 October 2026. With the same model and tasks, successive harness releases raised the mean score from 59.4 to 63.0.
 - [Cortex: Measurement-Gated Evolution and Pruning of Coding-Agent Skills and Rules](https://arxiv.org/abs/2610.14216). Samuele Giampieri, arXiv, 9 October 2026. Replay tasks with a new rule several times. Keep it only if it helps overall and breaks no task.
@@ -116,6 +274,13 @@ Newer pieces behind the labelled recommendations. Titles are quoted as published
 
 ### Earlier, still current
 
+- [Announcing the 2025 DORA Report](https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report). Nathen Harvey, Derek DeBellis, Google Cloud Blog, 23 September 2025. AI adoption now goes with higher throughput, and still with lower delivery stability.
+- [State of AI in Software Development](https://leaddev.com/wp-content/uploads/2026/06/LXD3-2026-AI-in-the-SDLC.pdf). DX, LeadDev LXD3, June 2026. Across 61 companies, AI users' change failure rate barely moved on average. Per company it rose or fell. Measure your own.
+- [Do These Violent Delights Have Violent Ends? Measuring the Post-Merge Fate of Agentic Code](https://arxiv.org/abs/2607.09902). Chunqiu Steven Xia, Courtney Miller and others, arXiv, 10 July 2026. Merged agent code needed more bug fixes later, and more so where changes went unreviewed. Merge rate alone hides this.
+- [Two years after npm shipped build provenance, 78% of a typical dependency tree still doesn't use it](https://zennoxa.com/research/npm-provenance-census-2026). Zennoxa Shield, Zennoxa, 25 August 2026. Build provenance is easy to turn on, yet most packages still ship without it.
+- [Strengthen your supply chain with code-to-cloud traceability and SLSA Build Level 3 security](https://github.blog/changelog/2026-01-20-strengthen-your-supply-chain-with-code-to-cloud-traceability-and-slsa-build-level-3-security/). GitHub, GitHub Changelog, 20 January 2026. Link each artifact to its attestations, where it is stored, and where it is deployed.
+- [Artifact attestations](https://docs.github.com/en/actions/concepts/security/artifact-attestations). GitHub, GitHub Docs, Undated. A signed record ties an artifact to its commit and workflow. SLSA Build Level 2 by default, Level 3 with a reusable workflow.
+- [Deployments and environments](https://docs.github.com/en/actions/reference/workflows-and-actions/deployments-and-environments). GitHub, GitHub Docs, Undated. Required reviewers must approve a job before it deploys to a protected environment.
 - [Is Agentic Code Review Helpful? Mining Developers' Feedback to CodeRabbit Reviews in the Wild](https://arxiv.org/abs/2607.03316). Hong Yi Lin, Mingzhao Liang, Patanamon Thongtanunam, Kla Tantithamthavorn, arXiv, 3 July 2026. Developers rejected more review bot comments than they accepted. Track which ones land.
 - [Under the hood: Security architecture of GitHub Agentic Workflows](https://github.blog/ai-and-ml/generative-ai/under-the-hood-security-architecture-of-github-agentic-workflows/). Landon Cox, Jiaxiao Zhou, The GitHub Blog, 9 March 2026. Agents hold no secrets. Their writes are staged and vetted before anything lands.
 - [Practical Security Guidance for Sandboxing Agentic Workflows and Managing Execution Risk](https://developer.nvidia.com/blog/practical-security-guidance-for-sandboxing-agentic-workflows-and-managing-execution-risk/). Rich Harang, NVIDIA Technical Blog, 30 January 2026. Sandbox agents and control where they can reach on the network.

@@ -13,6 +13,7 @@ import {
   STATIONS,
   STATION_IDS,
   stationIndex,
+  TOOLS,
 } from "./model.ts";
 
 test("nine stations, numbered in order", () => {
@@ -129,6 +130,20 @@ test("each bench edit has its own commit message", () => {
 test("no em or en dashes in station copy, the guide, or the recommendations", () => {
   // Titles are quoted as published, so they are left out.
   const refs = ALL_REFERENCES.map(({ title: _title, ...rest }) => rest);
-  const copy = JSON.stringify([STATIONS, GUIDE, ADOPTION_STAGES, refs, RECOMMENDATIONS, MATURITY]);
+  const copy = JSON.stringify([STATIONS, GUIDE, ADOPTION_STAGES, refs, RECOMMENDATIONS, MATURITY, TOOLS]);
   assert.doesNotMatch(copy, /[\u2013\u2014]/);
+});
+
+test("every recommendation maps to tools or names its gap", () => {
+  const readme = readFileSync(new URL("../../README.md", import.meta.url), "utf8");
+  for (const r of RECOMMENDATIONS) {
+    const entry = TOOLS[r.id];
+    assert.ok(entry, r.id);
+    assert.ok(entry.tools.length > 0 || entry.gap, r.id);
+    for (const t of entry.tools) {
+      assert.match(t.url, /^https:\/\//, t.name);
+      assert.ok(readme.includes(t.url), t.name);
+    }
+  }
+  for (const id of Object.keys(TOOLS)) assert.ok(RECOMMENDATIONS.some((r) => r.id === id), id);
 });

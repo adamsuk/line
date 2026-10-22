@@ -285,7 +285,16 @@ export type ReadingId =
   | "ci-loop-guards"
   | "ironbee"
   | "pace-bench"
-  | "cortex";
+  | "cortex"
+  | "stepto-progressive"
+  | "reveneau-progressive"
+  | "dora-2025"
+  | "dx-state-ai"
+  | "post-merge-fate"
+  | "npm-provenance-census"
+  | "gh-slsa-changelog"
+  | "gh-attestations"
+  | "gh-environments";
 
 export type ReferenceId = BuiltOnId | ReadingId;
 
@@ -344,6 +353,24 @@ export const FURTHER_READING: { heading: string; refs: Reference[] }[] = [
   {
     heading: "Sep to Oct 2026",
     refs: [
+      {
+        id: "stepto-progressive",
+        title: "More Code, Fewer Deployments: Why Progressive Delivery Is the Missing Half of Your AI Coding Strategy",
+        author: "Igor Gazivoda",
+        publication: "StepTo",
+        date: "20 October 2026",
+        url: "https://stepto.net/blog/progressive-delivery-feature-flags-ai-generated-code-release-safety-2026",
+        took: "Agents raise change volume. Flags, canaries, and automated rollback shrink how many users meet a bad change.",
+      },
+      {
+        id: "reveneau-progressive",
+        title: "Releasing AI-written changes: flags, canaries and rollback",
+        author: "Reveneau Editorial",
+        publication: "Reveneau",
+        date: "1 September 2026",
+        url: "https://reveneau.com/guides/ai-native-delivery/progressive-delivery-for-ai-written-changes",
+        took: "Separate deploy from release, widen on a named signal, and let anyone on call roll back. Practise the rollback.",
+      },
       {
         id: "ironbee",
         title: "The Honest Raw LLM Code Review Benchmark: 21 Models, 7,980 Reviews, Every Number Open",
@@ -458,6 +485,69 @@ export const FURTHER_READING: { heading: string; refs: Reference[] }[] = [
   {
     heading: "Earlier, still current",
     refs: [
+      {
+        id: "dora-2025",
+        title: "Announcing the 2025 DORA Report",
+        author: "Nathen Harvey, Derek DeBellis",
+        publication: "Google Cloud Blog",
+        date: "23 September 2025",
+        url: "https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report",
+        took: "AI adoption now goes with higher throughput, and still with lower delivery stability.",
+      },
+      {
+        id: "dx-state-ai",
+        title: "State of AI in Software Development",
+        author: "DX",
+        publication: "LeadDev LXD3",
+        date: "June 2026",
+        url: "https://leaddev.com/wp-content/uploads/2026/06/LXD3-2026-AI-in-the-SDLC.pdf",
+        took: "Across 61 companies, AI users' change failure rate barely moved on average. Per company it rose or fell. Measure your own.",
+      },
+      {
+        id: "post-merge-fate",
+        title: "Do These Violent Delights Have Violent Ends? Measuring the Post-Merge Fate of Agentic Code",
+        author: "Chunqiu Steven Xia, Courtney Miller and others",
+        publication: "arXiv",
+        date: "10 July 2026",
+        url: "https://arxiv.org/abs/2607.09902",
+        took: "Merged agent code needed more bug fixes later, and more so where changes went unreviewed. Merge rate alone hides this.",
+      },
+      {
+        id: "npm-provenance-census",
+        title: "Two years after npm shipped build provenance, 78% of a typical dependency tree still doesn't use it",
+        author: "Zennoxa Shield",
+        publication: "Zennoxa",
+        date: "25 August 2026",
+        url: "https://zennoxa.com/research/npm-provenance-census-2026",
+        took: "Build provenance is easy to turn on, yet most packages still ship without it.",
+      },
+      {
+        id: "gh-slsa-changelog",
+        title: "Strengthen your supply chain with code-to-cloud traceability and SLSA Build Level 3 security",
+        author: "GitHub",
+        publication: "GitHub Changelog",
+        date: "20 January 2026",
+        url: "https://github.blog/changelog/2026-01-20-strengthen-your-supply-chain-with-code-to-cloud-traceability-and-slsa-build-level-3-security/",
+        took: "Link each artifact to its attestations, where it is stored, and where it is deployed.",
+      },
+      {
+        id: "gh-attestations",
+        title: "Artifact attestations",
+        author: "GitHub",
+        publication: "GitHub Docs",
+        date: "Undated",
+        url: "https://docs.github.com/en/actions/concepts/security/artifact-attestations",
+        took: "A signed record ties an artifact to its commit and workflow. SLSA Build Level 2 by default, Level 3 with a reusable workflow.",
+      },
+      {
+        id: "gh-environments",
+        title: "Deployments and environments",
+        author: "GitHub",
+        publication: "GitHub Docs",
+        date: "Undated",
+        url: "https://docs.github.com/en/actions/reference/workflows-and-actions/deployments-and-environments",
+        took: "Required reviewers must approve a job before it deploys to a protected environment.",
+      },
       {
         id: "coderabbit",
         title: "Is Agentic Code Review Helpful? Mining Developers' Feedback to CodeRabbit Reviews in the Wild",
@@ -700,7 +790,7 @@ export const RECOMMENDATIONS: Recommendation[] = [
     stage: "Start",
     maturity: "Best practice",
     text: "Write done as checks a machine can run. Vague criteria give an agent room to claim success.",
-    sources: ["ms-spec-driven", "spec-sign-off"],
+    sources: ["ms-spec-driven",  "spec-sign-off"],
   },
   {
     id: "untrusted-issues",
@@ -708,7 +798,7 @@ export const RECOMMENDATIONS: Recommendation[] = [
     stage: "Next",
     maturity: "Best practice",
     text: "Treat issue text as untrusted input. The triage agent reads it but takes no orders from it.",
-    sources: ["nvidia-agents-md", "owasp-agents"],
+    sources: ["nvidia-agents-md",  "owasp-agents"],
   },
   {
     id: "sandbox-no-secrets",
@@ -716,7 +806,7 @@ export const RECOMMENDATIONS: Recommendation[] = [
     stage: "Guardrails",
     maturity: "Best practice",
     text: "Run agents in a sandbox with no production secrets. Isolation is the boundary, not a prompt.",
-    sources: ["gh-agentic-security", "nvidia-sandbox", "owasp-agents"],
+    sources: ["gh-agentic-security",  "nvidia-sandbox",  "owasp-agents"],
   },
   {
     id: "egress-allowlist",
@@ -724,7 +814,7 @@ export const RECOMMENDATIONS: Recommendation[] = [
     stage: "Guardrails",
     maturity: "Best practice",
     text: "Let the sandbox reach only a short list of hosts. Block the rest of the network.",
-    sources: ["nvidia-sandbox", "gh-agentic-security", "owasp-agents"],
+    sources: ["nvidia-sandbox",  "gh-agentic-security",  "owasp-agents"],
   },
   {
     id: "staged-writes",
@@ -732,7 +822,7 @@ export const RECOMMENDATIONS: Recommendation[] = [
     stage: "Guardrails",
     maturity: "Best practice",
     text: "Stage the agent's writes. Pushes, PRs, and comments pass a check with limits before they land.",
-    sources: ["gh-agentic-security", "owasp-agents"],
+    sources: ["gh-agentic-security",  "owasp-agents"],
   },
   {
     id: "owned-instructions",
@@ -740,7 +830,7 @@ export const RECOMMENDATIONS: Recommendation[] = [
     stage: "Guardrails",
     maturity: "Best practice",
     text: "Put AGENTS.md and other instruction files under code owners. Review a change to them like a change to code.",
-    sources: ["owasp-agents", "nvidia-agents-md", "gcloud-trusted-files"],
+    sources: ["owasp-agents",  "nvidia-agents-md",  "gcloud-trusted-files"],
   },
   {
     id: "checks-not-claims",
@@ -748,23 +838,63 @@ export const RECOMMENDATIONS: Recommendation[] = [
     stage: "Start",
     maturity: "Best practice",
     text: "An agent saying it is done is not evidence. Only the gate's checks count.",
-    sources: ["osmani", "spec-sign-off", "gh-agentic-security"],
+    sources: ["osmani",  "spec-sign-off",  "gh-agentic-security"],
   },
   {
     id: "spec-signs-off",
     station: "gate",
     stage: "Later",
     maturity: "Cutting edge",
-    text: "Let the spec sign off, not the agent. Checks drawn from the work order commit the result, and run again when what they depend on changes. A person checks those checks against the work order, because agents tend to write checks that copy their code, not the spec.",
-    sources: ["spec-sign-off", "specguardbench"],
+    text: "Let the spec sign off, not the agent. Checks drawn from the work order decide whether the change is done.",
+    sources: ["spec-sign-off"],
   },
   {
-    id: "narrow-self-healing",
+    id: "spec-checks-rerun",
     station: "gate",
     stage: "Later",
     maturity: "Cutting edge",
-    text: "A fixing agent sorts each red check first: whose problem it is, and whether it has been seen before. It opens a fix as a PR that goes through the gate and review. A new or risky failure goes to its owner. Cap the attempts, try again only on a new failure, and send any fix to tests, CI config, or lockfiles to a person.",
-    sources: ["port-self-healing", "ci-loop-guards"],
+    text: "Run those checks again whenever the code or data they depend on changes.",
+    sources: ["spec-sign-off"],
+  },
+  {
+    id: "check-the-checks",
+    station: "gate",
+    stage: "Later",
+    maturity: "Cutting edge",
+    text: "A person checks the checks against the work order. Agents tend to write checks that copy their code, not the spec.",
+    sources: ["specguardbench",  "spec-sign-off"],
+  },
+  {
+    id: "triage-red-checks",
+    station: "gate",
+    stage: "Later",
+    maturity: "Cutting edge",
+    text: "A fixing agent sorts each red check first: whose problem it is, and whether it has been seen before. A new or risky failure goes to its owner.",
+    sources: ["port-self-healing"],
+  },
+  {
+    id: "fix-as-pr",
+    station: "gate",
+    stage: "Later",
+    maturity: "Cutting edge",
+    text: "The fixing agent opens its fix as a PR. It goes through the gate and review like any other change.",
+    sources: ["port-self-healing"],
+  },
+  {
+    id: "cap-fix-loop",
+    station: "gate",
+    stage: "Later",
+    maturity: "Cutting edge",
+    text: "Cap the fixing agent's attempts, and let it try again only on a new failure.",
+    sources: ["ci-loop-guards"],
+  },
+  {
+    id: "fix-paths-to-person",
+    station: "gate",
+    stage: "Later",
+    maturity: "Cutting edge",
+    text: "Send any fix that touches tests, CI config, or lockfiles to a person.",
+    sources: ["ci-loop-guards"],
   },
   {
     id: "scale-review",
@@ -772,7 +902,7 @@ export const RECOMMENDATIONS: Recommendation[] = [
     stage: "Start",
     maturity: "Best practice",
     text: "Keep PRs small. Scale how deeply a person reviews to the size and risk of the change.",
-    sources: ["crbugbench", "dora-small-batches"],
+    sources: ["crbugbench",  "dora-small-batches"],
   },
   {
     id: "human-approves",
@@ -780,23 +910,47 @@ export const RECOMMENDATIONS: Recommendation[] = [
     stage: "Start",
     maturity: "Best practice",
     text: "A named person approves. Agent review does not replace it, and no agent approves its own change.",
-    sources: ["owasp-ai-coding", "owasp-agents", "crbugbench"],
+    sources: ["owasp-ai-coding",  "owasp-agents",  "crbugbench"],
   },
   {
     id: "measure-review-bot",
     station: "review",
     stage: "Next",
+    maturity: "Cutting edge",
+    text: "Track how often people accept the review bot's comments, and test it on bugs you already know. The PR description can mislead it, so read its summary as a claim. Test it again when the model changes. Rankings move within months. Several independent benchmarks back this, but wide adoption is not shown yet.",
+    sources: ["crbugbench",  "coderabbit",  "reviewbench",  "review-bench-rots",  "ironbee"],
+  },
+  {
+    id: "attest-provenance",
+    station: "artifact",
+    stage: "Next",
+    maturity: "Cutting edge",
+    text: "Attest each build: a signed record that ties the digest to its commit and workflow. Verify it before you promote. The SLSA standard is mature, but most projects do not do this yet.",
+    sources: ["gh-attestations",  "gh-slsa-changelog",  "npm-provenance-census"],
+  },
+  {
+    id: "progressive-release",
+    station: "release",
+    stage: "Later",
     maturity: "Best practice",
-    text: "Track how often people accept the review bot's comments, and test it on bugs you already know. The PR description can mislead it, so read its summary as a claim. Test it again when the model changes. Rankings move within months. Several independent benchmarks back this, though wide adoption is not shown yet.",
-    sources: ["crbugbench", "coderabbit", "reviewbench", "review-bench-rots", "ironbee"],
+    text: "Separate deploy from release. Turn a change on for a small share of users first, widen it on a named signal, and roll back automatically when a guardrail breaks.",
+    sources: ["reveneau-progressive",  "stepto-progressive",  "dora-2025"],
+  },
+  {
+    id: "human-release-gate",
+    station: "release",
+    stage: "Later",
+    maturity: "Best practice",
+    text: "A named person approves promotion to production where a wrong call is expensive, like auth, billing, data migrations, or a public API. Anyone on call can roll back without a second approval, and the rollback is practised.",
+    sources: ["gh-environments",  "reveneau-progressive",  "iusztin"],
   },
   {
     id: "measure-factory",
     station: "observe",
     stage: "Start",
     maturity: "Best practice",
-    text: "Measure change failure rate and cost per change before agents arrive and after. Expect a dip at first while people check more.",
-    sources: ["dora-roi", "crbugbench"],
+    text: "Measure change failure rate, rework, and recovery time before agents arrive and after. Expect throughput to rise before stability does. Count cost per change too, though little published evidence measures it yet.",
+    sources: ["dora-2025",  "dora-roi",  "dx-state-ai",  "post-merge-fate"],
   },
   {
     id: "harness-evals",
@@ -804,7 +958,7 @@ export const RECOMMENDATIONS: Recommendation[] = [
     stage: "Next",
     maturity: "Cutting edge",
     text: "Test the agent setup like code. Run small behavioural evals when a prompt, tool, or model changes, and track the pass rate over time. Keep a prompt or rule change only when replayed evals show it helps and breaks no task.",
-    sources: ["harness-evals", "crbugbench", "pace-bench", "cortex"],
+    sources: ["harness-evals",  "crbugbench",  "pace-bench",  "cortex"],
   },
   {
     id: "spec-drift",
@@ -812,9 +966,408 @@ export const RECOMMENDATIONS: Recommendation[] = [
     stage: "Later",
     maturity: "Cutting edge",
     text: "Check that the docs agents build from still match the code. Record the drift as the next work order. Make the check deterministic, so it can refuse a drifting commit.",
-    sources: ["spec-drift", "ms-spec-driven", "spec-growth"],
+    sources: ["spec-drift",  "ms-spec-driven",  "spec-growth"],
   },
 ];
+
+export type Fit = "Full" | "Partial";
+
+export interface Tool {
+  name: string;
+  url: string;
+  fit: Fit;
+  note: string;
+}
+
+/** When the tool links were last opened. */
+export const TOOLS_CHECKED = "22 October 2026";
+
+/** Per recommendation: tools that meet some or all of it, and what is left. Not an endorsement. */
+export const TOOLS: Record<string, { tools: Tool[]; gap?: string }> = {
+  "done-as-checks": {
+    tools: [
+      {
+        name: "GitHub Spec Kit",
+        url: "https://github.com/github/spec-kit",
+        fit: "Partial",
+        note: "Keeps the spec as what agents build and check against. Does not make the checks executable.",
+      },
+      {
+        name: "Kiro",
+        url: "https://kiro.dev",
+        fit: "Partial",
+        note: "Writes acceptance criteria into specs. They run only if you turn them into tests.",
+      },
+      {
+        name: "Cucumber",
+        url: "https://cucumber.io",
+        fit: "Partial",
+        note: "Acceptance criteria as executable scenarios. People still write them.",
+      }
+    ],
+  },
+  "untrusted-issues": {
+    tools: [
+      {
+        name: "GitHub Agentic Workflows",
+        url: "https://github.github.com/gh-aw/",
+        fit: "Partial",
+        note: "Limits what an agent can do with what it reads.",
+      },
+      {
+        name: "Lakera Guard",
+        url: "https://www.lakera.ai/lakera-guard",
+        fit: "Partial",
+        note: "Detects prompt injection. Detection is probabilistic, not a boundary.",
+      },
+      {
+        name: "PurpleLlama (Prompt Guard)",
+        url: "https://github.com/meta-llama/PurpleLlama",
+        fit: "Partial",
+        note: "Open-source injection classifier, with the same limit.",
+      }
+    ],
+  },
+  "sandbox-no-secrets": {
+    tools: [
+      {
+        name: "E2B",
+        url: "https://e2b.dev",
+        fit: "Full",
+        note: "Isolated sandboxes for agents.",
+      },
+      {
+        name: "Daytona",
+        url: "https://www.daytona.io",
+        fit: "Full",
+        note: "Isolated sandboxes for agents.",
+      },
+      {
+        name: "Copilot coding agent",
+        url: "https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent",
+        fit: "Full",
+        note: "Runs in a GitHub Actions sandbox. GitHub-hosted work only.",
+      }
+    ],
+  },
+  "egress-allowlist": {
+    tools: [
+      {
+        name: "Copilot coding agent firewall",
+        url: "https://docs.github.com/en/copilot/customizing-copilot/customizing-or-disabling-the-firewall-for-copilot-coding-agent",
+        fit: "Full",
+        note: "Allowlist for Copilot's agent only.",
+      },
+      {
+        name: "StepSecurity Harden-Runner",
+        url: "https://github.com/step-security/harden-runner",
+        fit: "Full",
+        note: "Blocks outbound traffic from GitHub Actions runners to unlisted hosts.",
+      }
+    ],
+  },
+  "staged-writes": {
+    tools: [
+      {
+        name: "GitHub Agentic Workflows",
+        url: "https://github.github.com/gh-aw/",
+        fit: "Full",
+        note: "The agent proposes writes and a separate step checks them before they land.",
+      },
+      {
+        name: "GitHub rulesets",
+        url: "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets",
+        fit: "Partial",
+        note: "Protect branches, but not comments or PRs.",
+      }
+    ],
+  },
+  "owned-instructions": {
+    tools: [
+      {
+        name: "CODEOWNERS",
+        url: "https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners",
+        fit: "Full",
+        note: "With rulesets, a change to an instruction file needs its owner.",
+      }
+    ],
+    gap: "Instruction files outside the repo, such as user or global agent settings, still need a person.",
+  },
+  "checks-not-claims": {
+    tools: [
+      {
+        name: "GitHub rulesets",
+        url: "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets",
+        fit: "Full",
+        note: "Required status checks block the merge.",
+      },
+      {
+        name: "Trunk Merge Queue",
+        url: "https://trunk.io/merge-queue",
+        fit: "Full",
+        note: "Merges only what passes the checks.",
+      },
+      {
+        name: "Mergify",
+        url: "https://mergify.com",
+        fit: "Full",
+        note: "Merge queue and merge rules.",
+      }
+    ],
+  },
+  "spec-signs-off": {
+    tools: [
+      {
+        name: "GitHub Spec Kit",
+        url: "https://github.com/github/spec-kit",
+        fit: "Partial",
+        note: "Keeps the spec as what agents build and check against. Does not make the checks executable.",
+      },
+      {
+        name: "Cucumber",
+        url: "https://cucumber.io",
+        fit: "Partial",
+        note: "Scenarios from the work order can decide done.",
+      }
+    ],
+    gap: "No tool makes checks drawn from the work order the sign-off by itself. A person or a custom workflow wires it up.",
+  },
+  "spec-checks-rerun": {
+    tools: [
+      {
+        name: "Nx affected",
+        url: "https://nx.dev/ci/features/affected",
+        fit: "Partial",
+        note: "Reruns checks for projects a code change touches. Not data changes.",
+      }
+    ],
+    gap: "Rerunning on a data or external dependency change needs a custom trigger.",
+  },
+  "check-the-checks": {
+    tools: [
+      {
+        name: "Stryker",
+        url: "https://stryker-mutator.io",
+        fit: "Partial",
+        note: "Mutation testing shows weak tests, not whether they match the spec.",
+      }
+    ],
+    gap: "No tool checks the checks against the work order. A person does it.",
+  },
+  "triage-red-checks": {
+    tools: [
+      {
+        name: "Trunk Flaky Tests",
+        url: "https://trunk.io/flaky-tests",
+        fit: "Partial",
+        note: "Separates flaky failures from real ones.",
+      },
+      {
+        name: "Nx Cloud self-healing CI",
+        url: "https://nx.dev/ci/features/self-healing-ci",
+        fit: "Partial",
+        note: "Proposes fixes for red checks. A person approves by default, with an option to auto-apply verified fixes.",
+      }
+    ],
+  },
+  "fix-as-pr": {
+    tools: [
+      {
+        name: "Nx Cloud self-healing CI",
+        url: "https://nx.dev/ci/features/self-healing-ci",
+        fit: "Partial",
+        note: "Proposes fixes for red checks. A person approves by default, with an option to auto-apply verified fixes.",
+      },
+      {
+        name: "Gitar",
+        url: "https://gitar.ai",
+        fit: "Partial",
+        note: "Fixes CI failures and reviews code.",
+      }
+    ],
+  },
+  "cap-fix-loop": {
+    tools: [],
+    gap: "No product found with an attempt cap and a new-failure rule. Write it into the workflow.",
+  },
+  "fix-paths-to-person": {
+    tools: [
+      {
+        name: "CODEOWNERS",
+        url: "https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners",
+        fit: "Full",
+        note: "Own tests, CI config, and lockfiles so a person must approve changes to them.",
+      }
+    ],
+  },
+  "scale-review": {
+    tools: [
+      {
+        name: "Graphite",
+        url: "https://graphite.dev",
+        fit: "Partial",
+        note: "Stacked PRs keep each change small.",
+      },
+      {
+        name: "PullApprove",
+        url: "https://www.pullapprove.com",
+        fit: "Partial",
+        note: "Routes reviewers by rule. You still judge the risk.",
+      }
+    ],
+  },
+  "human-approves": {
+    tools: [
+      {
+        name: "GitHub rulesets",
+        url: "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets",
+        fit: "Full",
+        note: "Require an approving review before merge.",
+      },
+      {
+        name: "Copilot code review",
+        url: "https://docs.github.com/en/copilot/concepts/agents/code-review",
+        fit: "Partial",
+        note: "A review bot only. Check that its reviews cannot count as an approval.",
+      }
+    ],
+  },
+  "measure-review-bot": {
+    tools: [
+      {
+        name: "CodeRabbit dashboard",
+        url: "https://docs.coderabbit.ai/guides/dashboard",
+        fit: "Partial",
+        note: "Comment acceptance rates by severity and category. CodeRabbit only.",
+      },
+      {
+        name: "Martian Code Review Bench",
+        url: "https://github.com/withmartian/code-review-benchmark",
+        fit: "Partial",
+        note: "Open benchmark to run your bot through.",
+      }
+    ],
+    gap: "Testing the bot on bugs from your own history is still a custom script.",
+  },
+  "attest-provenance": {
+    tools: [
+      {
+        name: "attest-build-provenance",
+        url: "https://github.com/actions/attest-build-provenance",
+        fit: "Full",
+        note: "Signed SLSA provenance from GitHub Actions. Verify with gh attestation verify.",
+      },
+      {
+        name: "slsa-github-generator",
+        url: "https://github.com/slsa-framework/slsa-github-generator",
+        fit: "Full",
+        note: "SLSA Build Level 3 provenance.",
+      },
+      {
+        name: "Sigstore cosign",
+        url: "https://github.com/sigstore/cosign",
+        fit: "Partial",
+        note: "Signs and verifies artifacts. Provenance comes from your build.",
+      }
+    ],
+  },
+  "progressive-release": {
+    tools: [
+      {
+        name: "Argo Rollouts",
+        url: "https://argoproj.github.io/rollouts/",
+        fit: "Full",
+        note: "Canary with metric analysis and automated rollback, on Kubernetes.",
+      },
+      {
+        name: "Flagger",
+        url: "https://flagger.app",
+        fit: "Full",
+        note: "The same, on Kubernetes.",
+      },
+      {
+        name: "LaunchDarkly guarded rollouts",
+        url: "https://launchdarkly.com/docs/home/releases/guarded-rollouts",
+        fit: "Full",
+        note: "Flag rollouts that halt and revert on a guardrail metric.",
+      }
+    ],
+  },
+  "human-release-gate": {
+    tools: [
+      {
+        name: "GitHub environments",
+        url: "https://docs.github.com/en/actions/reference/workflows-and-actions/deployments-and-environments",
+        fit: "Full",
+        note: "Required reviewers approve before a deploy to production.",
+      }
+    ],
+    gap: "Deciding which changes are expensive to get wrong is still a person's call.",
+  },
+  "measure-factory": {
+    tools: [
+      {
+        name: "DX",
+        url: "https://getdx.com",
+        fit: "Partial",
+        note: "AI impact and delivery metrics.",
+      },
+      {
+        name: "Faros AI",
+        url: "https://www.faros.ai",
+        fit: "Partial",
+        note: "DORA metrics.",
+      },
+      {
+        name: "Swarmia",
+        url: "https://www.swarmia.com",
+        fit: "Partial",
+        note: "Delivery metrics.",
+      }
+    ],
+    gap: "No tool reports cost per change. Join agent and CI bills to changes yourself.",
+  },
+  "harness-evals": {
+    tools: [
+      {
+        name: "Inspect AI",
+        url: "https://inspect.aisi.org.uk",
+        fit: "Full",
+        note: "Agent evals.",
+      },
+      {
+        name: "Promptfoo",
+        url: "https://www.promptfoo.dev",
+        fit: "Full",
+        note: "Evals that run in CI.",
+      },
+      {
+        name: "Braintrust",
+        url: "https://www.braintrust.dev",
+        fit: "Partial",
+        note: "Tracks eval results over time.",
+      }
+    ],
+    gap: "Keeping a rule only when replayed tasks show it helps needs your own task set.",
+  },
+  "spec-drift": {
+    tools: [
+      {
+        name: "dependency-cruiser",
+        url: "https://github.com/sverweij/dependency-cruiser",
+        fit: "Partial",
+        note: "Blocks imports that break declared rules, deterministically. Does not read prose specs.",
+      },
+      {
+        name: "ArchUnit",
+        url: "https://www.archunit.org",
+        fit: "Partial",
+        note: "The same for Java.",
+      }
+    ],
+    gap: "Nothing checks prose docs or AGENTS.md against the code. That check is custom.",
+  }
+};
 
 export function recommendationsFor(filter: { station?: StationId; stage?: AdoptionStage }): Recommendation[] {
   return RECOMMENDATIONS.filter(
