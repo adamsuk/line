@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { FURTHER_READING, REFERENCES, TOOL_LIST, TOOLS_CHECKED } from "@/factory/model";
+import { FURTHER_READING, REFERENCES, TOOLS_CHECKED } from "@/factory/model";
 import { ChangelogEntries } from "@/components/line/changelog";
 import { Guide } from "@/components/line/guide";
 import { buildInfo, commitUrl, formatLondon, shortSha } from "@/factory/build-info";
@@ -7,6 +7,7 @@ import { doneCount, useLine } from "@/factory/store";
 import { Parts } from "@/components/line/parts";
 import { Rail } from "@/components/line/rail";
 import { Stage } from "@/components/line/stage";
+import { ToolsByStation } from "@/components/line/tools";
 
 export function LineApp() {
   const view = useLine((s) => s.view);
@@ -179,23 +180,11 @@ function BuiltOn() {
         </Disclosure>
         <Disclosure id="tools" title="Tools" className="mt-4">
           <p className="mt-2 max-w-2xl text-sm text-muted">
-            Every tool named in the guide, checked on {TOOLS_CHECKED}. This is not an endorsement. Each
-            station's recommendations show which tools fit, how fully, and the gap left.
+            Every tool named in the guide, checked on {TOOLS_CHECKED}. This is not an endorsement. Marked by
+            the stations they cover, fully or partly. Each station's recommendations also show the gap
+            left.
           </p>
-          <ul className="mt-4 grid gap-x-6 gap-y-2 text-sm sm:grid-cols-2 lg:grid-cols-3">
-            {TOOL_LIST.map((t) => (
-              <li key={t.url}>
-                <a
-                  href={t.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-ink underline underline-offset-4 hover:text-steel"
-                >
-                  {t.name}
-                </a>
-              </li>
-            ))}
-          </ul>
+          <ToolsByStation />
         </Disclosure>
         <Disclosure id="changelog" title="Changelog" className="mt-4">
           <ChangelogEntries />

@@ -15,6 +15,8 @@ import {
   stationIndex,
   TOOLS,
   TOOL_LIST,
+  TOOL_COVERAGE,
+  FIT_MEANING,
 } from "./model.ts";
 
 test("nine stations, numbered in order", () => {
@@ -153,4 +155,47 @@ test("the tools list names each tool once", () => {
   assert.equal(new Set(TOOL_LIST.map((t) => t.url)).size, TOOL_LIST.length);
   const urls = new Set(Object.values(TOOLS).flatMap((e) => e.tools.map((t) => t.url)));
   assert.equal(TOOL_LIST.length, urls.size);
+});
+
+test("tool coverage rates every station for every tool, and nothing else", () => {
+  assert.equal(TOOL_COVERAGE.length, TOOL_LIST.length);
+  const urls = new Set(TOOL_LIST.map((t) => t.url));
+  for (const t of TOOL_COVERAGE) {
+    assert.ok(urls.has(t.url), t.name);
+    assert.deepEqual(Object.keys(t.stations).sort(), [...STATION_IDS].sort(), t.name);
+    assert.ok(Object.values(t.stations).some((c) => c.fit !== "None"), `${t.name} covers no station`);
+  }
+});
+
+test("each coverage rating comes from TOOLS for a recommendation at that station", () => {
+  for (const t of TOOL_COVERAGE) {
+    for (const [station, cell] of Object.entries(t.stations)) {
+      assert.equal(cell.fit === "None", cell.uses.length === 0, `${t.name} ${station}`);
+      if (cell.uses.length) {
+        const best = cell.uses.some((u) => u.fit === "Full") ? "Full" : "Partial";
+        assert.equal(cell.fit, best, `${t.name} ${station}`);
+      }
+      for (const u of cell.uses) {
+        const r = RECOMMENDATIONS.find((x) => x.id === u.recommendation);
+        assert.ok(r, u.recommendation);
+        assert.equal(r.station, station, `${t.name} ${u.recommendation}`);
+        assert.equal(u.maturity, r.maturity);
+        const src = TOOLS[r.id].tools.find((x) => x.url === t.url);
+        assert.ok(src, `${t.name} not in TOOLS for ${r.id}`);
+        assert.equal(u.fit, src.fit);
+        assert.equal(u.note, src.note);
+      }
+    }
+  }
+  // And the other way: every tool in TOOLS shows up at its recommendation's station.
+  for (const r of RECOMMENDATIONS) {
+    for (const tool of TOOLS[r.id].tools) {
+      const cov = TOOL_COVERAGE.find((t) => t.url === tool.url);
+      assert.ok(cov?.stations[r.station].uses.some((u) => u.recommendation === r.id), `${tool.name} ${r.id}`);
+    }
+  }
+});
+
+test("fit meanings have no em or en dashes", () => {
+  assert.doesNotMatch(JSON.stringify(FIT_MEANING), /[\u2013\u2014]/);
 });
