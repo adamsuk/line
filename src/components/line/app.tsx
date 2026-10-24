@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { FURTHER_READING, REFERENCES, TOOL_LIST, TOOLS_CHECKED } from "@/factory/model";
+import { ChangelogEntries } from "@/components/line/changelog";
 import { Guide } from "@/components/line/guide";
 import { buildInfo, commitUrl, formatLondon, shortSha } from "@/factory/build-info";
 import { doneCount, useLine } from "@/factory/store";
@@ -195,6 +196,9 @@ function BuiltOn() {
               </li>
             ))}
           </ul>
+        </Disclosure>
+        <Disclosure id="changelog" title="Changelog" className="mt-4">
+          <ChangelogEntries />
         </Disclosure>
         <LastUpdated />
       </div>

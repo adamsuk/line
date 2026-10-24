@@ -8,6 +8,7 @@ Research-driven entries say what changed, why, and which sources back it. See [C
 
 ### Added
 
+- A collapsed Changelog section on the site, built from this file at build time so it never drifts. The latest three dates show, with older ones behind a second toggle. ([#PR_NUMBER](https://github.com/adamsuk/line/pull/PR_NUMBER))
 - This changelog, backfilled from the merged PRs. Every PR now adds an entry, with a PR template checkbox and a CI check (skip with the `skip-changelog` label). ([#30](https://github.com/adamsuk/line/pull/30))
 
 ## 2026-10-23
