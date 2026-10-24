@@ -6,14 +6,16 @@ Research-driven entries say what changed, why, and which sources back it. See [C
 
 ## 2026-10-24
 
+### Added
+
+- Assess your setup with an LLM: a collapsed section in the guide with a read-only audit prompt, a scoring rubric, and MCP servers to connect. The site now serves guide.json, llms.txt, and llms-full.txt, built from the page's data and versioned by this changelog. Cutting edge. Sources: [MCP specification 2026-07-28](https://modelcontextprotocol.io/specification/2026-07-28), [llms.txt v2](https://llmstxt.org/). ([#36](https://github.com/adamsuk/line/pull/36))
+- A cutting-edge Return recommendation to audit the whole setup with a read-only agent over MCP, with GitHub MCP Server and Datadog MCP Server as partial tools. ([#36](https://github.com/adamsuk/line/pull/36))
+- A collapsed Changelog section on the site, built from this file at build time so it never drifts. The latest three dates show, with older ones behind a second toggle. ([#32](https://github.com/adamsuk/line/pull/32))
+- This changelog, backfilled from the merged PRs. Every PR now adds an entry, with a PR template checkbox and a CI check (skip with the `skip-changelog` label). ([#30](https://github.com/adamsuk/line/pull/30))
+
 ### Changed
 
 - The Tools section marks each tool with the stations it covers, full or partial, and filters by station to show how each tool helps there. Ratings come from the existing per-recommendation fits, so no new claims. ([#34](https://github.com/adamsuk/line/pull/34))
-
-### Added
-
-- A collapsed Changelog section on the site, built from this file at build time so it never drifts. The latest three dates show, with older ones behind a second toggle. ([#32](https://github.com/adamsuk/line/pull/32))
-- This changelog, backfilled from the merged PRs. Every PR now adds an entry, with a PR template checkbox and a CI check (skip with the `skip-changelog` label). ([#30](https://github.com/adamsuk/line/pull/30))
 
 ## 2026-10-23
 
