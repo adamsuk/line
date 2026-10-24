@@ -95,6 +95,7 @@ Agent tooling is changing fast. Each recommendation carries one of two labels, s
 | Best practice | Observe | Start | Measure change failure rate, rework, and recovery time before agents arrive and after. Expect throughput to rise before stability does. Count cost per change too, though little published evidence measures it yet. | [Announcing the 2025 DORA Report](https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report)<br>[ROI of AI-assisted Software Development](https://dora.dev/ai/roi/report/)<br>[State of AI in Software Development](https://leaddev.com/wp-content/uploads/2026/06/LXD3-2026-AI-in-the-SDLC.pdf)<br>[Do These Violent Delights Have Violent Ends? Measuring the Post-Merge Fate of Agentic Code](https://arxiv.org/abs/2607.09902) |
 | Cutting edge | Observe | Next | Test the agent setup like code. Run small behavioural evals when a prompt, tool, or model changes, and track the pass rate over time. Keep a prompt or rule change only when replayed evals show it helps and breaks no task. | [The Anatomy of Harness Engineering: How to Evaluate, Iterate, and Guard AI Coding Agents](https://developers.googleblog.com/en/the-anatomy-of-harness-engineering-how-to-evaluate-iterate-and-guard-ai-coding-agents/)<br>[(When) Should a Software Factory be Lights-off? Benchmarking Code Review Agents on Bug Detection](https://arxiv.org/abs/2610.13668)<br>[When Coding Agents Outpace Review: Evaluating PRD-Driven Development in Mature Enterprise Repositories](https://arxiv.org/abs/2610.26394)<br>[Cortex: Measurement-Gated Evolution and Pruning of Coding-Agent Skills and Rules](https://arxiv.org/abs/2610.14216) |
 | Cutting edge | Return | Later | Check that the docs agents build from still match the code. Record the drift as the next work order. Make the check deterministic, so it can refuse a drifting commit. | [Spec-driven development and spec drift: 335 repositories surveyed](https://striff.io/blog/architecture-matters-more-not-less/)<br>[Spec-Driven Development: A Spec-First Approach to AI-Native Engineering](https://developer.microsoft.com/blog/spec-driven-development-ai-native-engineering/)<br>[Implementing the Spec Growth Engine: Preventing Spec-Code Divergence, and Growing the Spec with Agents](https://arxiv.org/abs/2610.11725) |
+| Cutting edge | Return | Later | Audit the whole setup against this guide with a read-only agent connected over MCP. It scores each recommendation with evidence and lists quick wins and biggest gains. People decide which gaps become work orders. | [Model Context Protocol Specification, version 2026-07-28](https://modelcontextprotocol.io/specification/2026-07-28)<br>[The /llms.txt file, v2](https://llmstxt.org/) |
 
 ## Tools
 
@@ -110,6 +111,7 @@ Every tool named in the guide, checked on 22 October 2026. This is not an endors
 - [Copilot coding agent](https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent)
 - [Copilot coding agent firewall](https://docs.github.com/en/copilot/customizing-copilot/customizing-or-disabling-the-firewall-for-copilot-coding-agent)
 - [Cucumber](https://cucumber.io)
+- [Datadog MCP Server](https://docs.datadoghq.com/bits_ai/mcp_server/)
 - [Daytona](https://www.daytona.io)
 - [dependency-cruiser](https://github.com/sverweij/dependency-cruiser)
 - [DX](https://getdx.com)
@@ -118,6 +120,7 @@ Every tool named in the guide, checked on 22 October 2026. This is not an endors
 - [Flagger](https://flagger.app)
 - [Gitar](https://gitar.ai)
 - [GitHub Agentic Workflows](https://github.github.com/gh-aw/)
+- [GitHub MCP Server](https://github.com/github/github-mcp-server)
 - [GitHub environments](https://docs.github.com/en/actions/reference/workflows-and-actions/deployments-and-environments)
 - [GitHub rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets)
 - [GitHub Spec Kit](https://github.com/github/spec-kit)
@@ -193,6 +196,17 @@ Newer pieces behind the labelled recommendations. Titles are quoted as published
 - [Capabilities: Working in small batches](https://dora.dev/capabilities/working-in-small-batches/). DORA, dora.dev, Updated 8 December 2025. Small batches are a safety net for AI adoption, against the instability faster changes bring.
 - [How to build self-healing CI pipelines](https://newsletter.port.io/p/how-to-build-self-healing-ci-pipelines). Zohar Einy, Port newsletter, 12 May 2026. Sort a red check by whose problem it is before fixing it. Hand new or risky failures to a person.
 - [Spec-Driven Development: A Spec-First Approach to AI-Native Engineering](https://developer.microsoft.com/blog/spec-driven-development-ai-native-engineering/). Apoorv Gupta, Microsoft for Developers, 10 June 2026. Write the spec first, and keep it as the thing agents build and check against.
+- [Model Context Protocol Specification, version 2026-07-28](https://modelcontextprotocol.io/specification/2026-07-28). Model Context Protocol, modelcontextprotocol.io, 28 July 2026. One protocol for agents to read context and call tools in other systems. Hosts must get consent before a tool runs.
+- [The /llms.txt file, v2](https://llmstxt.org/). Jeremy Howard, llmstxt.org, 3 September 2024, updated 10 August 2026. A small Markdown file at a path tells agents what the site is and links the detail they should fetch.
+
+## Assess your setup with an LLM
+
+Cutting edge. Give an agent read-only MCP access to your repos, CI, branch rules, deploy, and monitoring, then paste the audit prompt from the guide view on the site. It reads the guide as data, scores each recommendation as met, partial, missing, or unknown with evidence, and returns quick wins and biggest gains.
+
+- [guide.json](https://adamsuk.github.io/line/guide.json): stations, recommendations, tools with station ratings, dated sources, the rubric and the prompt
+- [llms.txt](https://adamsuk.github.io/line/llms.txt) and [llms-full.txt](https://adamsuk.github.io/line/llms-full.txt)
+
+All three are built from the page's data and CHANGELOG.md by `npm run build:pages` ([src/factory/audit.ts](src/factory/audit.ts)).
 
 ## Run it
 

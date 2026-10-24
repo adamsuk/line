@@ -1,6 +1,7 @@
 import { ADOPTION_STAGES, GUIDE, STATIONS, recommendationsFor } from "@/factory/model";
 import { MaturityLegend, RecommendationList } from "@/components/line/recommendations";
 import { SourceLink } from "@/components/line/stage";
+import { AssessWithLlm } from "@/components/line/assess";
 
 export function Guide() {
   return (
@@ -16,6 +17,7 @@ export function Guide() {
           <MaturityLegend />
         </div>
       </div>
+      <AssessWithLlm />
       <ol className="mt-6 grid gap-4">
         {ADOPTION_STAGES.map((group) => (
           <li key={group.stage} className="rounded-2xl border border-line bg-paper p-4 sm:p-6">

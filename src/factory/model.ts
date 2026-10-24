@@ -294,7 +294,9 @@ export type ReadingId =
   | "npm-provenance-census"
   | "gh-slsa-changelog"
   | "gh-attestations"
-  | "gh-environments";
+  | "gh-environments"
+  | "llms-txt"
+  | "mcp-spec";
 
 export type ReferenceId = BuiltOnId | ReadingId;
 
@@ -647,6 +649,24 @@ export const FURTHER_READING: { heading: string; refs: Reference[] }[] = [
         url: "https://developer.microsoft.com/blog/spec-driven-development-ai-native-engineering/",
         took: "Write the spec first, and keep it as the thing agents build and check against.",
       },
+      {
+        id: "mcp-spec",
+        title: "Model Context Protocol Specification, version 2026-07-28",
+        author: "Model Context Protocol",
+        publication: "modelcontextprotocol.io",
+        date: "28 July 2026",
+        url: "https://modelcontextprotocol.io/specification/2026-07-28",
+        took: "One protocol for agents to read context and call tools in other systems. Hosts must get consent before a tool runs.",
+      },
+      {
+        id: "llms-txt",
+        title: "The /llms.txt file, v2",
+        author: "Jeremy Howard",
+        publication: "llmstxt.org",
+        date: "3 September 2024, updated 10 August 2026",
+        url: "https://llmstxt.org/",
+        took: "A small Markdown file at a path tells agents what the site is and links the detail they should fetch.",
+      },
     ],
   },
 ];
@@ -967,6 +987,14 @@ export const RECOMMENDATIONS: Recommendation[] = [
     maturity: "Cutting edge",
     text: "Check that the docs agents build from still match the code. Record the drift as the next work order. Make the check deterministic, so it can refuse a drifting commit.",
     sources: ["spec-drift",  "ms-spec-driven",  "spec-growth"],
+  },
+  {
+    id: "audit-with-mcp",
+    station: "loop",
+    stage: "Later",
+    maturity: "Cutting edge",
+    text: "Audit the whole setup against this guide with a read-only agent connected over MCP. It scores each recommendation with evidence and lists quick wins and biggest gains. People decide which gaps become work orders.",
+    sources: ["mcp-spec",  "llms-txt"],
   },
 ];
 
@@ -1366,6 +1394,23 @@ export const TOOLS: Record<string, { tools: Tool[]; gap?: string }> = {
       }
     ],
     gap: "Nothing checks prose docs or AGENTS.md against the code. That check is custom.",
+  },
+  "audit-with-mcp": {
+    tools: [
+      {
+        name: "GitHub MCP Server",
+        url: "https://github.com/github/github-mcp-server",
+        fit: "Partial",
+        note: "Read-only mode reads repos, Actions runs, and rulesets. It does not see your cloud or monitoring.",
+      },
+      {
+        name: "Datadog MCP Server",
+        url: "https://docs.datadoghq.com/bits_ai/mcp_server/",
+        fit: "Partial",
+        note: "Reads monitors, dashboards, and logs with the user's own permissions. Monitoring only.",
+      }
+    ],
+    gap: "No one server sees the whole setup. Connect one per system, and list what the agent could not see.",
   }
 };
 
