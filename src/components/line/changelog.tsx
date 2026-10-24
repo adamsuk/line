@@ -1,6 +1,11 @@
 import changelogSource from "../../../CHANGELOG.md?raw";
 import { REPO_URL } from "@/factory/build-info";
-import { parseChangelog, resolveHref, type ChangelogRelease, type Inline } from "@/factory/changelog";
+import {
+  parseChangelog,
+  resolveHref,
+  type ChangelogRelease,
+  type Inline,
+} from "@/factory/changelog";
 
 // Built from CHANGELOG.md at build time, so the site and the repo always agree.
 const LOG = parseChangelog(changelogSource);
@@ -29,7 +34,10 @@ export function ChangelogEntries() {
       {older.length > 0 && (
         <details className="group/older mt-4">
           <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2 rounded-lg font-mono text-xs text-steel focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-steel [&::-webkit-details-marker]:hidden">
-            <span aria-hidden="true" className="inline-block transition-transform duration-150 group-open/older:rotate-90">
+            <span
+              aria-hidden="true"
+              className="inline-block transition-transform duration-150 group-open/older:rotate-90"
+            >
               ▸
             </span>
             Older entries ({older.length})

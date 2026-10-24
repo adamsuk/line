@@ -67,7 +67,14 @@ export function parseChangelog(markdown: string): Changelog {
       flush();
     } else if (line.startsWith("## ")) {
       flush();
-      release = { date: line.slice(3).replace(/^\[|\]$/g, "").trim(), notes: [], groups: [] };
+      release = {
+        date: line
+          .slice(3)
+          .replace(/^\[|\]$/g, "")
+          .trim(),
+        notes: [],
+        groups: [],
+      };
       releases.push(release);
       group = null;
     } else if (line.startsWith("### ")) {
