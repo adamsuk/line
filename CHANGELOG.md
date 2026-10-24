@@ -15,6 +15,7 @@ Research-driven entries say what changed, why, and which sources back it. See [C
 
 ### Changed
 
+- The audit prompt's per-station lists read mid-sentence: each item starts lowercase unless it is a name like CI or GitHub. ([#PR_NUMBER](https://github.com/adamsuk/line/pull/PR_NUMBER))
 - The Tools section marks each tool with the stations it covers, full or partial, and filters by station to show how each tool helps there. Ratings come from the existing per-recommendation fits, so no new claims. ([#34](https://github.com/adamsuk/line/pull/34))
 
 ## 2026-10-23

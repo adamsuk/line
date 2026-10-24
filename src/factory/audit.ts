@@ -240,11 +240,21 @@ export function buildGuideJson(changelog: string) {
   };
 }
 
+/**
+ * Lowercase the first letter of a list item so it reads mid-sentence. Words with a capital after
+ * the first letter (CI, SLOs, GitHub, AGENTS.md) are names, so they keep their case.
+ */
+export function midSentence(item: string): string {
+  const first = item.split(/[\s(,;:]/, 1)[0];
+  if (/[A-Z]/.test(first.slice(1))) return item;
+  return item.charAt(0).toLowerCase() + item.slice(1);
+}
+
 /** The prompt someone pastes into an agent that has read-only MCP access to their setup. */
 export function auditPrompt(version: string): string {
   const stations = STATIONS.map((s) => {
     const a = AUDIT_EVIDENCE[s.id];
-    return `- ${s.index} ${s.name}: look for ${a.evidence.join("; ")}. Use ${a.access.join("; ")}.`;
+    return `- ${s.index} ${s.name}: look for ${a.evidence.map(midSentence).join("; ")}. Use ${a.access.map(midSentence).join("; ")}.`;
   }).join("\n");
   const rubric = (r: Record<string, string>) =>
     Object.entries(r)

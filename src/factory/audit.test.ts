@@ -10,6 +10,7 @@ import {
   LLMS_FULL_URL,
   machineFiles,
   MCP_SERVERS,
+  midSentence,
   SITE_URL,
 } from "./audit.ts";
 import { ALL_REFERENCES, RECOMMENDATIONS, STATIONS, STATION_IDS, TOOL_COVERAGE } from "./model.ts";
@@ -120,4 +121,16 @@ test("MCP server links are https, and the copy has no em or en dashes", () => {
     buildLlmsTxt(changelog),
   ]);
   assert.doesNotMatch(copy, /[\u2013\u2014]/);
+});
+
+test("list items read mid-sentence in the prompt, and names keep their case", () => {
+  assert.equal(midSentence("Issue and work order templates"), "issue and work order templates");
+  assert.equal(midSentence("CI workflows"), "CI workflows");
+  assert.equal(midSentence("GitHub environments"), "GitHub environments");
+  assert.equal(midSentence("SLOs for production"), "SLOs for production");
+  const p = auditPrompt("x");
+  assert.ok(p.includes("look for issue and work order templates"));
+  assert.doesNotMatch(p, /look for [A-Z][a-z]/);
+  for (const line of p.split("\n").filter((l) => / look for /.test(l)))
+    assert.doesNotMatch(line, /; [A-Z][a-z]+ /, line);
 });
