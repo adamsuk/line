@@ -6,6 +6,8 @@ Live at https://adamsuk.github.io/line/
 
 How it was researched: [Researching a Software Factory with Grok](https://sradams.co.uk/blog/researching-a-software-factory-with-grok)
 
+What changed and why: [CHANGELOG.md](CHANGELOG.md). Every PR adds an entry; see [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## Where to read
 
 Start here. These files are the factory. Everything else is the app shell that renders them.

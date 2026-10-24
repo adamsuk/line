@@ -1,0 +1,37 @@
+name: Changelog
+
+# Fails a pull request that does not modify the changelog file.
+# Generic: copy as is. Set CHANGELOG_FILE and SKIP_LABEL if yours differ.
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+env:
+  CHANGELOG_FILE: CHANGELOG.md
+  SKIP_LABEL: skip-changelog
+
+jobs:
+  changelog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check the changelog was updated
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+          LABELS: ${{ toJSON(github.event.pull_request.labels.*.name) }}
+        run: |
+          if jq -e --arg l "$SKIP_LABEL" 'index($l) != null' <<< "$LABELS" > /dev/null; then
+            echo "Skipped: '$SKIP_LABEL' label is set."
+            exit 0
+          fi
+          if gh api --paginate "repos/$REPO/pulls/$PR/files" --jq '.[].filename' | grep -qxF "$CHANGELOG_FILE"; then
+            echo "$CHANGELOG_FILE is updated."
+          else
+            echo "::error::Add an entry to $CHANGELOG_FILE, or apply the '$SKIP_LABEL' label."
+            exit 1
+          fi
