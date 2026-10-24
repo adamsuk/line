@@ -1379,3 +1379,46 @@ export function recommendationsFor(filter: { station?: StationId; stage?: Adopti
     (r) => (!filter.station || r.station === filter.station) && (!filter.stage || r.stage === filter.stage),
   );
 }
+
+/** How well a tool covers a station: its best fit across that station's recommendations. */
+export type StationFit = Fit | "None";
+
+/** One way a tool helps: the recommendation it serves, how fully, and the note from TOOLS. */
+export interface ToolUse {
+  recommendation: string;
+  maturity: Maturity;
+  fit: Fit;
+  note: string;
+}
+
+export interface ToolCoverage {
+  name: string;
+  url: string;
+  /** Every station, rated Full, Partial, or None, with the uses behind the rating. */
+  stations: Record<StationId, { fit: StationFit; uses: ToolUse[] }>;
+}
+
+/**
+ * Tool by station, built from TOOLS and RECOMMENDATIONS so it cannot drift from them.
+ * A station is Full when the tool fully meets at least one of its recommendations, Partial when
+ * it only meets some, and None when the guide names the tool for none of them.
+ */
+export const TOOL_COVERAGE: ToolCoverage[] = TOOL_LIST.map(({ name, url }) => {
+  const stations = Object.fromEntries(
+    STATION_IDS.map((id) => [id, { fit: "None" as StationFit, uses: [] as ToolUse[] }]),
+  ) as ToolCoverage["stations"];
+  for (const r of RECOMMENDATIONS) {
+    for (const t of TOOLS[r.id]?.tools ?? []) {
+      if (t.url !== url) continue;
+      const cell = stations[r.station];
+      cell.uses.push({ recommendation: r.id, maturity: r.maturity, fit: t.fit, note: t.note });
+      cell.fit = cell.fit === "Full" || t.fit === "Full" ? "Full" : "Partial";
+    }
+  }
+  return { name, url, stations };
+});
+
+export const FIT_MEANING: Record<Fit, string> = {
+  Full: "Meets at least one of the station's recommendations on its own.",
+  Partial: "Meets some of a recommendation. People or other tools cover the rest.",
+};
