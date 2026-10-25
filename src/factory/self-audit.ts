@@ -179,10 +179,10 @@ const BY_STATION: Record<StationId, Q[]> = {
   gate: [
     {
       id: "gate-refuse",
-      q: "Do checks run on a clean machine from the snapshot, and does red block the merge?",
-      covered: "Required checks on a clean runner. A check that did not run counts as red.",
-      partial: "Checks run but are not required, or get rerun until green.",
-      gap: "Checks are optional.",
+      q: "Do checks run on a clean machine, and does merge read the required checks' result from CI, not the agent's summary or the PR text?",
+      covered: "Required checks on a clean runner gate the merge. A check that did not run or was skipped counts as red, and the agent's summary is ignored.",
+      partial: "People look at CI, but checks are not required, get rerun until green, or a summary that says done is sometimes taken instead.",
+      gap: "The agent saying done is the signal, or checks are optional.",
       recs: ["checks-not-claims"],
     },
     {
@@ -229,11 +229,11 @@ const BY_STATION: Record<StationId, Q[]> = {
     },
     {
       id: "review-scale",
-      q: "Is review depth scaled to the size and risk of the change?",
-      covered: "Small PRs, with deeper review for risky paths by rule.",
-      partial: "Small PRs, one review depth for all.",
-      gap: "Large PRs, skimmed.",
-      recs: ["scale-review"],
+      q: "Is review depth scaled to the size and risk of the change, and do you track time to first review and reviewer load, capping agent PRs when the queue grows?",
+      covered: "Small PRs, deeper review for risky paths by rule, and agent PRs held back when time to first review or reviewer load climbs.",
+      partial: "Small PRs, or the queue is tracked, but nothing slows the agents when it grows.",
+      gap: "Large PRs, skimmed, and nobody watches the queue.",
+      recs: ["scale-review", "review-capacity"],
     },
     {
       id: "review-bot",
@@ -278,6 +278,14 @@ const BY_STATION: Record<StationId, Q[]> = {
       partial: "Yes, never practised.",
       gap: "Needs the author or a second approval.",
       recs: ["human-release-gate"],
+    },
+    {
+      id: "release-rollback-time",
+      q: "How long does a rollback take, measured?",
+      covered: "Measured in minutes, and practised.",
+      partial: "An estimate.",
+      gap: "Unknown.",
+      recs: ["progressive-release", "human-release-gate"],
     },
     {
       id: "release-approve",

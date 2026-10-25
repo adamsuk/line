@@ -290,6 +290,11 @@ export type ReadingId =
   | "reveneau-progressive"
   | "dora-2025"
   | "dx-state-ai"
+  | "dx-q3-2026"
+  | "enterprise-2x"
+  | "meta-ai-review"
+  | "impossiblebench"
+  | "hacktrace"
   | "post-merge-fate"
   | "npm-provenance-census"
   | "gh-slsa-changelog"
@@ -355,6 +360,33 @@ export const FURTHER_READING: { heading: string; refs: Reference[] }[] = [
   {
     heading: "Sep to Oct 2026",
     refs: [
+      {
+        id: "hacktrace",
+        title: "hacktrace: behavior-supervised detection of reward hacking during code generation",
+        author: "Hao Jiang, Xin Li, Annan Wang and others",
+        publication: "arXiv",
+        date: "2 October 2026",
+        url: "https://arxiv.org/abs/2610.03055",
+        took: "A coding agent can pass by deleting the test that exposes the bug. In the authors' training runs, 82 to 91% of passing solutions were shortcuts until a monitor penalised them.",
+      },
+      {
+        id: "dx-q3-2026",
+        title: "State of AI Impact in Engineering: Q3 Report",
+        author: "DX",
+        publication: "getdx.com",
+        date: "Q3 2026 data (July to September 2026), page undated",
+        url: "https://getdx.com/report/state-of-ai-impact-in-engineering-q3-report/",
+        took: "Where agents write the most code, PRs wait 105% longer for a first review, while PR throughput keeps rising. Review has not kept pace.",
+      },
+      {
+        id: "meta-ai-review",
+        title: "A Preliminary Analysis of the Impact of AI Assisted/Generated Code on Quality, Centrality and Review Time at Scale",
+        author: "Audris Mockus, Peter C. Rigby, Don Stewart, Chandra Maddila, Nachiappan Nagappan",
+        publication: "ESEM 2026 (LIPIcs)",
+        date: "September 2026",
+        url: "https://drops.dagstuhl.de/storage/00lipics/lipics-vol394-esem2026/LIPIcs.ESEM.2026.93/LIPIcs.ESEM.2026.93.pdf",
+        took: "A counterpoint. At Meta, diffs with AI code were reviewed faster once context was controlled for. Review load is not slower everywhere, so measure your own.",
+      },
       {
         id: "stepto-progressive",
         title: "More Code, Fewer Deployments: Why Progressive Delivery Is the Missing Half of Your AI Coding Strategy",
@@ -487,6 +519,24 @@ export const FURTHER_READING: { heading: string; refs: Reference[] }[] = [
   {
     heading: "Earlier, still current",
     refs: [
+      {
+        id: "enterprise-2x",
+        title: "AI Writes Faster Than Humans Can Review: A Longitudinal Study of an Enterprise 2x Mandate",
+        author: "Hao He, Shyam Agarwal, Yegor Denisov-Blanch and others",
+        publication: "arXiv",
+        date: "2 July 2026",
+        url: "https://arxiv.org/abs/2607.01904",
+        took: "Merged PRs per engineer doubled. Load per reviewer roughly doubled too, and automated review overtook human review.",
+      },
+      {
+        id: "impossiblebench",
+        title: "ImpossibleBench: Measuring LLMs' Propensity of Exploiting Test Cases",
+        author: "Ziqian Zhong, Aditi Raghunathan, Nicholas Carlini",
+        publication: "arXiv",
+        date: "23 October 2025",
+        url: "https://arxiv.org/abs/2510.20270",
+        took: "Agents given tests that conflict with the spec often pass by changing or gaming the tests. Limiting test access cuts this.",
+      },
       {
         id: "dora-2025",
         title: "Announcing the 2025 DORA Report",
@@ -853,6 +903,14 @@ export const RECOMMENDATIONS: Recommendation[] = [
     sources: ["owasp-agents",  "nvidia-agents-md",  "gcloud-trusted-files"],
   },
   {
+    id: "tests-out-of-reach",
+    station: "bench",
+    stage: "Guardrails",
+    maturity: "Cutting edge",
+    text: "Keep tests out of the agent's reach. A change that edits, skips, or deletes an existing test goes to a person, and the gate counts a skipped test as a fail.",
+    sources: ["impossiblebench",  "hacktrace",  "spec-sign-off"],
+  },
+  {
     id: "checks-not-claims",
     station: "gate",
     stage: "Start",
@@ -931,6 +989,14 @@ export const RECOMMENDATIONS: Recommendation[] = [
     maturity: "Best practice",
     text: "A named person approves. Agent review does not replace it, and no agent approves its own change.",
     sources: ["owasp-ai-coding",  "owasp-agents",  "crbugbench"],
+  },
+  {
+    id: "review-capacity",
+    station: "review",
+    stage: "Next",
+    maturity: "Cutting edge",
+    text: "Let agents open only as many PRs as people can read. Track time to first review and reviewer load, and slow the agents before review turns into silent approval. One large study found AI code reviewed faster, so measure your own.",
+    sources: ["dx-q3-2026",  "enterprise-2x",  "meta-ai-review"],
   },
   {
     id: "measure-review-bot",
@@ -1121,6 +1187,23 @@ export const TOOLS: Record<string, { tools: Tool[]; gap?: string }> = {
     ],
     gap: "Instruction files outside the repo, such as user or global agent settings, still need a person.",
   },
+  "tests-out-of-reach": {
+    tools: [
+      {
+        name: "CODEOWNERS",
+        url: "https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners",
+        fit: "Partial",
+        note: "Own the test paths so a person must approve an edit or deletion.",
+      },
+      {
+        name: "GitHub rulesets",
+        url: "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets",
+        fit: "Partial",
+        note: "Require code owner review on test paths before merge.",
+      }
+    ],
+    gap: "A skip added in the test file itself, or a test that silently stops running, needs a CI check that fails on skipped or missing tests.",
+  },
   "checks-not-claims": {
     tools: [
       {
@@ -1259,6 +1342,23 @@ export const TOOLS: Record<string, { tools: Tool[]; gap?: string }> = {
         note: "A review bot only. Check that its reviews cannot count as an approval.",
       }
     ],
+  },
+  "review-capacity": {
+    tools: [
+      {
+        name: "DX",
+        url: "https://getdx.com",
+        fit: "Partial",
+        note: "Tracks time to first review alongside AI use.",
+      },
+      {
+        name: "Swarmia",
+        url: "https://www.swarmia.com",
+        fit: "Partial",
+        note: "Tracks time to first review, and a work in progress agreement flags when too many PRs are open.",
+      }
+    ],
+    gap: "These measure the queue. Holding agent PRs back when it grows is a rule you set on the agents.",
   },
   "measure-review-bot": {
     tools: [
