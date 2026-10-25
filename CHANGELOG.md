@@ -6,6 +6,11 @@ Research-driven entries say what changed, why, and which sources back it. See [C
 
 ## 2026-10-25
 
+### Added
+
+- A homepage that leads with the thesis: a change moves only on evidence, never on a claim, and when a station fails it, people fix the line, not just the change. It has a short why a line paragraph and two ways in: Walk the line (unchanged) and Audit your setup. Line now opens on the homepage, and Start over returns to the walk. Why: the site opened straight into the walk and never said what it argues. ([#42](https://github.com/adamsuk/line/pull/42))
+- Audit your setup: five setup questions (intent, outcome signal, harness, instruction files, who can stop the line), then two to four questions per station, each with a covered, partial and gap rule. A gap opens that station's existing recommendations and tools. A summary scores each station and names the weakest. Answers stay in this browser's localStorage, with no sharing or export. Why: Scott wanted a way to check a real setup against Line. The questions reuse the recommendations already in the guide, so nothing is added or copied. ([#42](https://github.com/adamsuk/line/pull/42))
+
 ### Changed
 
 - The guide's recommendation cards now list suggested tools, the same list the station cards in the walk show. Why: Scott asked for suggested tools in the guide, and only the walk had them. ([#40](https://github.com/adamsuk/line/pull/40))
