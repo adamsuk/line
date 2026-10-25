@@ -49,7 +49,7 @@ export function Guide() {
               <div className="mt-4">
                 <h3 className="font-mono text-xs text-muted">Recommendations</h3>
                 <div className="mt-2">
-                  <RecommendationList items={recommendationsFor({ stage: group.stage })} show="station" />
+                  <RecommendationList items={recommendationsFor({ stage: group.stage })} show="station" withTools />
                 </div>
               </div>
             ) : null}
