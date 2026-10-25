@@ -2,10 +2,9 @@ import { FURTHER_READING, REFERENCES, TOOLS_CHECKED } from "@/factory/model";
 import { ChangelogEntries } from "@/components/line/changelog";
 import { Guide } from "@/components/line/guide";
 import { Home } from "@/components/line/home";
-import { AuditSetup } from "@/components/line/audit-setup";
 import { buildInfo, commitUrl, formatLondon, shortSha } from "@/factory/build-info";
 import { doneCount, useLine } from "@/factory/store";
-import { Parts } from "@/components/line/parts";
+import { useHashRoute } from "@/components/line/use-hash-route";
 import { Rail } from "@/components/line/rail";
 import { Stage } from "@/components/line/stage";
 import { Disclosure } from "@/components/line/disclosure";
@@ -18,6 +17,7 @@ export function LineApp() {
   const notice = useLine((s) => s.notice);
   const clearNotice = useLine((s) => s.clearNotice);
   const count = useLine(doneCount);
+  useHashRoute();
 
   return (
     <main className="min-h-screen pb-16">
@@ -64,12 +64,10 @@ export function LineApp() {
             </a>
           </p>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <nav aria-label="Views" className="flex flex-wrap gap-1 rounded-xl bg-paper-2 p-1">
+            <nav aria-label="Views" className="grid grid-cols-3 gap-1 rounded-xl bg-paper-2 p-1 sm:flex">
               <Seg label="Home" active={view === "home"} onClick={() => setView("home")} />
               <Seg label="Walk the line" active={view === "walk"} onClick={() => setView("walk")} />
-              <Seg label="The parts" active={view === "parts"} onClick={() => setView("parts")} />
               <Seg label="The guide" active={view === "guide"} onClick={() => setView("guide")} />
-              <Seg label="Audit your setup" active={view === "audit"} onClick={() => setView("audit")} />
             </nav>
             <p className="font-mono text-xs tabular-nums text-faint">
               CHK-184 · {count} of 9 stations done
@@ -89,15 +87,11 @@ export function LineApp() {
 
       {view === "home" ? (
         <Home />
-      ) : view === "audit" ? (
-        <AuditSetup />
       ) : view === "walk" ? (
         <div className="mx-auto grid max-w-6xl gap-4 px-4 py-4 sm:px-6 lg:grid-cols-[16.5rem_minmax(0,1fr)] lg:items-start">
           <Rail />
           <Stage />
         </div>
-      ) : view === "parts" ? (
-        <Parts />
       ) : (
         <Guide />
       )}
@@ -122,7 +116,7 @@ function Seg({
       onClick={onClick}
       aria-pressed={active}
       className={
-        "min-h-11 rounded-lg px-4 text-sm font-medium transition-colors duration-150 " +
+        "min-h-11 whitespace-nowrap rounded-lg px-2 text-sm font-medium transition-colors duration-150 sm:px-4 " +
         (active ? "bg-ink text-paper" : "text-muted hover:text-ink")
       }
     >

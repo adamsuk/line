@@ -13,6 +13,7 @@ Research-driven entries say what changed, why, and which sources back it. See [C
 
 ### Changed
 
+- Three tabs instead of five: Home, Walk the line and The guide. The parts now sit on Home below the hero, and Audit your setup is a labelled section at the end of the guide, with an entry card at the top. The view is kept in the URL hash, and #parts and #audit open the section where that content now lives. Why: Scott found too many options, and on a phone the tab bar wrapped to two rows. It now fits one row at 390px and up. ([#44](https://github.com/adamsuk/line/pull/44))
 - The guide's recommendation cards now list suggested tools, the same list the station cards in the walk show. Why: Scott asked for suggested tools in the guide, and only the walk had them. ([#40](https://github.com/adamsuk/line/pull/40))
 
 ## 2026-10-24

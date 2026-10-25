@@ -45,8 +45,8 @@ export function AuditSetup() {
   const answeredCount = Object.keys(answers).length;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
-      <h2 className="font-display text-3xl text-ink">Audit your setup</h2>
+    <section id="audit" aria-labelledby="audit-heading" className="mt-10 scroll-mt-4 border-t border-line pt-8">
+      <h2 id="audit-heading" className="font-display text-3xl text-ink">Audit your setup</h2>
       <p className="mt-2 max-w-2xl text-base text-muted">
         Start with how work enters and how you know it worked. Then ask each station whether it can fail a
         change, on what evidence, and who can stop the line. Pick the rule that fits. Each gap points to that
@@ -112,7 +112,7 @@ export function AuditSetup() {
       </ol>
 
       <Summary answers={answers} />
-    </div>
+    </section>
   );
 }
 
