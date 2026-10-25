@@ -19,6 +19,9 @@ Start here. These files are the factory. Everything else is the app shell that r
 | [src/components/line/stage.tsx](src/components/line/stage.tsx) | What you do at each station |
 | [src/components/line/rail.tsx](src/components/line/rail.tsx) | The line itself |
 | [src/components/line/parts.tsx](src/components/line/parts.tsx) | The glossary of parts |
+| [src/components/line/home.tsx](src/components/line/home.tsx) | The homepage: the thesis, why a line, and the two ways in |
+| [src/factory/self-audit.ts](src/factory/self-audit.ts) | Audit your setup: the questions, their covered, partial and gap rules, and the scoring |
+| [src/components/line/audit-setup.tsx](src/components/line/audit-setup.tsx) | The audit view and its per-station summary |
 | [src/components/line/guide.tsx](src/components/line/guide.tsx) | The adoption guide: which bot, when, and where people stay |
 | [src/components/line/recommendations.tsx](src/components/line/recommendations.tsx) | The labelled recommendations: best practice or cutting edge |
 | [src/components/line/app.tsx](src/components/line/app.tsx) | The shell: walk, read the parts, or read the guide |

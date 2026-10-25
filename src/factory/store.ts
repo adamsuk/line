@@ -9,7 +9,7 @@ import {
   stationIndex,
 } from "@/factory/model";
 
-export type View = "walk" | "parts" | "guide";
+export type View = "home" | "walk" | "parts" | "guide" | "audit";
 
 export interface LineState {
   view: View;
@@ -50,7 +50,7 @@ export interface LineState {
 }
 
 const initial = {
-  view: "walk" as const,
+  view: "home" as View,
   focus: "backlog" as StationId,
   notice: null as string | null,
   criteria: [false, false, false],
@@ -212,7 +212,7 @@ export const useLine = create<LineState>((set, get) => ({
   },
   readSignal: () => set({ signalRead: true }),
   dropReturn: () => set({ returned: true }),
-  reset: () => set({ ...initial, criteria: [false, false, false], checks: CHECKS.map(() => "pending") }),
+  reset: () => set({ ...initial, view: "walk", criteria: [false, false, false], checks: CHECKS.map(() => "pending") }),
 }));
 
 export function doneCount(s: LineState): number {
