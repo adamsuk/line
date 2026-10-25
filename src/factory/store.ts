@@ -9,10 +9,12 @@ import {
   stationIndex,
 } from "@/factory/model";
 
-export type View = "home" | "walk" | "parts" | "guide" | "audit";
+import type { Anchor, View } from "@/factory/routes";
+export type { View } from "@/factory/routes";
 
 export interface LineState {
   view: View;
+  anchor: Anchor;
   focus: StationId;
   notice: string | null;
   criteria: boolean[];
@@ -29,7 +31,7 @@ export interface LineState {
   production: boolean;
   signalRead: boolean;
   returned: boolean;
-  setView: (view: View) => void;
+  setView: (view: View, anchor?: Anchor) => void;
   focusStation: (id: StationId) => void;
   clearNotice: () => void;
   toggleCriterion: (index: number) => void;
@@ -51,6 +53,7 @@ export interface LineState {
 
 const initial = {
   view: "home" as View,
+  anchor: null as Anchor,
   focus: "backlog" as StationId,
   notice: null as string | null,
   criteria: [false, false, false],
@@ -109,7 +112,7 @@ function downstreamCleared() {
 
 export const useLine = create<LineState>((set, get) => ({
   ...initial,
-  setView: (view) => set({ view }),
+  setView: (view, anchor = null) => set({ view, anchor }),
   focusStation: (id) => {
     const frontier = frontierOf(get());
     if (stationIndex(id) > stationIndex(frontier)) {

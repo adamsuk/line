@@ -2,6 +2,8 @@ import { ADOPTION_STAGES, GUIDE, STATIONS, recommendationsFor } from "@/factory/
 import { MaturityLegend, RecommendationList } from "@/components/line/recommendations";
 import { SourceLink } from "@/components/line/stage";
 import { AssessWithLlm } from "@/components/line/assess";
+import { AuditSetup } from "@/components/line/audit-setup";
+import { HOMEPAGE } from "@/factory/self-audit";
 
 export function Guide() {
   return (
@@ -17,6 +19,13 @@ export function Guide() {
           <MaturityLegend />
         </div>
       </div>
+      <a
+        href="#audit"
+        className="mt-4 flex min-h-11 max-w-4xl flex-col rounded-xl border border-steel p-4 hover:bg-paper-2 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-steel"
+      >
+        <span className="font-display text-xl text-ink">Audit your setup →</span>
+        <span className="mt-1 text-sm text-muted">{HOMEPAGE.audit} It is at the end of this guide.</span>
+      </a>
       <AssessWithLlm />
       <ol className="mt-6 grid gap-4">
         {ADOPTION_STAGES.map((group) => (
@@ -56,6 +65,7 @@ export function Guide() {
           </li>
         ))}
       </ol>
+      <AuditSetup />
     </div>
   );
 }
