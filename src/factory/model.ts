@@ -291,6 +291,8 @@ export type ReadingId =
   | "dora-2025"
   | "dx-state-ai"
   | "dx-q3-2026"
+  | "oreilly-review-record"
+  | "gitlab-ship-agents"
   | "enterprise-2x"
   | "meta-ai-review"
   | "impossiblebench"
@@ -360,6 +362,24 @@ export const FURTHER_READING: { heading: string; refs: Reference[] }[] = [
   {
     heading: "Sep to Oct 2026",
     refs: [
+      {
+        id: "gitlab-ship-agents",
+        title: "Redesign how your team ships software with AI agents",
+        author: "Chandler Gibbons",
+        publication: "GitLab Blog",
+        date: "20 October 2026",
+        url: "https://about.gitlab.com/blog/redesign-how-your-team-ships-software-with-ai-agents/",
+        took: "Define expected behaviour up front, match review depth to risk, and record every agentic review decision so someone can inspect it later. A checkpoint nobody exercises is worse than none.",
+      },
+      {
+        id: "oreilly-review-record",
+        title: "Code Review After Code Gets Cheap",
+        author: "Markus Eisele",
+        publication: "O'Reilly Radar",
+        date: "16 October 2026",
+        url: "https://www.oreilly.com/radar/code-review-after-code-gets-cheap/",
+        took: "Start review from a short record tying agreed behaviour to the checks that ran on this revision, and flag behaviour nobody asked for. Refresh the evidence when the code changes.",
+      },
       {
         id: "hacktrace",
         title: "hacktrace: behavior-supervised detection of reward hacking during code generation",
@@ -999,6 +1019,14 @@ export const RECOMMENDATIONS: Recommendation[] = [
     sources: ["dx-q3-2026",  "enterprise-2x",  "meta-ai-review"],
   },
   {
+    id: "review-record",
+    station: "review",
+    stage: "Next",
+    maturity: "Cutting edge",
+    text: "Start review from a short record, not the diff: the agreed behaviour, the checks that ran on this commit, any behaviour nobody asked for, and how far a mistake would reach. A claim without evidence stays open, and a new commit needs fresh evidence.",
+    sources: ["oreilly-review-record",  "gitlab-ship-agents"],
+  },
+  {
     id: "measure-review-bot",
     station: "review",
     stage: "Next",
@@ -1359,6 +1387,10 @@ export const TOOLS: Record<string, { tools: Tool[]; gap?: string }> = {
       }
     ],
     gap: "These measure the queue. Holding agent PRs back when it grows is a rule you set on the agents.",
+  },
+  "review-record": {
+    tools: [],
+    gap: "No tool found that builds the record. A PR template, plus a CI check that it is filled in and names the head commit, comes closest.",
   },
   "measure-review-bot": {
     tools: [
