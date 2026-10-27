@@ -4,6 +4,12 @@ All notable changes to Line are recorded here. The format follows [Keep a Change
 
 Research-driven entries say what changed, why, and which sources back it. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
+## 2026-10-27
+
+### Changed
+
+- Restore TypeScript to the 5.9 release line and update the lockfile to stay within the supported peer range of typescript-eslint and its parser packages.
+
 ## 2026-10-26
 
 ### Added
