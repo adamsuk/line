@@ -8,11 +8,7 @@ Research-driven entries say what changed, why, and which sources back it. See [C
 
 ### Added
 
-- A pull-request check named `test` that runs typecheck, lint and the factory tests, and a factory config that records that command for later builders. `npm test` stays out of CI. Why: the Pages build ran the factory tests, but a builder had no recorded command for typecheck, lint and those tests together.
-
-### Fixed
-
-- The token-hashing fallback still ignores a JWT payload that will not parse, and now says why, so lint accepts that catch. The test workflow checks out with `persist-credentials: false`. Why: the new lint check failed on the empty catch, and this job does not need authenticated Git commands after checkout.
+- A pull-request check named `test` that runs typecheck, lint and the factory tests, and a factory config that records that command for later builders. `npm test` stays out of CI until the failures tracked in #62 are fixed. The check runs with `persist-credentials: false`, and the empty catch in the token-hashing fallback now explains why it ignores an unparseable payload, so lint passes. Why: the Pages build ran the factory tests, but a builder had no recorded command for typecheck, lint and those tests together.
 
 ## 2026-10-26
 
