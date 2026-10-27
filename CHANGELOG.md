@@ -4,6 +4,12 @@ All notable changes to Line are recorded here. The format follows [Keep a Change
 
 Research-driven entries say what changed, why, and which sources back it. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
+## 2026-10-27
+
+### Changed
+
+- The changelog check now skips Dependabot pull requests, because dependency bumps carry no changelog entry and were all failing CI.
+
 ## 2026-10-26
 
 ### Added
