@@ -1,0 +1,94 @@
+/* Home Screen installation instructions, shared by the Vite and Nitro pages. */
+:root {
+  color-scheme: dark;
+  font-family: system-ui, sans-serif;
+  background: #000;
+  color: #fff;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+.page {
+  max-width: 48rem;
+  margin: auto;
+  padding: 2rem 1.5rem;
+}
+.powered,
+.powered-brand,
+.step,
+.add-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.powered {
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+.powered-by,
+.muted,
+.desktop-note {
+  color: #aaa;
+}
+.content {
+  text-align: center;
+}
+h1 {
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  line-height: 1.2;
+}
+.ob-img {
+  max-width: 100%;
+  height: auto;
+}
+.steps {
+  display: grid;
+  justify-content: center;
+  margin-top: 2rem;
+}
+.step {
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.glass,
+.add-label {
+  padding: 0.5rem;
+  border-radius: 0.75rem;
+  background: #222;
+}
+.desktop-open {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  color: #fff;
+}
+.content-desktop,
+.ob-ipad,
+.loc-ipad,
+.step-ios27 {
+  display: none;
+}
+.device-desktop .content {
+  display: none;
+}
+.device-desktop .content-desktop {
+  display: block;
+}
+.device-tablet .ob-phone,
+.device-tablet .loc-phone {
+  display: none;
+}
+.device-tablet .ob-ipad {
+  display: inline-block;
+}
+.device-tablet .loc-ipad {
+  display: inline;
+}
+.ios-27-plus .step-ios-legacy {
+  display: none;
+}
+.ios-27-plus .step-ios27 {
+  display: flex;
+}

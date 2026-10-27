@@ -13,6 +13,7 @@ Research-driven entries say what changed, why, and which sources back it. See [C
 ### Fixed
 
 - Empty catch in the token-hashing fallback now has a comment so lint passes.
+- Factory agent validation now includes `npm test`. App tests use isolated auth and share-card fixtures; four checks for untracked upstream Grok agent documents were removed, and the referenced Home Screen icon and stylesheet are now tracked. Why: the inherited test suite failed before reaching the application tests. The pull-request workflow still awaits a person's review through the normal approval process.
 - `npm test` is left out of the `test` check for now: 17 of its 197 app tests already fail on `main`. A follow-up issue fixes them and adds it back.
 
 ## 2026-10-26

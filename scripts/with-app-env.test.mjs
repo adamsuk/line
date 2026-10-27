@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
-import { mkdirSync, mkdtempSync, symlinkSync, writeFileSync } from "node:fs";
+import { copyFileSync, mkdirSync, mkdtempSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
@@ -23,6 +23,8 @@ function makeWorkspace(appEnvJson) {
     mkdirSync(join(root, ".grok"), { recursive: true });
     writeFileSync(join(root, APP_ENV_REL_PATH), appEnvJson);
   }
+  mkdirSync(join(root, "scripts"));
+  copyFileSync(WRAPPER, join(root, "scripts/with-app-env.mjs"));
   return root;
 }
 
@@ -59,8 +61,16 @@ test("an explicit process-env override wins over the file", () => {
   assert.equal(merged.PATH, "/usr/bin");
 });
 
-test("the template ships auth off", () => {
-  assert.deepEqual(readAppEnv(projectRoot()), { VITE_AUTH_ENABLED: "false" });
+test("the wrapped command preserves the environment when app-env is absent", async () => {
+  const root = makeWorkspace();
+  const env = { ...process.env };
+  delete env.VITE_AUTH_ENABLED;
+  const { stdout } = await execFileAsync(
+    process.execPath,
+    [join(root, "scripts/with-app-env.mjs"), process.execPath, "-e", PRINT_FLAG],
+    { env },
+  );
+  assert.equal(stdout, "undefined");
 });
 
 test("vite loadEnv resolves the wrapped value", () => {
@@ -74,19 +84,22 @@ test("vite loadEnv resolves the wrapped value", () => {
 });
 
 test("the wrapped command runs with the app env applied", async () => {
-  const { stdout } = await execFileAsync(process.execPath, [
-    WRAPPER,
+  const root = makeWorkspace('{"VITE_AUTH_ENABLED":"false"}');
+  const env = { ...process.env };
+  delete env.VITE_AUTH_ENABLED;
+  const { stdout } = await execFileAsync(
     process.execPath,
-    "-e",
-    PRINT_FLAG,
-  ]);
+    [join(root, "scripts/with-app-env.mjs"), process.execPath, "-e", PRINT_FLAG],
+    { env, cwd: tmpdir() },
+  );
   assert.equal(stdout, "false");
 });
 
 test("the wrapped command sees an explicit override, not the file value", async () => {
+  const root = makeWorkspace('{"VITE_AUTH_ENABLED":"false"}');
   const { stdout } = await execFileAsync(
     process.execPath,
-    [WRAPPER, process.execPath, "-e", PRINT_FLAG],
+    [join(root, "scripts/with-app-env.mjs"), process.execPath, "-e", PRINT_FLAG],
     { env: { ...process.env, VITE_AUTH_ENABLED: "true" } },
   );
   assert.equal(stdout, "true");
@@ -117,12 +130,14 @@ test("the CLI still runs when invoked through a symlinked path", async () => {
   // node realpaths import.meta.url but not process.argv[1], so a raw comparison
   // turns the wrapper into a no-op that exits 0 without starting anything.
   const link = join(mkdtempSync(join(tmpdir(), "app-env-link-")), "scripts");
-  symlinkSync(join(projectRoot(), "scripts"), link);
-  const { stdout } = await execFileAsync(process.execPath, [
-    join(link, "with-app-env.mjs"),
+  const root = makeWorkspace('{"VITE_AUTH_ENABLED":"false"}');
+  const env = { ...process.env };
+  delete env.VITE_AUTH_ENABLED;
+  symlinkSync(join(root, "scripts"), link);
+  const { stdout } = await execFileAsync(
     process.execPath,
-    "-e",
-    PRINT_FLAG,
-  ]);
+    [join(link, "with-app-env.mjs"), process.execPath, "-e", PRINT_FLAG],
+    { env },
+  );
   assert.equal(stdout, "false");
 });

@@ -6,9 +6,9 @@ import { fileURLToPath } from "node:url";
 import test from "node:test";
 import {
   appNameFromHost,
-  createHeadInjector,
+  createHeadInjector as createHeadInjectorFromWorkspace,
   grokXCreatorHeadTags,
-  injectGrokPwaHead,
+  injectGrokPwaHead as injectGrokPwaHeadFromWorkspace,
   isDocumentPath,
   isInstallQuery,
   publicAppHost,
@@ -20,6 +20,14 @@ import {
 import { renderInstallPage } from "./grok-pwa-plugin.mjs";
 
 const TEMPLATE_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
+
+// Default unit tests to an empty workspace so Line's own site.json and og.jpg
+// cannot override the fallback identity under test. Explicit fixture cwd wins.
+const EMPTY_ROOT = mkdtempSync(join(tmpdir(), "grok-pwa-test-"));
+const injectGrokPwaHead = (html, ctx = {}) =>
+  injectGrokPwaHeadFromWorkspace(html, { cwd: EMPTY_ROOT, ...ctx });
+const createHeadInjector = (ctx = {}) =>
+  createHeadInjectorFromWorkspace({ cwd: EMPTY_ROOT, ...ctx });
 
 test("injects before </head>", () => {
   const out = injectGrokPwaHead("<html><head><title>x</title></head><body></body></html>");
