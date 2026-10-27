@@ -2,6 +2,7 @@ name: Changelog
 
 # Fails a pull request that does not modify the changelog file.
 # Generic: copy as is. Set CHANGELOG_FILE and SKIP_LABEL if yours differ.
+# Dependabot pull requests are skipped: dependency bumps carry no entry.
 on:
   pull_request:
     types: [opened, synchronize, reopened, labeled, unlabeled]
@@ -24,7 +25,12 @@ jobs:
           REPO: ${{ github.repository }}
           PR: ${{ github.event.pull_request.number }}
           LABELS: ${{ toJSON(github.event.pull_request.labels.*.name) }}
+          AUTHOR: ${{ github.event.pull_request.user.login }}
         run: |
+          if [ "$AUTHOR" = "dependabot[bot]" ]; then
+            echo "Skipped: Dependabot pull request."
+            exit 0
+          fi
           if jq -e --arg l "$SKIP_LABEL" 'index($l) != null' <<< "$LABELS" > /dev/null; then
             echo "Skipped: '$SKIP_LABEL' label is set."
             exit 0
