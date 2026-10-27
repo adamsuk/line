@@ -1,0 +1,11 @@
+# Factory agents for Line (see the gh-factory README, "Agents").
+# Scott merges pull requests himself, so agents.merge stays false.
+agents:
+  roles: [builder, reviewer]
+  merge: false
+  review_bot: coderabbit
+  test_command: npm run typecheck && npm run lint && npm test && npm run test:factory
+
+required_checks:
+  - test
+  - changelog

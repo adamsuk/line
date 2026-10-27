@@ -4,6 +4,12 @@ All notable changes to Line are recorded here. The format follows [Keep a Change
 
 Research-driven entries say what changed, why, and which sources back it. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
+## 2026-10-27
+
+### Added
+
+- A pull-request check named `test` that runs typecheck, lint, the app tests and the factory tests, and a factory config that records that command for later builds. Why: nothing in CI ran those scripts together, so a builder had no recorded test command.
+
 ## 2026-10-26
 
 ### Added
