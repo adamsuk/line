@@ -12,7 +12,7 @@ import {
   compareAuthInvariant,
   probeDevAuthEnabled,
 } from "./check-auth-invariant.mjs";
-import { APP_ENV_REL_PATH, projectRoot } from "./with-app-env.mjs";
+import { APP_ENV_REL_PATH, projectRoot, readAppEnv } from "./with-app-env.mjs";
 
 /**
  * The JSON body `/__app-env` would serve. Do not start a real Vite server —
@@ -88,6 +88,13 @@ test("only a divergence warns the smoke verdict", () => {
   ]) {
     assert.deepEqual(authInvariantWarnings(result), []);
   }
+});
+
+test("the build side resolves the repository app-env and explicit overrides", () => {
+  const root = projectRoot();
+  assert.equal(buildAuthEnabled(root, {}), readAppEnv(root).VITE_AUTH_ENABLED !== "false");
+  assert.equal(buildAuthEnabled(root, { VITE_AUTH_ENABLED: "true" }), true);
+  assert.equal(buildAuthEnabled(root, { VITE_AUTH_ENABLED: "false" }), false);
 });
 
 test("the build side resolves the workspace app-env and explicit overrides", () => {

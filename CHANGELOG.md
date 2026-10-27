@@ -12,6 +12,7 @@ Research-driven entries say what changed, why, and which sources back it. See [C
 
 ### Fixed
 
+- Restored repository integration coverage for auth environment loading and both share-card head injectors while retaining isolated fixtures. Why: fixture isolation had removed checks against repository configuration and assets; `.grok/app-env.json` is optional and is not tracked in Line.
 - Empty catch in the token-hashing fallback now has a comment so lint passes.
 - Factory agent validation now includes `npm test`. App tests use isolated auth and share-card fixtures; four checks for untracked upstream Grok agent documents were removed, and the referenced Home Screen icon and stylesheet are now tracked. Why: the inherited test suite failed before reaching the application tests. The pull-request workflow still awaits a person's review through the normal approval process.
 - `npm test` is left out of the `test` check for now: 17 of its 197 app tests already fail on `main`. A follow-up issue fixes them and adds it back.

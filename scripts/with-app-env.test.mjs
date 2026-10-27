@@ -61,6 +61,18 @@ test("an explicit process-env override wins over the file", () => {
   assert.equal(merged.PATH, "/usr/bin");
 });
 
+test("the wrapped command applies the repository app env from any cwd", async () => {
+  const appEnv = readAppEnv(projectRoot());
+  const env = { ...process.env };
+  delete env.VITE_AUTH_ENABLED;
+  const { stdout } = await execFileAsync(
+    process.execPath,
+    [WRAPPER, process.execPath, "-e", PRINT_FLAG],
+    { env, cwd: tmpdir() },
+  );
+  assert.equal(stdout, String(appEnv.VITE_AUTH_ENABLED));
+});
+
 test("the wrapped command preserves the environment when app-env is absent", async () => {
   const root = makeWorkspace();
   const env = { ...process.env };

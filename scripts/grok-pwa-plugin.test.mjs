@@ -29,6 +29,21 @@ const injectGrokPwaHead = (html, ctx = {}) =>
 const createHeadInjector = (ctx = {}) =>
   createHeadInjectorFromWorkspace({ cwd: EMPTY_ROOT, ...ctx });
 
+test("document and streaming heads use the repository share-card assets", () => {
+  const html = "<html><head><title>Fallback</title></head><body></body></html>";
+  const ctx = { cwd: TEMPLATE_ROOT, host: "line.example.com" };
+  const injector = createHeadInjector(ctx);
+  const streamed = Buffer.concat([
+    ...injector.push("<html><head><title>Fallback</title></he"),
+    ...injector.push("ad><body></body></html>"),
+    ...injector.flush(),
+  ]).toString("utf8");
+  const out = injectGrokPwaHead(html, ctx);
+  assert.equal(streamed, out);
+  assert.match(out, /property="og:title" content="Line"/);
+  assert.match(out, /property="og:image" content="https:\/\/line\.example\.com\/og\.jpg"/);
+});
+
 test("injects before </head>", () => {
   const out = injectGrokPwaHead("<html><head><title>x</title></head><body></body></html>");
   assert.match(out, /rel="manifest"/);
@@ -546,4 +561,3 @@ test("vite plugin bakes og identity as a virtual module", () => {
   assert.match(plugin, /virtual:grok-og-identity/);
   assert.match(plugin, /snapshotOgIdentity/);
 });
-
