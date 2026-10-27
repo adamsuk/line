@@ -1,0 +1,15 @@
+# Factory agents for Line (see the gh-factory README, "Agents").
+# Scott merges pull requests himself, so agents.merge stays false.
+agents:
+  roles: [builder, reviewer]
+  merge: false
+  review_bot: coderabbit
+  # Typecheck, lint, and the factory tests. npm test stays out of CI.
+  test_command: npm run typecheck && npm run lint && npm run test:factory
+
+# Check names from the pull-request workflows. The test job has no job name,
+# so its check is `test`. `changelog` is the check name on pull requests
+# (for example #49).
+required_checks:
+  - test
+  - changelog

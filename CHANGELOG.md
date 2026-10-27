@@ -6,6 +6,10 @@ Research-driven entries say what changed, why, and which sources back it. See [C
 
 ## 2026-10-27
 
+### Added
+
+- A pull-request check named `test` that runs typecheck, lint and the factory tests, and a factory config that records that command for later builders. `npm test` stays out of CI until the failures tracked in #62 are fixed. The check runs with `persist-credentials: false`, and the empty catch in the token-hashing fallback now explains why it ignores an unparseable payload, so lint passes. Why: the Pages build ran the factory tests, but a builder had no recorded command for typecheck, lint and those tests together.
+
 ### Changed
 
 - The changelog check now skips Dependabot pull requests, because dependency bumps carry no changelog entry and were all failing CI.
