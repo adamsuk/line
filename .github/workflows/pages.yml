@@ -31,7 +31,7 @@ jobs:
           echo "LINE_BUILD_TIME=$(git log -1 --format=%cI)" >> "$GITHUB_ENV"
           echo "LINE_BUILD_SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - run: npm run build:pages
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist-pages
