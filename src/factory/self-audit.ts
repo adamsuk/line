@@ -303,7 +303,7 @@ const BY_STATION: Record<StationId, Q[]> = {
       covered: "Each work order's outcome signal is checked after release, and a miss reopens it.",
       partial: "Dashboards exist, not tied to work orders.",
       gap: "Nothing ties production back.",
-      recs: ["measure-factory"],
+      recs: ["measure-factory", "verify-after-deploy"],
     },
     {
       id: "observe-stop",

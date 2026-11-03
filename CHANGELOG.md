@@ -4,6 +4,12 @@ All notable changes to Line are recorded here. The format follows [Keep a Change
 
 Research-driven entries say what changed, why, and which sources back it. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
+## 2026-11-03
+
+### Added
+
+- A cutting-edge Observe recommendation: before merge, record the behaviour the change should produce as a small check, such as a request and the response it should return, then run that same check after the deploy and close the work order only when it passes. A green run, a closed issue, or a finished deploy does not by itself show the change works. The Observe question on a missed outcome reopening the work order now links this card as well as factory measurement. No product feature was found for that close rule, so the card names the gap. Why: a green run, a closed issue, or a finished deploy can all report success while the change is broken. Source: [AI coding agent mistakes: what broke and the lessons learned](https://www.andrewconnell.com/articles/ai-coding-agent-mistakes-lessons-learned/) (andrewconnell.com, 30 October 2026). ([#68](https://github.com/adamsuk/line/pull/68))
+
 ## 2026-10-27
 
 ### Added

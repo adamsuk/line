@@ -88,3 +88,32 @@ test("stored answers are validated", () => {
 test("no em or en dashes in the homepage or audit copy", () => {
   assert.doesNotMatch(JSON.stringify([HOMEPAGE, ALL_QUESTIONS]), /[\u2013\u2014]/);
 });
+
+test("observe-refuse links verify-after-deploy", () => {
+  const ids = RECOMMENDATIONS.map((r) => r.id);
+  const rec = RECOMMENDATIONS[ids.indexOf("harness-evals") + 1];
+  assert.equal(rec?.id, "verify-after-deploy");
+  assert.equal(rec.station, "observe");
+  assert.equal(rec.stage, "Next");
+  assert.equal(rec.maturity, "Cutting edge");
+  assert.deepEqual(rec.sources, ["connell-agent-mistakes"]);
+  assert.match(rec.text, /after the deploy/);
+  assert.match(rec.text, /Close the work order only when the check passes/);
+
+  const observe = STATION_QUESTIONS.observe;
+  assert.equal(observe.length, 4);
+  assert.deepEqual(
+    observe.map((q) => q.id),
+    ["observe-refuse", "observe-stop", "observe-measure", "observe-evals"],
+  );
+  const q = observe[0];
+  assert.equal(q.id, "observe-refuse");
+  assert.equal(q.q, "Can the production signal fail the change, so a missed outcome reopens it?");
+  assert.equal(q.covered, "Each work order's outcome signal is checked after release, and a miss reopens it.");
+  assert.equal(q.partial, "Dashboards exist, not tied to work orders.");
+  assert.equal(q.gap, "Nothing ties production back.");
+  assert.deepEqual(q.recs, ["measure-factory", "verify-after-deploy"]);
+
+  assert.equal(TOOLS["verify-after-deploy"].tools.length, 0);
+  assert.ok(TOOLS["verify-after-deploy"].gap);
+});
