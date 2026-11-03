@@ -117,3 +117,53 @@ test("observe-refuse links verify-after-deploy", () => {
   assert.equal(TOOLS["verify-after-deploy"].tools.length, 0);
   assert.ok(TOOLS["verify-after-deploy"].gap);
 });
+
+test("source-secrets links per-run-credentials", () => {
+  const rec = RECOMMENDATIONS.find((r) => r.id === "per-run-credentials");
+  assert.ok(rec, "per-run-credentials");
+  assert.equal(rec.station, "source");
+  assert.equal(rec.stage, "Guardrails");
+  assert.equal(rec.maturity, "Cutting edge");
+  assert.deepEqual(rec.sources, ["monday-agent-keys", "owasp-ai-coding"]);
+  assert.match(rec.text, /fresh sandbox/);
+  assert.match(rec.text, /token scoped only to the repos that task needs/);
+  assert.match(rec.text, /expires within about an hour/);
+  assert.match(rec.text, /nothing from the run carries into the next one/);
+  assert.match(rec.text, /Every tool call is seen by a policy check/);
+  assert.match(rec.text, /no general-purpose shell, HTTP, or eval tool that can bypass that check/);
+
+  const ids = RECOMMENDATIONS.map((r) => r.id);
+  assert.equal(ids[ids.indexOf("sandbox-no-secrets") + 1], "per-run-credentials");
+  const sandbox = RECOMMENDATIONS.find((r) => r.id === "sandbox-no-secrets");
+  assert.ok(sandbox);
+  assert.equal(sandbox.maturity, "Best practice");
+  assert.equal(sandbox.stage, "Guardrails");
+  assert.equal(
+    sandbox.text,
+    "Run agents in a sandbox with no production secrets. Isolation is the boundary, not a prompt.",
+  );
+  assert.deepEqual(sandbox.sources, ["gh-agentic-security", "nvidia-sandbox", "owasp-agents"]);
+
+  const secrets = STATION_QUESTIONS.source.find((q) => q.id === "source-secrets");
+  assert.ok(secrets);
+  assert.deepEqual(secrets.recs, ["sandbox-no-secrets", "per-run-credentials"]);
+  assert.equal(secrets.q, "Does any agent workspace hold a production secret?");
+  assert.equal(secrets.covered, "None, checked by a scan.");
+  assert.equal(secrets.partial, "Scoped tokens, but some reach production.");
+  assert.equal(secrets.gap, "Yes.");
+  const refuse = STATION_QUESTIONS.source.find((q) => q.id === "source-refuse");
+  assert.deepEqual(refuse?.recs, ["sandbox-no-secrets"]);
+
+  assert.deepEqual(TOOLS["per-run-credentials"].tools, []);
+  assert.equal(
+    TOOLS["per-run-credentials"].gap,
+    "No listed product does all three: a fresh sandbox per run, a token limited to that task's repos that expires within about an hour, and tool wrappers with no general-purpose shell, HTTP, or eval bypass.",
+  );
+  assert.ok(TOOLS["per-run-credentials"].gap.trim().length > 0);
+
+  assert.equal(STATION_QUESTIONS.source.length, 4);
+  assert.deepEqual(
+    STATION_QUESTIONS.source.map((q) => q.id),
+    ["source-refuse", "source-stop", "source-secrets", "source-egress"],
+  );
+});

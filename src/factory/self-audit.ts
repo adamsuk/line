@@ -139,7 +139,7 @@ const BY_STATION: Record<StationId, Q[]> = {
       covered: "None, checked by a scan.",
       partial: "Scoped tokens, but some reach production.",
       gap: "Yes.",
-      recs: ["sandbox-no-secrets"],
+      recs: ["sandbox-no-secrets", "per-run-credentials"],
     },
     {
       id: "source-egress",
