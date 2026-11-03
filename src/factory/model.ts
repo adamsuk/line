@@ -303,7 +303,8 @@ export type ReadingId =
   | "gh-attestations"
   | "gh-environments"
   | "llms-txt"
-  | "mcp-spec";
+  | "mcp-spec"
+  | "connell-agent-mistakes";
 
 export type ReferenceId = BuiltOnId | ReadingId;
 
@@ -362,6 +363,15 @@ export const FURTHER_READING: { heading: string; refs: Reference[] }[] = [
   {
     heading: "Sep to Oct 2026",
     refs: [
+      {
+        id: "connell-agent-mistakes",
+        title: "AI coding agent mistakes: what broke and the lessons learned",
+        author: "Andrew Connell",
+        publication: "andrewconnell.com",
+        date: "30 October 2026",
+        url: "https://www.andrewconnell.com/articles/ai-coding-agent-mistakes-lessons-learned/",
+        took: "Before merge, record the behaviour the change should produce as a small check, such as a request and the response it should return. Run that same check after the deploy, and close the work order only when it passes. A green run, a closed issue, or a finished deploy does not by itself show the change works.",
+      },
       {
         id: "gitlab-ship-agents",
         title: "Redesign how your team ships software with AI agents",
@@ -1075,6 +1085,14 @@ export const RECOMMENDATIONS: Recommendation[] = [
     sources: ["harness-evals",  "crbugbench",  "pace-bench",  "cortex"],
   },
   {
+    id: "verify-after-deploy",
+    station: "observe",
+    stage: "Next",
+    maturity: "Cutting edge",
+    text: "Before merge, record the behaviour the change should produce as a small check, such as a request and the response it should return. Run that same check after the deploy. Close the work order only when the check passes. A green run, a closed issue, or a finished deploy does not by itself show the change works.",
+    sources: ["connell-agent-mistakes"],
+  },
+  {
     id: "spec-drift",
     station: "loop",
     stage: "Later",
@@ -1509,6 +1527,10 @@ export const TOOLS: Record<string, { tools: Tool[]; gap?: string }> = {
       }
     ],
     gap: "Keeping a rule only when replayed tasks show it helps needs your own task set.",
+  },
+  "verify-after-deploy": {
+    tools: [],
+    gap: "The work order stays open until the recorded check passes after deploy. This close rule was not found as a product feature.",
   },
   "spec-drift": {
     tools: [
