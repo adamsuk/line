@@ -6,6 +6,10 @@ Research-driven entries say what changed, why, and which sources back it. See [C
 
 ## 2026-11-03
 
+### Changed
+
+- Pinned `step-security/harden-runner` (v2.22.3, `egress-policy: audit`) as the first step of every job in the test, pages (build and deploy), CodeQL and changelog workflows, at the same commit as gh-factory's `ci.yml`. Audit mode records outbound traffic without blocking it. (adamsuk/software-factory#223)
+
 ### Added
 
 - A cutting-edge Observe recommendation: before merge, record the behaviour the change should produce as a small check, such as a request and the response it should return, then run that same check after the deploy and close the work order only when it passes. A green run, a closed issue, or a finished deploy does not by itself show the change works. The Observe question on a missed outcome reopening the work order now links this card as well as factory measurement. No product feature was found for that close rule, so the card names the gap. Why: a green run, a closed issue, or a finished deploy can all report success while the change is broken. Source: [AI coding agent mistakes: what broke and the lessons learned](https://www.andrewconnell.com/articles/ai-coding-agent-mistakes-lessons-learned/) (andrewconnell.com, 30 October 2026). ([#68](https://github.com/adamsuk/line/pull/68))
