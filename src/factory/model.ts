@@ -293,6 +293,7 @@ export type ReadingId =
   | "dx-q3-2026"
   | "oreilly-review-record"
   | "gitlab-ship-agents"
+  | "monday-agent-keys"
   | "enterprise-2x"
   | "meta-ai-review"
   | "impossiblebench"
@@ -371,6 +372,15 @@ export const FURTHER_READING: { heading: string; refs: Reference[] }[] = [
         date: "30 October 2026",
         url: "https://www.andrewconnell.com/articles/ai-coding-agent-mistakes-lessons-learned/",
         took: "Before merge, record the behaviour the change should produce as a small check, such as a request and the response it should return. Run that same check after the deploy, and close the work order only when it passes. A green run, a closed issue, or a finished deploy does not by itself show the change works.",
+      },
+      {
+        id: "monday-agent-keys",
+        title: "How We Gave AI Agents the Keys to Production and Still Sleep at Night",
+        author: "Pablo Sebastian Martinez",
+        publication: "monday AI engineering",
+        date: "26 October 2026",
+        url: "https://engineering.monday.com/how-we-gave-ai-agents-the-keys-to-production-and-still-sleep-at-night/",
+        took: "Each agent run gets a fresh sandbox and a token scoped only to the repos that task needs. The token expires within about an hour, and nothing from the run carries into the next one. Every tool call is seen by a policy check. There is no general-purpose shell, HTTP, or eval tool that can bypass that check.",
       },
       {
         id: "gitlab-ship-agents",
@@ -909,6 +919,14 @@ export const RECOMMENDATIONS: Recommendation[] = [
     sources: ["gh-agentic-security",  "nvidia-sandbox",  "owasp-agents"],
   },
   {
+    id: "per-run-credentials",
+    station: "source",
+    stage: "Guardrails",
+    maturity: "Cutting edge",
+    text: "Each agent run gets a fresh sandbox and a token scoped only to the repos that task needs. The token expires within about an hour, and nothing from the run carries into the next one. Every tool call is seen by a policy check. There is no general-purpose shell, HTTP, or eval tool that can bypass that check.",
+    sources: ["monday-agent-keys",  "owasp-ai-coding"],
+  },
+  {
     id: "egress-allowlist",
     station: "source",
     stage: "Guardrails",
@@ -1189,6 +1207,10 @@ export const TOOLS: Record<string, { tools: Tool[]; gap?: string }> = {
         note: "Runs in a GitHub Actions sandbox. GitHub-hosted work only.",
       }
     ],
+  },
+  "per-run-credentials": {
+    tools: [],
+    gap: "No listed product does all three: a fresh sandbox per run, a token limited to that task's repos that expires within about an hour, and tool wrappers with no general-purpose shell, HTTP, or eval bypass.",
   },
   "egress-allowlist": {
     tools: [
