@@ -94,8 +94,9 @@ const BY_STATION: Record<StationId, Q[]> = {
     {
       id: "backlog-refuse",
       q: "Can a work order be refused before work starts, and on what evidence?",
-      covered: "Refused unless done is written as checks a machine can run.",
-      partial: "Checks are written, but nothing refuses work without them.",
+      covered:
+        "Refused unless done is written as checks a machine can run, and an ambiguous ticket is sent back for the owner's answers first.",
+      partial: "Checks are required, but an ambiguous ticket can still enter unclarified, or neither is enforced.",
       gap: "Anything can enter.",
       recs: ["done-as-checks", "ask-before-building"],
     },
@@ -109,9 +110,10 @@ const BY_STATION: Record<StationId, Q[]> = {
     },
     {
       id: "backlog-untrusted",
-      q: "Does the triage agent treat issue text as data, never as orders?",
-      covered: "It can only label and route, and input is scanned for injection.",
-      partial: "Its prompt says so, but its tools would let it act.",
+      q: "Does the triage agent treat issue text as data, never as orders, even when it writes the owner's clarification answers back to the ticket?",
+      covered:
+        "It can label, route, and write the owner's clarification answers to the ticket. It takes no other action an issue's text asks for, and input is scanned for injection.",
+      partial: "Its prompt says so, but its tools would let it take other actions, or it writes more than the owner's answers.",
       gap: "It acts on what issues say.",
       recs: ["untrusted-issues"],
     },
@@ -447,7 +449,7 @@ export function weakestStation(results: StationResult[]): StationResult | null {
   return worst;
 }
 
-export const STORAGE_KEY = "line-audit-v1";
+export const STORAGE_KEY = "line-audit-v2";
 
 export function parseAnswers(raw: string | null): Answers {
   if (!raw) return {};

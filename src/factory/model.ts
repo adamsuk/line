@@ -1215,8 +1215,15 @@ export const TOOLS: Record<string, { tools: Tool[]; gap?: string }> = {
     ],
   },
   "ask-before-building": {
-    tools: [],
-    gap: "No listed product makes the triage agent ask the owner and write the answers back to the ticket before it is marked ready. Plan modes in coding agents ask before building, but not at triage.",
+    tools: [
+      {
+        name: "GitHub Spec Kit",
+        url: "https://github.com/github/spec-kit",
+        fit: "Partial",
+        note: "Its /clarify command asks the owner targeted questions and records the answers in the spec. It writes to the spec, not the ticket.",
+      },
+    ],
+    gap: "No listed product makes the triage agent write the owner's answers back to the ticket before it is marked ready. Spec Kit records them in the spec instead. Plan modes in coding agents ask before building, but not at triage.",
   },
   "sandbox-no-secrets": {
     tools: [
