@@ -1179,7 +1179,7 @@ export const RECOMMENDATIONS: Recommendation[] = [
   {
     id: "background-review-agent",
     station: "review",
-    stage: "Next",
+    stage: "Start",
     maturity: "Cutting edge",
     text: "Run an adversarial review agent in the background on every PR. It looks for bugs and API misuse and writes a summary. A person still reads the diff and approves.",
     sources: ["savkin-review", "crbugbench"],
@@ -1267,7 +1267,7 @@ export const RECOMMENDATIONS: Recommendation[] = [
   {
     id: "signal-to-work-order",
     station: "observe",
-    stage: "Next",
+    stage: "Later",
     maturity: "Cutting edge",
     text: "A monitoring agent turns production alerts, errors, and incidents into new work orders for triage. A person on call owns the consequences.",
     sources: ["iusztin", "osmani"],
@@ -1785,8 +1785,15 @@ export const TOOLS: Record<string, { tools: Tool[]; gap?: string }> = {
     gap: "No listed product was checked as a separate QA agent that tries to break a change. It is set up as a second agent run with its own instructions.",
   },
   "background-review-agent": {
-    tools: [],
-    gap: "Review bots are covered under measuring the review bot. A background review agent that writes a summary for the person needs a workflow you wire up.",
+    tools: [
+      {
+        name: "CodeRabbit",
+        url: "https://www.coderabbit.ai",
+        fit: "Partial",
+        note: "Reviews every PR automatically in the background and posts a summary. Its comments still need the same acceptance tracking as measuring the review bot.",
+      },
+    ],
+    gap: "CodeRabbit covers the automatic background review and summary out of the box. Tuning it to focus on bugs and API misuse, not just style and docs, still takes configuration.",
   },
   "signal-to-work-order": {
     tools: [],

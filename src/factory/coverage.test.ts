@@ -18,6 +18,7 @@ test("the audit prompt and guide.json carry each station's evidence", () => {
   const guide = buildGuideJson("## 2026-01-01\n");
   for (const s of STATIONS) {
     for (const line of AUDIT_EVIDENCE[s.id].evidence) assert.ok(prompt.includes(midSentence(line)), `${s.id}: ${line}`);
+    for (const line of AUDIT_EVIDENCE[s.id].access) assert.ok(prompt.includes(midSentence(line)), `${s.id}: ${line}`);
     const g = guide.stations.find((x) => x.id === s.id)!;
     assert.deepEqual(g.audit, AUDIT_EVIDENCE[s.id]);
     assert.equal(g.recommendations.length, RECOMMENDATIONS.filter((r) => r.station === s.id).length);
