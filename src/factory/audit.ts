@@ -29,6 +29,7 @@ export const AUDIT_EVIDENCE: Record<StationId, { evidence: string[]; access: str
       "Issue and work order templates, and whether done is written as checks",
       "Labels or routing for triage, and how agents are told which issues to take",
       "Whether triage has a clarifying-questions step for ambiguous tickets, and whether the questions and the owner's answers are recorded on the issue before it is marked ready",
+      "Whether a triage agent drops duplicates and routes issues, and whether only labelled issues are picked up for building",
     ],
     access: [
       "Issue tracker (GitHub Issues, GitLab, Jira or Linear)",
@@ -50,6 +51,7 @@ export const AUDIT_EVIDENCE: Record<StationId, { evidence: string[]; access: str
     evidence: [
       "Agent instruction files (AGENTS.md, copilot-instructions and the like) and whether CODEOWNERS covers them",
       "How agent writes land: as PRs or staged outputs, never straight to main",
+      "Whether work orders are small, one change each, and whether a separate QA agent tries to break the change",
     ],
     access: [
       "Repo files: instruction files, CODEOWNERS",
@@ -71,6 +73,7 @@ export const AUDIT_EVIDENCE: Record<StationId, { evidence: string[]; access: str
     evidence: [
       "Required reviewers and code owners, PR size, time to first review",
       "Whether a review bot runs, and how often its comments are accepted",
+      "Whether an adversarial review agent runs in the background on each PR and writes a summary",
     ],
     access: [
       "Pull requests and reviews (GitHub MCP pull_requests toolset)",
@@ -103,6 +106,7 @@ export const AUDIT_EVIDENCE: Record<StationId, { evidence: string[]; access: str
     evidence: [
       "Alerts, monitors, dashboards and SLOs for production",
       "Change failure rate, recovery time and rework, and whether alerts become issues",
+      "Whether a monitoring agent turns alerts and incidents into work orders, and whether a recorded check runs after deploy",
     ],
     access: [
       "Observability MCP (Datadog, Grafana, Sentry or similar)",
@@ -113,6 +117,7 @@ export const AUDIT_EVIDENCE: Record<StationId, { evidence: string[]; access: str
     evidence: [
       "Postmortems or records of what happened, and how a signal becomes the next work order",
       "Whether docs agents build from are checked against the code",
+      "Whether a record agent writes down what shipped and what is left undone for the next work order",
     ],
     access: ["Repo files: docs, decision records, drift checks", "Issue tracker"],
   },

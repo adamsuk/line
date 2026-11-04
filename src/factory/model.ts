@@ -310,7 +310,11 @@ export type ReadingId =
   | "mcp-spec"
   | "connell-agent-mistakes"
   | "ambig-swe"
-  | "clarifygpt";
+  | "clarifygpt"
+  | "minimumcd-immutable"
+  | "gh-protected-branches"
+  | "coderabbit-governance"
+  | "oneuptime-build-once";
 
 export type ReferenceId = BuiltOnId | ReadingId;
 
@@ -558,6 +562,15 @@ export const FURTHER_READING: { heading: string; refs: Reference[] }[] = [
         date: "9 September 2026",
         url: "https://developers.googleblog.com/en/the-anatomy-of-harness-engineering-how-to-evaluate-iterate-and-guard-ai-coding-agents/",
         took: "Test the agent setup with small behavioural evals, and watch the pass rate when a prompt or model changes.",
+      },
+      {
+        id: "minimumcd-immutable",
+        title: "Immutable Artifacts",
+        author: "MinimumCD and DojoConsortium",
+        publication: "beyond.minimumcd.org",
+        date: "Last updated 8 October 2026",
+        url: "https://beyond.minimumcd.org/docs/pipeline/immutable-artifacts/",
+        took: "Build once, deploy everywhere. Rebuilding per environment is the anti-pattern: different builds can produce different results even from the same source.",
       },
     ],
   },
@@ -807,6 +820,33 @@ export const FURTHER_READING: { heading: string; refs: Reference[] }[] = [
         url: "https://llmstxt.org/",
         took: "A small Markdown file at a path tells agents what the site is and links the detail they should fetch.",
       },
+      {
+        id: "gh-protected-branches",
+        title: "About protected branches",
+        author: "GitHub",
+        publication: "GitHub Docs",
+        date: "Undated",
+        url: "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches",
+        took: "Required reviews, required status checks, and blocked force-pushes and deletion on the branch that matters most.",
+      },
+      {
+        id: "coderabbit-governance",
+        title: "AI governance for coding agents: policies and enforcement",
+        author: "Brandon Gubitosa",
+        publication: "CodeRabbit",
+        date: "23 June 2026",
+        url: "https://www.coderabbit.ai/guides/ai-governance-coding-agents",
+        took: "Make the merge gate mandatory with branch protection: a required CI job and code-owner approval, so review becomes a required system step rather than a social one.",
+      },
+      {
+        id: "oneuptime-build-once",
+        title: "Build Once, Promote Everywhere: Stop Rebuilding Artifacts per Environment",
+        author: "Nawaz Dhandala",
+        publication: "OneUptime",
+        date: "28 July 2026",
+        url: "https://oneuptime.com/blog/post/2026-07-28-build-once-promote-everywhere/view",
+        took: "If staging and production rebuild the same commit independently, they do not necessarily deploy the same software.",
+      },
     ],
   },
 ];
@@ -969,6 +1009,14 @@ export const RECOMMENDATIONS: Recommendation[] = [
     sources: ["ambig-swe", "clarifygpt"],
   },
   {
+    id: "triage-routing",
+    station: "backlog",
+    stage: "Next",
+    maturity: "Cutting edge",
+    text: "The triage agent drops duplicates and routes each new issue, labelling it for the factory or sending it to a person. Only issues it has labelled are picked up for building.",
+    sources: ["iusztin", "osmani"],
+  },
+  {
     id: "sandbox-no-secrets",
     station: "source",
     stage: "Guardrails",
@@ -993,6 +1041,14 @@ export const RECOMMENDATIONS: Recommendation[] = [
     sources: ["nvidia-sandbox",  "gh-agentic-security",  "owasp-agents"],
   },
   {
+    id: "protect-default-branch",
+    station: "source",
+    stage: "Guardrails",
+    maturity: "Best practice",
+    text: "Protect the default branch. Require a pull request, passing checks and review before anything merges, and block force-pushes and deletion.",
+    sources: ["gh-protected-branches",  "coderabbit-governance"],
+  },
+  {
     id: "staged-writes",
     station: "bench",
     stage: "Guardrails",
@@ -1007,6 +1063,22 @@ export const RECOMMENDATIONS: Recommendation[] = [
     maturity: "Best practice",
     text: "Put AGENTS.md and other instruction files under code owners. Review a change to them like a change to code.",
     sources: ["owasp-agents",  "nvidia-agents-md",  "gcloud-trusted-files"],
+  },
+  {
+    id: "small-work-orders",
+    station: "bench",
+    stage: "Next",
+    maturity: "Cutting edge",
+    text: "Give the coding agent small work orders labelled for the factory, one change each. Anything unlabelled or too large for one change goes back to a person to split.",
+    sources: ["savkin", "iusztin", "dora-small-batches"],
+  },
+  {
+    id: "qa-agent",
+    station: "bench",
+    stage: "Next",
+    maturity: "Cutting edge",
+    text: "A separate QA agent tries to break the change before it leaves the bench. It is not the agent that wrote it.",
+    sources: ["iusztin", "savkin"],
   },
   {
     id: "tests-out-of-reach",
@@ -1105,6 +1177,14 @@ export const RECOMMENDATIONS: Recommendation[] = [
     sources: ["owasp-ai-coding",  "owasp-agents",  "crbugbench"],
   },
   {
+    id: "background-review-agent",
+    station: "review",
+    stage: "Next",
+    maturity: "Cutting edge",
+    text: "Run an adversarial review agent in the background on every PR. It looks for bugs and API misuse and writes a summary. A person still reads the diff and approves.",
+    sources: ["savkin-review", "crbugbench"],
+  },
+  {
     id: "review-capacity",
     station: "review",
     stage: "Next",
@@ -1135,6 +1215,14 @@ export const RECOMMENDATIONS: Recommendation[] = [
     maturity: "Cutting edge",
     text: "Attest each build: a signed record that ties the digest to its commit and workflow. Verify it before you promote. The SLSA standard is mature, but most projects do not do this yet.",
     sources: ["gh-attestations",  "gh-slsa-changelog",  "npm-provenance-census"],
+  },
+  {
+    id: "promote-not-rebuild",
+    station: "artifact",
+    stage: "Start",
+    maturity: "Best practice",
+    text: "Build the artifact once and promote that same digest through every environment, including production. A rebuild, even from the same commit, can pick up a different dependency, base image or toolchain.",
+    sources: ["minimumcd-immutable",  "oneuptime-build-once"],
   },
   {
     id: "progressive-release",
@@ -1177,12 +1265,28 @@ export const RECOMMENDATIONS: Recommendation[] = [
     sources: ["connell-agent-mistakes"],
   },
   {
+    id: "signal-to-work-order",
+    station: "observe",
+    stage: "Next",
+    maturity: "Cutting edge",
+    text: "A monitoring agent turns production alerts, errors, and incidents into new work orders for triage. A person on call owns the consequences.",
+    sources: ["iusztin", "osmani"],
+  },
+  {
     id: "spec-drift",
     station: "loop",
     stage: "Later",
     maturity: "Cutting edge",
     text: "Check that the docs agents build from still match the code. Record the drift as the next work order. Make the check deterministic, so it can refuse a drifting commit.",
     sources: ["spec-drift",  "ms-spec-driven",  "spec-growth"],
+  },
+  {
+    id: "record-what-happened",
+    station: "loop",
+    stage: "Later",
+    maturity: "Cutting edge",
+    text: "A record agent writes down what actually happened for each change: what shipped, what the signal showed, and what is left undone. The next work order starts from that record.",
+    sources: ["savkin", "iusztin"],
   },
   {
     id: "audit-with-mcp",
@@ -1204,7 +1308,7 @@ export interface Tool {
 }
 
 /** When the tool links were last opened. */
-export const TOOLS_CHECKED = "22 October 2026";
+export const TOOLS_CHECKED = "4 November 2026";
 
 /** Per recommendation: tools that meet some or all of it, and what is left. Not an endorsement. */
 export const TOOLS: Record<string, { tools: Tool[]; gap?: string }> = {
@@ -1303,6 +1407,16 @@ export const TOOLS: Record<string, { tools: Tool[]; gap?: string }> = {
         fit: "Full",
         note: "Blocks outbound traffic from GitHub Actions runners to unlisted hosts.",
       }
+    ],
+  },
+  "protect-default-branch": {
+    tools: [
+      {
+        name: "GitHub rulesets",
+        url: "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets",
+        fit: "Full",
+        note: "Required pull request, required status checks, blocked force-push and deletion on the default branch.",
+      },
     ],
   },
   "staged-writes": {
@@ -1571,6 +1685,10 @@ export const TOOLS: Record<string, { tools: Tool[]; gap?: string }> = {
       }
     ],
   },
+  "promote-not-rebuild": {
+    tools: [],
+    gap: "Build systems can pin and promote a digest, but nothing in this list makes that the default: a pipeline has to be written to deploy the build it tested rather than rebuild at each stage.",
+  },
   "progressive-release": {
     tools: [
       {
@@ -1653,6 +1771,30 @@ export const TOOLS: Record<string, { tools: Tool[]; gap?: string }> = {
   "verify-after-deploy": {
     tools: [],
     gap: "The work order stays open until the recorded check passes after deploy. This close rule was not found as a product feature.",
+  },
+  "triage-routing": {
+    tools: [],
+    gap: "No listed product was checked for dedupe plus routing plus a factory label that gates pickup. A triage workflow and your tracker's labels do this.",
+  },
+  "small-work-orders": {
+    tools: [],
+    gap: "A label that gates which issues a builder may pick up is a convention in your tracker plus a workflow rule. No listed product was checked for it.",
+  },
+  "qa-agent": {
+    tools: [],
+    gap: "No listed product was checked as a separate QA agent that tries to break a change. It is set up as a second agent run with its own instructions.",
+  },
+  "background-review-agent": {
+    tools: [],
+    gap: "Review bots are covered under measuring the review bot. A background review agent that writes a summary for the person needs a workflow you wire up.",
+  },
+  "signal-to-work-order": {
+    tools: [],
+    gap: "No listed product was checked for turning alerts into work orders for triage. It needs a webhook or workflow from your monitor to your tracker.",
+  },
+  "record-what-happened": {
+    tools: [],
+    gap: "No listed product was checked for a record agent. It is a workflow step that writes the record into the repo or the work order.",
   },
   "spec-drift": {
     tools: [
