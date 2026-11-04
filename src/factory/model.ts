@@ -1029,7 +1029,7 @@ export const RECOMMENDATIONS: Recommendation[] = [
     station: "gate",
     stage: "Next",
     maturity: "Best practice",
-    text: "Run the required checks on a fresh runner from the snapshot, not in the agent's sandbox. Use a merge queue, so two changes that each pass alone are checked together before either merges.",
+    text: "Run the required checks on a fresh runner from the snapshot, not in the agent's sandbox. Use a merge queue, so each change is checked against the latest base and the changes queued ahead of it before it merges.",
     sources: ["gh-hosted-runners",  "gh-merge-queue",  "dora-ci"],
   },
   {
@@ -1204,7 +1204,7 @@ export interface Tool {
 }
 
 /** When the tool links were last opened. */
-export const TOOLS_CHECKED = "4 November 2026";
+export const TOOLS_CHECKED = "22 October 2026";
 
 /** Per recommendation: tools that meet some or all of it, and what is left. Not an endorsement. */
 export const TOOLS: Record<string, { tools: Tool[]; gap?: string }> = {
@@ -1376,19 +1376,19 @@ export const TOOLS: Record<string, { tools: Tool[]; gap?: string }> = {
       {
         name: "GitHub merge queue",
         url: "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-a-merge-queue",
-        fit: "Full",
+        fit: "Partial",
         note: "Runs the required checks on the merge group, the base plus the queued changes.",
       },
       {
         name: "Trunk Merge Queue",
         url: "https://trunk.io/merge-queue",
-        fit: "Full",
+        fit: "Partial",
         note: "Tests queued changes together before they merge.",
       },
       {
         name: "Mergify",
         url: "https://mergify.com",
-        fit: "Full",
+        fit: "Partial",
         note: "Merge queue and merge rules.",
       }
     ],
