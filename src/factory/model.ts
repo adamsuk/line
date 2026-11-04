@@ -1204,7 +1204,7 @@ export interface Tool {
 }
 
 /** When the tool links were last opened. */
-export const TOOLS_CHECKED = "22 October 2026";
+export const TOOLS_CHECKED = "4 November 2026";
 
 /** Per recommendation: tools that meet some or all of it, and what is left. Not an endorsement. */
 export const TOOLS: Record<string, { tools: Tool[]; gap?: string }> = {
