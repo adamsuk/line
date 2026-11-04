@@ -294,6 +294,9 @@ export type ReadingId =
   | "oreilly-review-record"
   | "gitlab-ship-agents"
   | "monday-agent-keys"
+  | "gh-merge-queue"
+  | "gh-hosted-runners"
+  | "dora-ci"
   | "enterprise-2x"
   | "meta-ai-review"
   | "impossiblebench"
@@ -652,6 +655,33 @@ export const FURTHER_READING: { heading: string; refs: Reference[] }[] = [
         took: "A signed record ties an artifact to its commit and workflow. SLSA Build Level 2 by default, Level 3 with a reusable workflow.",
       },
       {
+        id: "gh-merge-queue",
+        title: "Managing a merge queue",
+        author: "GitHub",
+        publication: "GitHub Docs",
+        date: "Undated",
+        url: "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-a-merge-queue",
+        took: "The queue tests each pull request against the latest base branch plus the changes ahead of it. A change merges only after the required checks pass for that combined group.",
+      },
+      {
+        id: "gh-hosted-runners",
+        title: "GitHub-hosted runners",
+        author: "GitHub",
+        publication: "GitHub Docs",
+        date: "Undated",
+        url: "https://docs.github.com/en/actions/concepts/runners/github-hosted-runners",
+        took: "Apart from single-CPU runners, each GitHub-hosted runner is a new virtual machine, not the machine the change was written on.",
+      },
+      {
+        id: "dora-ci",
+        title: "Capabilities: Continuous integration",
+        author: "DORA",
+        publication: "dora.dev",
+        date: "Undated",
+        url: "https://dora.dev/capabilities/continuous-integration/",
+        took: "Every commit triggers a scripted, repeatable build and automated tests. The packages the CI build creates are authoritative for everything downstream. A broken build comes first.",
+      },
+      {
         id: "gh-environments",
         title: "Deployments and environments",
         author: "GitHub",
@@ -995,6 +1025,14 @@ export const RECOMMENDATIONS: Recommendation[] = [
     sources: ["osmani",  "spec-sign-off",  "gh-agentic-security"],
   },
   {
+    id: "clean-runner-merge-queue",
+    station: "gate",
+    stage: "Next",
+    maturity: "Best practice",
+    text: "Run the required checks on a fresh runner from the snapshot, not in the agent's sandbox. Use a merge queue, so each change is checked against the latest base and the changes queued ahead of it before it merges.",
+    sources: ["gh-hosted-runners",  "gh-merge-queue",  "dora-ci"],
+  },
+  {
     id: "spec-signs-off",
     station: "gate",
     stage: "Later",
@@ -1332,6 +1370,29 @@ export const TOOLS: Record<string, { tools: Tool[]; gap?: string }> = {
         note: "Merge queue and merge rules.",
       }
     ],
+  },
+  "clean-runner-merge-queue": {
+    tools: [
+      {
+        name: "GitHub merge queue",
+        url: "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-a-merge-queue",
+        fit: "Partial",
+        note: "Runs the required checks on the merge group, the base plus the queued changes.",
+      },
+      {
+        name: "Trunk Merge Queue",
+        url: "https://trunk.io/merge-queue",
+        fit: "Partial",
+        note: "Tests queued changes together before they merge.",
+      },
+      {
+        name: "Mergify",
+        url: "https://mergify.com",
+        fit: "Partial",
+        note: "Merge queue and merge rules.",
+      }
+    ],
+    gap: "A queue tests the combined state, but nothing makes the checks run on a clean runner. Your CI config does that, and a self-hosted runner can keep state between jobs.",
   },
   "spec-signs-off": {
     tools: [

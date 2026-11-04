@@ -185,7 +185,7 @@ const BY_STATION: Record<StationId, Q[]> = {
       covered: "Required checks on a clean runner gate the merge. A check that did not run or was skipped counts as red, and the agent's summary is ignored.",
       partial: "People look at CI, but checks are not required, get rerun until green, or a summary that says done is sometimes taken instead.",
       gap: "The agent saying done is the signal, or checks are optional.",
-      recs: ["checks-not-claims"],
+      recs: ["checks-not-claims", "clean-runner-merge-queue"],
     },
     {
       id: "gate-stop",
