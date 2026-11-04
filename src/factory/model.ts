@@ -305,7 +305,9 @@ export type ReadingId =
   | "gh-environments"
   | "llms-txt"
   | "mcp-spec"
-  | "connell-agent-mistakes";
+  | "connell-agent-mistakes"
+  | "ambig-swe"
+  | "clarifygpt";
 
 export type ReferenceId = BuiltOnId | ReadingId;
 
@@ -559,6 +561,24 @@ export const FURTHER_READING: { heading: string; refs: Reference[] }[] = [
   {
     heading: "Earlier, still current",
     refs: [
+      {
+        id: "ambig-swe",
+        title: "Ambig-SWE: Interactive Agents to Overcome Underspecificity in Software Engineering",
+        author: "Sanidhya Vijayvargiya, Xuhui Zhou, Akhila Yerukola and others",
+        publication: "arXiv",
+        date: "18 February 2025",
+        url: "https://arxiv.org/abs/2502.13069",
+        took: "Models struggle to tell a well-specified instruction from an underspecified one. When they ask the user targeted questions, they gather the missing information and do better, by up to 74% over agents that never ask.",
+      },
+      {
+        id: "clarifygpt",
+        title: "ClarifyGPT: Empowering LLM-based Code Generation with Intention Clarification",
+        author: "Fangwen Mu, Lin Shi, Song Wang and others",
+        publication: "arXiv",
+        date: "17 October 2023",
+        url: "https://arxiv.org/abs/2310.10996",
+        took: "Check whether a requirement is ambiguous first. If it is, ask targeted questions and refine the requirement with the answers before generating code. GPT-4 Pass@1 on MBPP-sanitized rose from 70.96% to 80.80% in a human evaluation.",
+      },
       {
         id: "enterprise-2x",
         title: "AI Writes Faster Than Humans Can Review: A Longitudinal Study of an Enterprise 2x Mandate",
@@ -911,6 +931,14 @@ export const RECOMMENDATIONS: Recommendation[] = [
     sources: ["nvidia-agents-md",  "owasp-agents"],
   },
   {
+    id: "ask-before-building",
+    station: "backlog",
+    stage: "Next",
+    maturity: "Best practice",
+    text: "When a ticket is ambiguous or its done-checks are missing, the triage agent asks the owner targeted questions, ideally as quick multiple-choice answers, and records the answers on the ticket before it is marked ready. It does not guess.",
+    sources: ["ambig-swe", "clarifygpt"],
+  },
+  {
     id: "sandbox-no-secrets",
     station: "source",
     stage: "Guardrails",
@@ -1185,6 +1213,17 @@ export const TOOLS: Record<string, { tools: Tool[]; gap?: string }> = {
         note: "Open-source injection classifier, with the same limit.",
       }
     ],
+  },
+  "ask-before-building": {
+    tools: [
+      {
+        name: "GitHub Spec Kit",
+        url: "https://github.com/github/spec-kit",
+        fit: "Partial",
+        note: "Its /clarify command asks the owner targeted questions and records the answers in the spec. It writes to the spec, not the ticket.",
+      },
+    ],
+    gap: "No listed product makes the triage agent write the owner's answers back to the ticket before it is marked ready. Spec Kit records them in the spec instead. Plan modes in coding agents ask before building, but not at triage.",
   },
   "sandbox-no-secrets": {
     tools: [

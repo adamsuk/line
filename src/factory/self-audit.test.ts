@@ -167,3 +167,28 @@ test("source-secrets links per-run-credentials", () => {
     ["source-refuse", "source-stop", "source-secrets", "source-egress"],
   );
 });
+
+test("backlog-refuse links ask-before-building", () => {
+  const rec = RECOMMENDATIONS.find((r) => r.id === "ask-before-building");
+  assert.ok(rec, "ask-before-building");
+  assert.equal(rec.station, "backlog");
+  assert.equal(rec.maturity, "Best practice");
+  assert.deepEqual(rec.sources, ["ambig-swe", "clarifygpt"]);
+  assert.match(rec.text, /It does not guess/);
+
+  const q = STATION_QUESTIONS.backlog.find((x) => x.id === "backlog-refuse");
+  assert.deepEqual(q?.recs, ["done-as-checks", "ask-before-building"]);
+  assert.match(q?.covered ?? "", /owner's answers first/);
+
+  assert.equal(TOOLS["ask-before-building"].tools.length, 1);
+  assert.equal(TOOLS["ask-before-building"].tools[0].name, "GitHub Spec Kit");
+  assert.equal(TOOLS["ask-before-building"].tools[0].fit, "Partial");
+  assert.ok(TOOLS["ask-before-building"].gap);
+});
+
+test("backlog-untrusted covers recording clarification answers on the ticket", () => {
+  const q = STATION_QUESTIONS.backlog.find((x) => x.id === "backlog-untrusted");
+  assert.ok(q);
+  assert.match(q.covered, /write the owner's clarification answers to the ticket/);
+  assert.match(q.covered, /takes no other action an issue's text asks for/);
+});
