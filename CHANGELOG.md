@@ -4,6 +4,12 @@ All notable changes to Line are recorded here. The format follows [Keep a Change
 
 Research-driven entries say what changed, why, and which sources back it. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
+## 2026-11-04
+
+### Added
+
+- A Best practice Backlog recommendation, `ask-before-building`: when a ticket is ambiguous or its done-checks are missing, the triage agent asks the owner targeted questions, ideally as quick multiple-choice answers, and records the answers on the ticket before it is marked ready. It does not guess. The Backlog audit question on refusing work now links to it, and the Backlog audit evidence asks whether triage has a clarifying-questions step and whether questions and answers are recorded on the issue. No listed product does this at triage, so the card names that gap. Why: nothing in the guide told the triage agent to raise ambiguity with the owner, so the audit could never flag its absence. Sources: [Ambig-SWE: Interactive Agents to Overcome Underspecificity in Software Engineering](https://arxiv.org/abs/2502.13069) (arXiv, 18 February 2025), [ClarifyGPT: Empowering LLM-based Code Generation with Intention Clarification](https://arxiv.org/abs/2310.10996) (arXiv, 17 October 2023). (#72)
+
 ## 2026-11-03
 
 ### Changed

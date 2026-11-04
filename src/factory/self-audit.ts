@@ -97,7 +97,7 @@ const BY_STATION: Record<StationId, Q[]> = {
       covered: "Refused unless done is written as checks a machine can run.",
       partial: "Checks are written, but nothing refuses work without them.",
       gap: "Anything can enter.",
-      recs: ["done-as-checks"],
+      recs: ["done-as-checks", "ask-before-building"],
     },
     {
       id: "backlog-stop",

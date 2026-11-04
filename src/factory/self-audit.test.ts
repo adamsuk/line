@@ -167,3 +167,18 @@ test("source-secrets links per-run-credentials", () => {
     ["source-refuse", "source-stop", "source-secrets", "source-egress"],
   );
 });
+
+test("backlog-refuse links ask-before-building", () => {
+  const rec = RECOMMENDATIONS.find((r) => r.id === "ask-before-building");
+  assert.ok(rec, "ask-before-building");
+  assert.equal(rec.station, "backlog");
+  assert.equal(rec.maturity, "Best practice");
+  assert.deepEqual(rec.sources, ["ambig-swe", "clarifygpt"]);
+  assert.match(rec.text, /It does not guess/);
+
+  const q = STATION_QUESTIONS.backlog.find((x) => x.id === "backlog-refuse");
+  assert.deepEqual(q?.recs, ["done-as-checks", "ask-before-building"]);
+
+  assert.equal(TOOLS["ask-before-building"].tools.length, 0);
+  assert.ok(TOOLS["ask-before-building"].gap);
+});
