@@ -1790,7 +1790,7 @@ export const TOOLS: Record<string, { tools: Tool[]; gap?: string }> = {
         name: "CodeRabbit",
         url: "https://www.coderabbit.ai",
         fit: "Partial",
-        note: "Reviews every PR automatically in the background and posts a summary. Its comments still need the same acceptance tracking as measuring the review bot.",
+        note: "Reviews pull requests automatically in the background and posts a summary. Draft pull requests are reviewed only when auto_review.drafts is true. Its comments still need the same acceptance tracking as measuring the review bot.",
       },
     ],
     gap: "CodeRabbit covers the automatic background review and summary out of the box. Tuning it to focus on bugs and API misuse, not just style and docs, still takes configuration.",
