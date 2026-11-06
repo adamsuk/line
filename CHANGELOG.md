@@ -4,6 +4,12 @@ All notable changes to Line are recorded here. The format follows [Keep a Change
 
 Research-driven entries say what changed, why, and which sources back it. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
+## 2026-11-05
+
+### Added
+
+- A required `Target repository` field at the top of the Task issue form, prefilled with `Target repo: owner/repo`, so every form-filed task names the single repository it lands in before station 01 marks it ready. It matches the gh-factory baseline form. (adamsuk/software-factory#110)
+
 ## 2026-11-04
 
 ### Added
