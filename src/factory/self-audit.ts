@@ -227,7 +227,7 @@ const BY_STATION: Record<StationId, Q[]> = {
       covered: "The diff, the gate result and the agent session.",
       partial: "The diff only.",
       gap: "The PR description.",
-      recs: ["review-record"],
+      recs: ["review-record", "background-review-agent"],
     },
     {
       id: "review-scale",
