@@ -4,6 +4,12 @@ All notable changes to Line are recorded here. The format follows [Keep a Change
 
 Research-driven entries say what changed, why, and which sources back it. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
+## 2026-11-11
+
+### Added
+
+- A `size-label.yml` workflow that calls gh-factory's reusable size-label workflow, pinned by full commit SHA, so every pull request here gets a `size/XS` to `size/XL` label and the reviewer can escalate large ones (adamsuk/software-factory#339).
+
 ## 2026-11-06
 
 ### Changed
