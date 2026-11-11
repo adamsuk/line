@@ -4,13 +4,11 @@ All notable changes to Line are recorded here. The format follows [Keep a Change
 
 Research-driven entries say what changed, why, and which sources back it. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## 2026-11-11 (merge queue ready)
+## 2026-11-06
 
 ### Changed
 
 - The Changelog and Test workflows now also trigger on `merge_group`, so required checks report on a merge queue's temporary branch. Without this, enabling the queue would leave every required check pending and stall merges (adamsuk/software-factory#312).
-
-## 2026-11-06
 
 ### Added
 
