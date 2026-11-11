@@ -6,6 +6,10 @@ Research-driven entries say what changed, why, and which sources back it. See [C
 
 ## 2026-11-06
 
+### Changed
+
+- The Changelog and Test workflows now also trigger on `merge_group`, so required checks report on a merge queue's temporary branch. Without this, enabling the queue would leave every required check pending and stall merges (adamsuk/software-factory#312).
+
 ### Added
 
 - Six cutting-edge recommendations for practices the station prose already described but the audit never scored: the triage agent drops duplicates and routes issues (Backlog), small work orders labelled for the factory and a separate QA agent (Bench), a background adversarial review agent (Review), a monitoring agent that turns alerts into work orders (Observe), and a record agent that writes down what happened (Return). Each station's audit evidence has a matching line, so the audit prompt asks for it. Why: Line audits only what `guide.json` lists as a recommendation. Sources: the pieces the guide already cites for each station (Iusztin, Osmani, Savkin, DORA small batches, CRBugBench).
