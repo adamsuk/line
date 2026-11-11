@@ -4,6 +4,7 @@ name: Changelog
 # Generic: copy as is. Set CHANGELOG_FILE and SKIP_LABEL if yours differ.
 # Dependabot pull requests are skipped: dependency bumps carry no entry.
 on:
+  merge_group:
   pull_request:
     types: [opened, synchronize, reopened, labeled, unlabeled]
 
