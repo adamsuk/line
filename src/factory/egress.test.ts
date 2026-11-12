@@ -5,8 +5,8 @@ import { readdirSync, readFileSync } from "node:fs";
 const dir = new URL("../../.github/workflows/", import.meta.url);
 const files = readdirSync(dir).filter((f) => /\.ya?ml$/.test(f));
 
-/** Jobs that stay on `audit` on purpose (adamsuk/software-factory#370), each commented in its workflow. */
-const AUDIT_EXCEPTIONS = new Set(["pages.yml:deploy", "links.yml:links"]);
+/** Jobs that stay on `audit` on purpose (adamsuk/software-factory#370, #373), each commented in its workflow. */
+const AUDIT_EXCEPTIONS = new Set(["links.yml:links"]);
 
 export interface HardenStep {
   job: string;

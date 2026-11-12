@@ -53,7 +53,10 @@ jobs:
     steps:
       - uses: step-security/harden-runner@46b06cea07f9e64621fdf066ba77ac6915163d43 # v2.22.3
         with:
-          # Stays audit on purpose: no allowlist yet; it needs a main run where deploy ran (follow-up to adamsuk/software-factory#370).
-          egress-policy: audit
+          # Hosts copied from the Harden-Runner insights of a main run where deploy ran
+          # (https://github.com/adamsuk/line/actions/runs/43043623745).
+          egress-policy: block
+          allowed-endpoints: >-
+            api.github.com:443
       - id: deployment
         uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
