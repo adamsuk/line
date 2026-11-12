@@ -8,6 +8,7 @@ Research-driven entries say what changed, why, and which sources back it. See [C
 
 ### Changed
 
+- Harden-Runner now blocks egress in the `pages.yml` deploy job, with `allowed-endpoints` copied from the insights of main run [43043623745](https://github.com/adamsuk/line/actions/runs/43043623745) (`api.github.com:443`). `src/factory/egress.test.ts` no longer exempts it, so only `links.yml` stays on `audit` (adamsuk/software-factory#373).
 - Harden-Runner now blocks egress in `changelog.yml`, `codeql.yml` (both jobs), `test.yml` and the `pages.yml` build job, with `allowed-endpoints` copied from each job's recommended policy (port 443 only, no wildcards). The `pages.yml` deploy job (no list until a main run where it ran) and `links.yml` (checks arbitrary external URLs) stay on `audit`, each commented in the workflow. A new `src/factory/egress.test.ts`, run by `npm run test:factory`, fails on any other Harden-Runner step that is `audit`, has no list, uses a wildcard or lists a non-443 endpoint (adamsuk/software-factory#370).
 - The Pages deploy workflow now pins `actions/checkout`, `actions/setup-node`, `actions/configure-pages`, `actions/upload-pages-artifact` and `actions/deploy-pages` by full commit SHA with a version comment, as the other workflows already do. A new `src/factory/workflows.test.ts`, run by `npm run test:factory`, fails on any non-local `uses:` that is not pinned to 40 hex (adamsuk/software-factory#353).
 
