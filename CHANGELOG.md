@@ -4,6 +4,12 @@ All notable changes to Line are recorded here. The format follows [Keep a Change
 
 Research-driven entries say what changed, why, and which sources back it. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
+## 2026-11-12
+
+### Changed
+
+- The Pages deploy workflow now pins `actions/checkout`, `actions/setup-node`, `actions/configure-pages`, `actions/upload-pages-artifact` and `actions/deploy-pages` by full commit SHA with a version comment, as the other workflows already do. A new `src/factory/workflows.test.ts`, run by `npm run test:factory`, fails on any non-local `uses:` that is not pinned to 40 hex (adamsuk/software-factory#353).
+
 ## 2026-11-11
 
 ### Added
