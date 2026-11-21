@@ -4,6 +4,12 @@ All notable changes to Line are recorded here. The format follows [Keep a Change
 
 Research-driven entries say what changed, why, and which sources back it. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
+## 2026-11-21
+
+### Added
+
+- A cutting-edge Review recommendation: classify a change's risk from the paths and files it touches, not from what the author or agent declares. Review related changes together, so a high-risk edit cannot be split into low-risk pieces. CI and deploy configuration, secrets, authentication, IAM, and migrations stay with a person and get a deeper review. The Review question on scaling depth now links this card alongside small-PR review and review capacity. No listed product classifies risk from the paths touched and keeps related changes in one review, so the card names that gap. Why it stays Cutting edge: the evidence is two practitioner posts from 17 and 20 November 2026, and one team, after measuring disagreement, also lets an agent merge some low-risk changes. Line takes path-based risk and a person who still approves. It does not treat that AI-only merge as best practice, and human approval stays as it is. Sources: [Building a gated review pipeline for AI coding agents on AWS](https://aws.amazon.com/blogs/devops/building-a-gated-review-pipeline-for-ai-coding-agents-on-aws/) (Owen Hawkins, Chris Williams and Trevor Schiavone, AWS DevOps Blog, 17 November 2026), [Building a Software Factory](https://runway.com/news/engineering/building-a-software-factory) (Alejandro Alvarez, Runway, 20 November 2026).
+
 ## 2026-11-12
 
 ### Changed
