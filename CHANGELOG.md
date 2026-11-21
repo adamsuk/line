@@ -4,6 +4,12 @@ All notable changes to Line are recorded here. The format follows [Keep a Change
 
 Research-driven entries say what changed, why, and which sources back it. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
+## 2026-11-21
+
+### Added
+
+- A cutting-edge Backlog recommendation, `approve-spec-before-code`: a person approves the work order's specification before any coding agent writes code. The specification covers intent, acceptance checks, constraints, and out of scope. After that approval, agents may build. The agent that writes the change still does not grade its own work. A new Backlog audit question asks whether a person approves that specification before generation, and the station's audit evidence records the same check. No listed product requires a person to accept the specification before a coding agent writes code, so the card names that gap. The card stays Cutting edge because the evidence is two practitioner posts from 17 November 2026, not wide adoption. Sources: [Specs, Not Prompts: Putting Machine-Readable Intent Back at the Center of the Development Lifecycle](https://www.computer.org/publications/tech-news/research/specification-driven-agentic-software) (Ashif Anwar, IEEE Computer Society, 17 November 2026), [Building a gated review pipeline for AI coding agents on AWS](https://aws.amazon.com/blogs/devops/building-a-gated-review-pipeline-for-ai-coding-agents-on-aws/) (Owen Hawkins, Chris Williams and Trevor Schiavone, AWS DevOps Blog, 17 November 2026). ([#109](https://github.com/adamsuk/line/issues/109))
+
 ## 2026-11-12
 
 ### Changed
