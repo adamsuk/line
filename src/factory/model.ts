@@ -294,6 +294,9 @@ export type ReadingId =
   | "oreilly-review-record"
   | "gitlab-ship-agents"
   | "monday-agent-keys"
+  | "willison-external-sandboxes"
+  | "gold-islo-factories"
+  | "brennan-sandbox-egress"
   | "gh-merge-queue"
   | "gh-hosted-runners"
   | "dora-ci"
@@ -370,6 +373,38 @@ export const REFERENCES: Reference[] = [
 
 /** Newer pieces behind the labelled recommendations. Titles are quoted as published. */
 export const FURTHER_READING: { heading: string; refs: Reference[] }[] = [
+  {
+    heading: "November 2026",
+    refs: [
+      {
+        id: "brennan-sandbox-egress",
+        title: "Coding Agent Sandboxes That Contain Prompt Injection",
+        author: "Rachel Brennan",
+        publication: "PastAGI",
+        date: "18 November 2026",
+        url: "https://pastagi.com/guides/coding-agent-sandboxes-egress-guide/",
+        took: "The agent never holds the token. A proxy outside the sandbox injects a scoped token only for an allowed destination, so a prompt injection cannot spend a credential the sandbox never saw.",
+      },
+      {
+        id: "gold-islo-factories",
+        title: "Introducing Islo: the safe way to run enterprise software factories",
+        author: "Adam Gold",
+        publication: "Islo",
+        date: "17 November 2026",
+        url: "https://islo.dev/blog/launching-islo-enterprise-software-factories/",
+        took: "Credentials are injected at a gateway, so they never sit inside the environment an agent can read and leak.",
+      },
+      {
+        id: "willison-external-sandboxes",
+        title: "External sandboxes for coding agents",
+        author: "Simon Willison",
+        publication: "Primeradiant",
+        date: "16 November 2026",
+        url: "https://blog.primeradiant.com/external-sandboxes-for-coding-agents/",
+        took: "A proxy outside the sandbox adds the real API key only on a request to an allowed host. Inside the sandbox the agent sees a placeholder, and the key itself stays where the agent cannot read it.",
+      },
+    ],
+  },
   {
     heading: "Sep to Oct 2026",
     refs: [
@@ -1029,8 +1064,8 @@ export const RECOMMENDATIONS: Recommendation[] = [
     station: "source",
     stage: "Guardrails",
     maturity: "Cutting edge",
-    text: "Each agent run gets a fresh sandbox and a token scoped only to the repos that task needs. The token expires within about an hour, and nothing from the run carries into the next one. Every tool call is seen by a policy check. There is no general-purpose shell, HTTP, or eval tool that can bypass that check.",
-    sources: ["monday-agent-keys",  "owasp-ai-coding"],
+    text: "Each agent run gets a fresh sandbox and a token scoped only to the repos that task needs. The token expires within about an hour, and nothing from the run carries into the next one. The sandbox does not hold the cleartext credential. A proxy or broker outside the sandbox adds the real credential only to an allowed request, and the sandbox sees a placeholder or no key. Every tool call is seen by a policy check. There is no general-purpose shell, HTTP, or eval tool that can bypass that check.",
+    sources: ["monday-agent-keys", "owasp-ai-coding", "willison-external-sandboxes", "gold-islo-factories", "brennan-sandbox-egress"],
   },
   {
     id: "egress-allowlist",
@@ -1391,7 +1426,7 @@ export const TOOLS: Record<string, { tools: Tool[]; gap?: string }> = {
   },
   "per-run-credentials": {
     tools: [],
-    gap: "No listed product does all three: a fresh sandbox per run, a token limited to that task's repos that expires within about an hour, and tool wrappers with no general-purpose shell, HTTP, or eval bypass.",
+    gap: "No listed product does all of these: a fresh sandbox per run, a token limited to that task's repos that expires within about an hour, tool wrappers with no general-purpose shell, HTTP, or eval bypass, and a proxy or broker outside the sandbox that adds the real credential only to an allowed request so the sandbox does not hold that cleartext credential.",
   },
   "egress-allowlist": {
     tools: [
