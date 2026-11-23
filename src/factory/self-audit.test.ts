@@ -126,13 +126,25 @@ test("source-secrets links per-run-credentials", () => {
   assert.equal(rec.station, "source");
   assert.equal(rec.stage, "Guardrails");
   assert.equal(rec.maturity, "Cutting edge");
-  assert.deepEqual(rec.sources, ["monday-agent-keys", "owasp-ai-coding"]);
+  assert.deepEqual(rec.sources, [
+    "monday-agent-keys",
+    "owasp-ai-coding",
+    "willison-external-sandboxes",
+    "gold-islo-factories",
+    "brennan-sandbox-egress",
+  ]);
   assert.match(rec.text, /fresh sandbox/);
   assert.match(rec.text, /token scoped only to the repos that task needs/);
   assert.match(rec.text, /expires within about an hour/);
   assert.match(rec.text, /nothing from the run carries into the next one/);
   assert.match(rec.text, /Every tool call is seen by a policy check/);
   assert.match(rec.text, /no general-purpose shell, HTTP, or eval tool that can bypass that check/);
+  assert.match(rec.text, /The sandbox does not hold the cleartext credential/);
+  assert.match(
+    rec.text,
+    /A proxy or broker outside the sandbox adds the real credential only to an allowed request/,
+  );
+  assert.match(rec.text, /the sandbox sees a placeholder or no key/);
 
   const ids = RECOMMENDATIONS.map((r) => r.id);
   assert.equal(ids[ids.indexOf("sandbox-no-secrets") + 1], "per-run-credentials");
@@ -159,7 +171,7 @@ test("source-secrets links per-run-credentials", () => {
   assert.deepEqual(TOOLS["per-run-credentials"].tools, []);
   assert.equal(
     TOOLS["per-run-credentials"].gap,
-    "No listed product does all three: a fresh sandbox per run, a token limited to that task's repos that expires within about an hour, and tool wrappers with no general-purpose shell, HTTP, or eval bypass.",
+    "No listed product does all of these: a fresh sandbox per run, a token limited to that task's repos that expires within about an hour, tool wrappers with no general-purpose shell, HTTP, or eval bypass, and a proxy or broker outside the sandbox that adds the real credential only to an allowed request so the sandbox does not hold that cleartext credential.",
   );
   assert.ok(TOOLS["per-run-credentials"].gap.trim().length > 0);
 
