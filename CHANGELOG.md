@@ -4,6 +4,12 @@ All notable changes to Line are recorded here. The format follows [Keep a Change
 
 Research-driven entries say what changed, why, and which sources back it. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
+## 2026-11-25
+
+### Removed
+
+- The sign-in scaffolding from the app-builder template Line started from: `src/lib/auth/`, the Better Auth schema in `migrations/auth/`, the dev-only `/auth/popup` and `/__app-env` routes, `npm run check:auth`, the sign-out and auth-invariant scripts with their tests, and the `better-auth`, `jose` and `kysely` dependencies. The cross-site request guard that connector calls still use moved to `src/lib/app-data/isolation.server.ts`. Why: Line has no sign-in. The GitHub Pages site never loaded this code, and the dev server shipped it switched off, yet it kept raising Better Auth upgrades (#85) that broke nothing a visitor could reach. ([#116](https://github.com/adamsuk/line/pull/116))
+
 ## 2026-11-23
 
 ### Changed
