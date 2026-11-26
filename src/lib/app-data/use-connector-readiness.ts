@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { isFramed } from "./login.ts";
 import { getConnectorReadiness } from "./readiness.ts";
 import {
@@ -15,6 +15,13 @@ export type ConnectorWaitStatus =
   | "not_embedded";
 
 export const READINESS_PROBE_TIMEOUT_MS = 10_000;
+
+// Whether the page is framed never changes for its lifetime, so there is
+// nothing to subscribe to. The server snapshot is `false` so SSR and hydration
+// render "waiting"; the client then settles on its real value.
+const noSubscribe = () => () => {};
+const notEmbeddedSnapshot = () => !isFramed();
+const notEmbeddedServerSnapshot = () => false;
 
 function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T | null> {
   return new Promise((resolve) => {
@@ -53,7 +60,11 @@ export function useRefetchWhenConnectorReady(
 ): ConnectorWaitStatus {
   const refetchRef = useRef(refetch);
   const [timedOut, setTimedOut] = useState(false);
-  const [notEmbedded, setNotEmbedded] = useState(false);
+  const notEmbedded = useSyncExternalStore(
+    noSubscribe,
+    notEmbeddedSnapshot,
+    notEmbeddedServerSnapshot,
+  );
 
   useEffect(() => {
     refetchRef.current = refetch;
@@ -61,10 +72,7 @@ export function useRefetchWhenConnectorReady(
 
   useEffect(() => {
     if (!waiting) return;
-    if (!isFramed()) {
-      setNotEmbedded(true);
-      return () => setNotEmbedded(false);
-    }
+    if (!isFramed()) return;
     let cancelled = false;
     let refetching = false;
     let attempt = 0;

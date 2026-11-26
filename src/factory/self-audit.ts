@@ -117,6 +117,16 @@ const BY_STATION: Record<StationId, Q[]> = {
       gap: "It acts on what issues say.",
       recs: ["untrusted-issues"],
     },
+    {
+      id: "backlog-approve-spec",
+      q: "Does a person approve the work order's specification before a coding agent writes code?",
+      covered:
+        "A person accepts the specification, including intent, acceptance checks, constraints, and out of scope, before any coding agent writes code. After that, agents may build. The agent that writes the change does not grade its own work.",
+      partial:
+        "A person reviews the change after it is written, but nobody accepts the specification before generation.",
+      gap: "Agents write code from a ticket nobody has accepted as the specification.",
+      recs: ["approve-spec-before-code"],
+    },
   ],
   source: [
     {

@@ -291,3 +291,86 @@ test("review-scale links path-risk", () => {
     assert.deepEqual(kept.sources, expected.sources, id);
   }
 });
+
+test("backlog-approve-spec links approve-spec-before-code", () => {
+  const ids = RECOMMENDATIONS.map((r) => r.id);
+  assert.equal(ids[ids.indexOf("triage-routing") + 1], "approve-spec-before-code");
+  const rec = RECOMMENDATIONS.find((r) => r.id === "approve-spec-before-code");
+  assert.ok(rec);
+  assert.equal(rec.station, "backlog");
+  assert.equal(rec.stage, "Next");
+  assert.equal(rec.maturity, "Cutting edge");
+  assert.equal(
+    rec.text,
+    "A person approves the work order's specification before any coding agent writes code. The specification covers intent, acceptance checks, constraints, and out of scope. After that approval, agents may build. The agent that writes the change still does not grade its own work.",
+  );
+  assert.deepEqual(rec.sources, ["anwar-specs-not-prompts", "aws-gated-review"]);
+
+  assert.equal(FURTHER_READING[0]?.heading, "November 2026");
+  assert.equal(FURTHER_READING[1]?.heading, "Sep to Oct 2026");
+  assert.deepEqual(
+    FURTHER_READING[0]?.refs.map((r) => r.id),
+    [
+      "runway-software-factory",
+      "brennan-sandbox-egress",
+      "anwar-specs-not-prompts",
+      "aws-gated-review",
+      "gold-islo-factories",
+      "willison-external-sandboxes",
+    ],
+  );
+  const anwar = FURTHER_READING[0]?.refs.find((r) => r.id === "anwar-specs-not-prompts");
+  const aws = FURTHER_READING[0]?.refs.find((r) => r.id === "aws-gated-review");
+  assert.equal(
+    anwar?.title,
+    "Specs, Not Prompts: Putting Machine-Readable Intent Back at the Center of the Development Lifecycle",
+  );
+  assert.equal(anwar?.date, "17 November 2026");
+  assert.equal(
+    anwar?.url,
+    "https://www.computer.org/publications/tech-news/research/specification-driven-agentic-software",
+  );
+  assert.equal(aws?.title, "Building a gated review pipeline for AI coding agents on AWS");
+  assert.equal(aws?.date, "17 November 2026");
+  assert.equal(
+    aws?.url,
+    "https://aws.amazon.com/blogs/devops/building-a-gated-review-pipeline-for-ai-coding-agents-on-aws/",
+  );
+
+  const backlog = STATION_QUESTIONS.backlog;
+  assert.deepEqual(
+    backlog.map((q) => q.id),
+    ["backlog-refuse", "backlog-stop", "backlog-untrusted", "backlog-approve-spec"],
+  );
+  const q = backlog.find((x) => x.id === "backlog-approve-spec");
+  assert.ok(q);
+  assert.equal(q.id, "backlog-approve-spec");
+  assert.equal(
+    q.q,
+    "Does a person approve the work order's specification before a coding agent writes code?",
+  );
+  assert.equal(
+    q.covered,
+    "A person accepts the specification, including intent, acceptance checks, constraints, and out of scope, before any coding agent writes code. After that, agents may build. The agent that writes the change does not grade its own work.",
+  );
+  assert.equal(
+    q.partial,
+    "A person reviews the change after it is written, but nobody accepts the specification before generation.",
+  );
+  assert.equal(q.gap, "Agents write code from a ticket nobody has accepted as the specification.");
+  assert.deepEqual(q.recs, ["approve-spec-before-code"]);
+
+  assert.deepEqual(AUDIT_EVIDENCE.backlog.evidence, [
+    "Issue and work order templates, and whether done is written as checks",
+    "Labels or routing for triage, and how agents are told which issues to take",
+    "Whether triage has a clarifying-questions step for ambiguous tickets, and whether the questions and the owner's answers are recorded on the issue before it is marked ready",
+    "Whether a triage agent drops duplicates and routes issues, and whether only labelled issues are picked up for building",
+    "Whether a person approves the work order's specification, including intent, acceptance checks, constraints, and out of scope, before a coding agent writes code",
+  ]);
+
+  assert.deepEqual(TOOLS["approve-spec-before-code"].tools, []);
+  assert.equal(
+    TOOLS["approve-spec-before-code"].gap,
+    "No listed product requires a person to accept the specification before a coding agent writes code.",
+  );
+});
