@@ -1,7 +1,7 @@
 # Factory agents for Line (see the gh-factory README, "Agents").
 # Scott merges pull requests himself, so agents.merge stays false.
 agents:
-  roles: [builder, reviewer]
+  roles: [intake, builder, reviewer]
   merge: false
   review_bot: coderabbit
   # Typecheck, lint, and the factory tests. npm test stays out of CI.
