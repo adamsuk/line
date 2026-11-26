@@ -317,7 +317,9 @@ export type ReadingId =
   | "minimumcd-immutable"
   | "gh-protected-branches"
   | "coderabbit-governance"
-  | "oneuptime-build-once";
+  | "oneuptime-build-once"
+  | "anwar-specs-not-prompts"
+  | "aws-gated-review";
 
 export type ReferenceId = BuiltOnId | ReadingId;
 
@@ -384,6 +386,25 @@ export const FURTHER_READING: { heading: string; refs: Reference[] }[] = [
         date: "18 November 2026",
         url: "https://pastagi.com/guides/coding-agent-sandboxes-egress-guide/",
         took: "The agent never holds the token. A proxy outside the sandbox injects a scoped token only for an allowed destination, so a prompt injection cannot spend a credential the sandbox never saw.",
+      },
+      {
+        id: "anwar-specs-not-prompts",
+        title:
+          "Specs, Not Prompts: Putting Machine-Readable Intent Back at the Center of the Development Lifecycle",
+        author: "Ashif Anwar",
+        publication: "IEEE Computer Society",
+        date: "17 November 2026",
+        url: "https://www.computer.org/publications/tech-news/research/specification-driven-agentic-software",
+        took: "Accept the work order's specification, including intent, acceptance checks, constraints, and out of scope, before any coding agent writes code.",
+      },
+      {
+        id: "aws-gated-review",
+        title: "Building a gated review pipeline for AI coding agents on AWS",
+        author: "Owen Hawkins, Chris Williams and Trevor Schiavone",
+        publication: "AWS DevOps Blog",
+        date: "17 November 2026",
+        url: "https://aws.amazon.com/blogs/devops/building-a-gated-review-pipeline-for-ai-coding-agents-on-aws/",
+        took: "After a person approves that specification, agents may build. The agent that writes the change still does not grade its own work.",
       },
       {
         id: "gold-islo-factories",
@@ -1050,6 +1071,14 @@ export const RECOMMENDATIONS: Recommendation[] = [
     maturity: "Cutting edge",
     text: "The triage agent drops duplicates and routes each new issue, labelling it for the factory or sending it to a person. Only issues it has labelled are picked up for building.",
     sources: ["iusztin", "osmani"],
+  },
+  {
+    id: "approve-spec-before-code",
+    station: "backlog",
+    stage: "Next",
+    maturity: "Cutting edge",
+    text: "A person approves the work order's specification before any coding agent writes code. The specification covers intent, acceptance checks, constraints, and out of scope. After that approval, agents may build. The agent that writes the change still does not grade its own work.",
+    sources: ["anwar-specs-not-prompts", "aws-gated-review"],
   },
   {
     id: "sandbox-no-secrets",
@@ -1810,6 +1839,10 @@ export const TOOLS: Record<string, { tools: Tool[]; gap?: string }> = {
   "triage-routing": {
     tools: [],
     gap: "No listed product was checked for dedupe plus routing plus a factory label that gates pickup. A triage workflow and your tracker's labels do this.",
+  },
+  "approve-spec-before-code": {
+    tools: [],
+    gap: "No listed product requires a person to accept the specification before a coding agent writes code.",
   },
   "small-work-orders": {
     tools: [],

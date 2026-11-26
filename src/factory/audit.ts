@@ -30,6 +30,7 @@ export const AUDIT_EVIDENCE: Record<StationId, { evidence: string[]; access: str
       "Labels or routing for triage, and how agents are told which issues to take",
       "Whether triage has a clarifying-questions step for ambiguous tickets, and whether the questions and the owner's answers are recorded on the issue before it is marked ready",
       "Whether a triage agent drops duplicates and routes issues, and whether only labelled issues are picked up for building",
+      "Whether a person approves the work order's specification, including intent, acceptance checks, constraints, and out of scope, before a coding agent writes code",
     ],
     access: [
       "Issue tracker (GitHub Issues, GitLab, Jira or Linear)",
