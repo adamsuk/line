@@ -245,7 +245,7 @@ const BY_STATION: Record<StationId, Q[]> = {
       covered: "Small PRs, deeper review for risky paths by rule, and agent PRs held back when time to first review or reviewer load climbs.",
       partial: "Small PRs, or the queue is tracked, but nothing slows the agents when it grows.",
       gap: "Large PRs, skimmed, and nobody watches the queue.",
-      recs: ["scale-review", "review-capacity"],
+      recs: ["scale-review", "path-risk", "review-capacity"],
     },
     {
       id: "review-bot",

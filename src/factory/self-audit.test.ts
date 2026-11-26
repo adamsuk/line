@@ -1,7 +1,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { FURTHER_READING, RECOMMENDATIONS, STATION_IDS, TOOLS, type ReadingId } from "./model.ts";
 import { AUDIT_EVIDENCE } from "./audit.ts";
-import { FURTHER_READING, RECOMMENDATIONS, STATION_IDS, TOOLS } from "./model.ts";
 import {
   ALL_QUESTIONS,
   HOMEPAGE,
@@ -206,6 +207,91 @@ test("backlog-untrusted covers recording clarification answers on the ticket", (
   assert.match(q.covered, /takes no other action an issue's text asks for/);
 });
 
+test("review-scale links path-risk", () => {
+  const text =
+    "Classify a change's risk from the paths and files it touches, not from what the author or agent declares. Review related changes together, so a high-risk edit cannot be split into low-risk pieces. CI and deploy configuration, secrets, authentication, IAM, and migrations stay with a person and get a deeper review.";
+  const cited: ReadingId[] = ["aws-gated-review", "runway-software-factory"];
+  const rec = RECOMMENDATIONS.find((r) => r.id === "path-risk");
+  assert.ok(rec, "path-risk");
+  assert.equal(rec.station, "review");
+  assert.equal(rec.stage, "Next");
+  assert.equal(rec.maturity, "Cutting edge");
+  assert.equal(rec.text, text);
+  assert.deepEqual(rec.sources, cited);
+
+  const readings = FURTHER_READING.flatMap((g) => g.refs);
+  const aws = readings.find((r) => r.id === "aws-gated-review");
+  assert.ok(aws);
+  assert.equal(aws.title, "Building a gated review pipeline for AI coding agents on AWS");
+  assert.equal(aws.author, "Owen Hawkins, Chris Williams and Trevor Schiavone");
+  assert.equal(aws.publication, "AWS DevOps Blog");
+  assert.equal(aws.date, "17 November 2026");
+  assert.equal(
+    aws.url,
+    "https://aws.amazon.com/blogs/devops/building-a-gated-review-pipeline-for-ai-coding-agents-on-aws/",
+  );
+  assert.match(aws.took, /paths and files a change touches/);
+  assert.match(aws.took, /person still approves/);
+
+  const runway = readings.find((r) => r.id === "runway-software-factory");
+  assert.ok(runway);
+  assert.equal(runway.title, "Building a Software Factory");
+  assert.equal(runway.author, "Alejandro Alvarez");
+  assert.equal(runway.publication, "Runway");
+  assert.equal(runway.date, "20 November 2026");
+  assert.equal(runway.url, "https://runway.com/news/engineering/building-a-software-factory");
+  assert.match(runway.took, /paths a change touches/);
+  assert.match(runway.took, /person, who still approves/);
+
+  assert.equal(STATION_QUESTIONS.review.length, 4);
+  const scale = STATION_QUESTIONS.review.find((q) => q.id === "review-scale");
+  assert.ok(scale);
+  assert.deepEqual(scale.recs, ["scale-review", "path-risk", "review-capacity"]);
+
+  assert.deepEqual(TOOLS["path-risk"].tools, []);
+  assert.equal(
+    TOOLS["path-risk"].gap,
+    "No listed product does both: classify risk from the paths and files a change touches, and keep related changes in one review so a high-risk edit cannot be split into low-risk pieces.",
+  );
+
+  const readme = readFileSync(new URL("../../README.md", import.meta.url), "utf8");
+  const row = readme.split("\n").find((line) => line.startsWith("| Cutting edge |") && line.includes(text));
+  assert.ok(row, "README row");
+  assert.ok(row.includes(aws.url), "aws url");
+  assert.ok(row.includes(runway.url), "runway url");
+
+  assert.ok(
+    AUDIT_EVIDENCE.review.evidence.includes(
+      "Whether risk is classified from the paths and files a change touches, rather than from the author",
+    ),
+  );
+
+  const unchanged: Record<string, { maturity: string; text: string; sources: string[] }> = {
+    "scale-review": {
+      maturity: "Best practice",
+      text: "Keep PRs small. Scale how deeply a person reviews to the size and risk of the change.",
+      sources: ["crbugbench", "dora-small-batches"],
+    },
+    "human-approves": {
+      maturity: "Best practice",
+      text: "A named person approves. Agent review does not replace it, and no agent approves its own change.",
+      sources: ["owasp-ai-coding", "owasp-agents", "crbugbench"],
+    },
+    "human-release-gate": {
+      maturity: "Best practice",
+      text: "A named person approves promotion to production where a wrong call is expensive, like auth, billing, data migrations, or a public API. Anyone on call can roll back without a second approval, and the rollback is practised.",
+      sources: ["gh-environments", "reveneau-progressive", "iusztin"],
+    },
+  };
+  for (const [id, expected] of Object.entries(unchanged)) {
+    const kept = RECOMMENDATIONS.find((r) => r.id === id);
+    assert.ok(kept, id);
+    assert.equal(kept.maturity, expected.maturity, id);
+    assert.equal(kept.text, expected.text, id);
+    assert.deepEqual(kept.sources, expected.sources, id);
+  }
+});
+
 test("backlog-approve-spec links approve-spec-before-code", () => {
   const ids = RECOMMENDATIONS.map((r) => r.id);
   assert.equal(ids[ids.indexOf("triage-routing") + 1], "approve-spec-before-code");
@@ -225,6 +311,7 @@ test("backlog-approve-spec links approve-spec-before-code", () => {
   assert.deepEqual(
     FURTHER_READING[0]?.refs.map((r) => r.id),
     [
+      "runway-software-factory",
       "brennan-sandbox-egress",
       "anwar-specs-not-prompts",
       "aws-gated-review",

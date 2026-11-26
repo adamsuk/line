@@ -263,6 +263,8 @@ export const LOGS = [
 export type BuiltOnId = "osmani" | "iusztin" | "savkin" | "savkin-review";
 
 export type ReadingId =
+  | "aws-gated-review"
+  | "runway-software-factory"
   | "crbugbench"
   | "spec-sign-off"
   | "harness-evals"
@@ -379,6 +381,15 @@ export const FURTHER_READING: { heading: string; refs: Reference[] }[] = [
     heading: "November 2026",
     refs: [
       {
+        id: "runway-software-factory",
+        title: "Building a Software Factory",
+        author: "Alejandro Alvarez",
+        publication: "Runway",
+        date: "20 November 2026",
+        url: "https://runway.com/news/engineering/building-a-software-factory",
+        took: "Risk comes from the paths a change touches, and specific paths can only lower how far an agent may approve. Database migrations, CI and deploy configuration, secrets, and authentication stay with a person, who still approves.",
+      },
+      {
         id: "brennan-sandbox-egress",
         title: "Coding Agent Sandboxes That Contain Prompt Injection",
         author: "Rachel Brennan",
@@ -404,7 +415,7 @@ export const FURTHER_READING: { heading: string; refs: Reference[] }[] = [
         publication: "AWS DevOps Blog",
         date: "17 November 2026",
         url: "https://aws.amazon.com/blogs/devops/building-a-gated-review-pipeline-for-ai-coding-agents-on-aws/",
-        took: "After a person approves that specification, agents may build. The agent that writes the change still does not grade its own work.",
+        took: "After a person approves that specification, agents may build. The agent that writes the change still does not grade its own work. Assign the risk tier from the paths and files a change touches, not from what the author declares. Review related changes together so a high-risk change cannot be split into low-risk pieces. A person still approves every tier, and that decision is never delegated.",
       },
       {
         id: "gold-islo-factories",
@@ -1249,6 +1260,14 @@ export const RECOMMENDATIONS: Recommendation[] = [
     sources: ["savkin-review", "crbugbench"],
   },
   {
+    id: "path-risk",
+    station: "review",
+    stage: "Next",
+    maturity: "Cutting edge",
+    text: "Classify a change's risk from the paths and files it touches, not from what the author or agent declares. Review related changes together, so a high-risk edit cannot be split into low-risk pieces. CI and deploy configuration, secrets, authentication, IAM, and migrations stay with a person and get a deeper review.",
+    sources: ["aws-gated-review", "runway-software-factory"],
+  },
+  {
     id: "review-capacity",
     station: "review",
     stage: "Next",
@@ -1672,6 +1691,10 @@ export const TOOLS: Record<string, { tools: Tool[]; gap?: string }> = {
         note: "Routes reviewers by rule. You still judge the risk.",
       }
     ],
+  },
+  "path-risk": {
+    tools: [],
+    gap: "No listed product does both: classify risk from the paths and files a change touches, and keep related changes in one review so a high-risk edit cannot be split into low-risk pieces.",
   },
   "human-approves": {
     tools: [
