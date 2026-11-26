@@ -30,6 +30,7 @@ export const AUDIT_EVIDENCE: Record<StationId, { evidence: string[]; access: str
       "Labels or routing for triage, and how agents are told which issues to take",
       "Whether triage has a clarifying-questions step for ambiguous tickets, and whether the questions and the owner's answers are recorded on the issue before it is marked ready",
       "Whether a triage agent drops duplicates and routes issues, and whether only labelled issues are picked up for building",
+      "Whether a person approves the work order's specification, including intent, acceptance checks, constraints, and out of scope, before a coding agent writes code",
     ],
     access: [
       "Issue tracker (GitHub Issues, GitLab, Jira or Linear)",
@@ -74,6 +75,7 @@ export const AUDIT_EVIDENCE: Record<StationId, { evidence: string[]; access: str
       "Required reviewers and code owners, PR size, time to first review",
       "Whether a review bot runs, and how often its comments are accepted",
       "Whether an adversarial review agent runs in the background on each PR and writes a summary",
+      "Whether risk is classified from the paths and files a change touches, rather than from the author",
     ],
     access: [
       "Pull requests and reviews (GitHub MCP pull_requests toolset)",
