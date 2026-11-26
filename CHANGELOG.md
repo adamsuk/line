@@ -4,6 +4,12 @@ All notable changes to Line are recorded here. The format follows [Keep a Change
 
 Research-driven entries say what changed, why, and which sources back it. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
+## 2026-11-26
+
+### Changed
+
+- The factory's intake station may now triage Line's issues: `.github/factory.yml` lists `intake` in `agents.roles` next to `builder` and `reviewer`. Why: intake refuses to triage a repo without that role, so Line's `factory:triage` issues could only reach `factory:ready` by hand. Merging stays with a person (`agents.merge: false`).
+
 ## 2026-11-25
 
 ### Removed
