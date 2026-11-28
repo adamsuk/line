@@ -321,6 +321,7 @@ export type ReadingId =
   | "coderabbit-governance"
   | "oneuptime-build-once"
   | "anwar-specs-not-prompts"
+  | "vacic-software-factory"
   | "aws-gated-review";
 
 export type ReferenceId = BuiltOnId | ReadingId;
@@ -638,6 +639,20 @@ export const FURTHER_READING: { heading: string; refs: Reference[] }[] = [
         date: "Last updated 8 October 2026",
         url: "https://beyond.minimumcd.org/docs/pipeline/immutable-artifacts/",
         took: "Build once, deploy everywhere. Rebuilding per environment is the anti-pattern: different builds can produce different results even from the same source.",
+      },
+    ],
+  },
+  {
+    heading: "7 November 2026",
+    refs: [
+      {
+        id: "vacic-software-factory",
+        title: "How We Run Our Software Factory (and What Broke)",
+        author: "Daniel Vacic",
+        publication: "The Growth Project",
+        date: "7 November 2026",
+        url: "https://thegrowthproject.com/blog/how-we-run-our-software-factory/",
+        took: "One operator measured review bots on known defects, and the best setup caught 4 of 11. Keep an AI reviewer advisory, not a required merge check, until that kind of measurement exists. Helper agents the author started, including a review panel, do not clear the author's work. Guardrails, not instructions: tooling has to enforce the rule, because a document alone does not. This is one operator's write-up, not wide adoption.",
       },
     ],
   },
@@ -1252,6 +1267,14 @@ export const RECOMMENDATIONS: Recommendation[] = [
     sources: ["owasp-ai-coding",  "owasp-agents",  "crbugbench"],
   },
   {
+    id: "helpers-not-clearance",
+    station: "review",
+    stage: "Next",
+    maturity: "Cutting edge",
+    text: "Author-spawned helper agents do not count as independent clearance, including a review panel the author started.",
+    sources: ["vacic-software-factory"],
+  },
+  {
     id: "background-review-agent",
     station: "review",
     stage: "Start",
@@ -1288,8 +1311,8 @@ export const RECOMMENDATIONS: Recommendation[] = [
     station: "review",
     stage: "Next",
     maturity: "Cutting edge",
-    text: "Track how often people accept the review bot's comments, and test it on bugs you already know. The PR description can mislead it, so read its summary as a claim. Test it again when the model changes. Rankings move within months. Several independent benchmarks back this, but wide adoption is not shown yet.",
-    sources: ["crbugbench",  "coderabbit",  "reviewbench",  "review-bench-rots",  "ironbee"],
+    text: "Track how often people accept the review bot's comments, and test it on bugs you already know. Keep the bot advisory, not a required merge check, until it has been measured on known defects. The PR description can mislead it, so read its summary as a claim. Test it again when the model changes. Rankings move within months. Several independent benchmarks back this, but wide adoption is not shown yet.",
+    sources: ["crbugbench",  "coderabbit",  "reviewbench",  "review-bench-rots",  "ironbee",  "vacic-software-factory"],
   },
   {
     id: "attest-provenance",
@@ -1711,6 +1734,10 @@ export const TOOLS: Record<string, { tools: Tool[]; gap?: string }> = {
         note: "A review bot only. Check that its reviews cannot count as an approval.",
       }
     ],
+  },
+  "helpers-not-clearance": {
+    tools: [],
+    gap: "No listed product stops helper agents the author started from counting as clearance of that author's change.",
   },
   "review-capacity": {
     tools: [

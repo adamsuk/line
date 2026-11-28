@@ -4,6 +4,12 @@ All notable changes to Line are recorded here. The format follows [Keep a Change
 
 Research-driven entries say what changed, why, and which sources back it. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
+## 2026-11-28
+
+### Changed
+
+- The Review card `measure-review-bot` now says to keep the review bot advisory, not a required merge check, until it has been measured on known defects. A new Review card, `helpers-not-clearance`, says author-spawned helper agents do not count as independent clearance, including a review panel the author started. The Review question on sending a change back now links both cards. Both stay Cutting edge because the evidence is one operator write-up, not wide adoption. Source: [How We Run Our Software Factory (and What Broke)](https://thegrowthproject.com/blog/how-we-run-our-software-factory/) (Daniel Vacic, The Growth Project, 7 November 2026). ([#88](https://github.com/adamsuk/line/issues/88))
+
 ## 2026-11-26
 
 ### Changed
