@@ -374,3 +374,53 @@ test("backlog-approve-spec links approve-spec-before-code", () => {
     "No listed product requires a person to accept the specification before a coding agent writes code.",
   );
 });
+
+test("review-refuse links helpers-not-clearance and measure-review-bot stays advisory", () => {
+  const bot = RECOMMENDATIONS.find((r) => r.id === "measure-review-bot");
+  assert.ok(bot);
+  assert.equal(
+    bot.text,
+    "Track how often people accept the review bot's comments, and test it on bugs you already know. Keep the bot advisory, not a required merge check, until it has been measured on known defects. The PR description can mislead it, so read its summary as a claim. Test it again when the model changes. Rankings move within months. Several independent benchmarks back this, but wide adoption is not shown yet.",
+  );
+  assert.deepEqual(bot.sources, [
+    "crbugbench",
+    "coderabbit",
+    "reviewbench",
+    "review-bench-rots",
+    "ironbee",
+    "vacic-software-factory",
+  ]);
+
+  const ids = RECOMMENDATIONS.map((r) => r.id);
+  assert.equal(ids[ids.indexOf("human-approves") + 1], "helpers-not-clearance");
+  const rec = RECOMMENDATIONS.find((r) => r.id === "helpers-not-clearance");
+  assert.ok(rec);
+  assert.equal(rec.id, "helpers-not-clearance");
+  assert.equal(rec.station, "review");
+  assert.equal(rec.stage, "Next");
+  assert.equal(rec.maturity, "Cutting edge");
+  assert.equal(
+    rec.text,
+    "Author-spawned helper agents do not count as independent clearance, including a review panel the author started.",
+  );
+  assert.deepEqual(rec.sources, ["vacic-software-factory"]);
+
+  assert.equal(FURTHER_READING[2]?.heading, "7 November 2026");
+  const vacic = FURTHER_READING[2]?.refs.find((r) => r.id === "vacic-software-factory");
+  assert.ok(vacic);
+  assert.equal(vacic.title, "How We Run Our Software Factory (and What Broke)");
+  assert.equal(vacic.date, "7 November 2026");
+  assert.equal(vacic.url, "https://thegrowthproject.com/blog/how-we-run-our-software-factory/");
+  assert.match(vacic.took, /Guardrails, not instructions/);
+  assert.match(vacic.took, /4 of 11/);
+
+  const refuse = STATION_QUESTIONS.review.find((q) => q.id === "review-refuse");
+  assert.deepEqual(refuse?.recs, ["human-approves", "helpers-not-clearance"]);
+  assert.equal(STATION_QUESTIONS.review.length, 4);
+
+  assert.deepEqual(TOOLS["helpers-not-clearance"].tools, []);
+  assert.equal(
+    TOOLS["helpers-not-clearance"].gap,
+    "No listed product stops helper agents the author started from counting as clearance of that author's change.",
+  );
+});

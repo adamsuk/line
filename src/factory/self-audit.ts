@@ -229,7 +229,7 @@ const BY_STATION: Record<StationId, Q[]> = {
       covered: "A named person approves. No agent approves its own change.",
       partial: "Bot approvals count toward merge.",
       gap: "No required review.",
-      recs: ["human-approves"],
+      recs: ["human-approves", "helpers-not-clearance"],
     },
     {
       id: "review-evidence",
